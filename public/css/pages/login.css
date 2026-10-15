@@ -1,0 +1,194 @@
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            var(--light-green),
+            transparent 35%
+        ),
+        var(--light-gray-bg);
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 440px;
+    padding: 24px;
+}
+
+.login-card {
+    padding: 40px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 20px;
+
+    box-shadow: var(--shadow-medium);
+}
+
+.login-brand {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.login-logo-box {
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    border-radius: 18px;
+
+    background: var(--light-green);
+}
+
+.login-logo {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--primary-green);
+    color: var(--white);
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.login-brand h1 {
+    margin-bottom: 5px;
+
+    color: var(--primary-green);
+
+    font-size: 30px;
+}
+
+.login-subtitle {
+    color: var(--primary-text);
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.login-helper {
+    margin-top: 5px;
+
+    color: var(--secondary-text);
+
+    font-size: 13px;
+}
+
+.login-divider {
+    height: 1px;
+
+    margin-bottom: 25px;
+
+    background: var(--border-gray);
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 65px;
+}
+
+.password-toggle {
+    position: absolute;
+
+    top: 50%;
+    right: 8px;
+
+    transform: translateY(-50%);
+
+    width: auto;
+
+    padding: 7px 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: var(--primary-green);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.password-toggle:hover {
+    background: var(--light-green);
+}
+
+.login-button {
+    width: 100%;
+
+    margin-top: 4px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: var(--primary-green);
+
+    color: var(--white);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+.login-button:hover {
+    background: var(--dark-green);
+}
+
+.security-note {
+    margin-top: 22px;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+.login-footer {
+    margin-top: 22px;
+
+    color: var(--secondary-text);
+
+    text-align: center;
+
+    font-size: 11px;
+}
+
+@media (max-width: 500px) {
+    .login-wrapper {
+        padding: 15px;
+    }
+
+    .login-card {
+        padding: 32px 23px;
+    }
+}

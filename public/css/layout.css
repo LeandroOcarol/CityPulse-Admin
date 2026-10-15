@@ -1,0 +1,377 @@
+/* =========================================
+   CITYPULSE ADMIN SHARED LAYOUT
+========================================= */
+
+
+/* PAGE */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: var(--sidebar-width);
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--white);
+
+    border-right: 1px solid var(--border-gray);
+
+    z-index: 1000;
+}
+
+
+/* BRAND */
+
+.sidebar-brand {
+    height: var(--topbar-height);
+    min-height: var(--topbar-height);
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid var(--border-gray);
+
+    flex-shrink: 0;
+}
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 12px;
+
+    border-radius: 10px;
+
+    background: var(--primary-green);
+
+    color: var(--white);
+
+    font-size: 20px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+.brand-name {
+    color: var(--primary-green);
+
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.brand-subtitle {
+    margin-top: 2px;
+
+    color: var(--secondary-text);
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   SIDEBAR MENU
+========================================= */
+
+.sidebar-menu {
+    flex: 1;
+
+    padding: 16px 11px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.menu-title {
+    padding: 14px 12px 7px;
+
+    color: var(--secondary-text);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+.menu-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    padding: 11px 13px;
+
+    margin-bottom: 3px;
+
+    border: none;
+    border-radius: var(--radius-small);
+
+    background: transparent;
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.menu-item:hover {
+    background: var(--light-green);
+
+    color: var(--dark-green);
+}
+
+.menu-item.active {
+    background: var(--light-green);
+
+    color: var(--primary-green);
+
+    font-weight: 700;
+}
+
+.logout-item {
+    color: var(--danger-red);
+}
+
+.logout-item:hover {
+    background: #FDECEC;
+
+    color: var(--danger-red);
+}
+
+
+/* =========================================
+   MAIN AREA
+========================================= */
+
+.main {
+    width: calc(100% - var(--sidebar-width));
+    height: 100vh;
+
+    margin-left: var(--sidebar-width);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   TOPBAR
+========================================= */
+
+.topbar {
+    width: 100%;
+
+    height: var(--topbar-height);
+    min-height: var(--topbar-height);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 0 28px;
+
+    background: var(--white);
+
+    border-bottom: 1px solid var(--border-gray);
+
+    flex-shrink: 0;
+}
+
+
+/* SEARCH */
+
+.search-box {
+    width: 100%;
+    max-width: 390px;
+}
+
+.search-box input {
+    width: 100%;
+
+    padding: 11px 14px;
+
+    border: 1px solid var(--border-gray);
+    border-radius: var(--radius-small);
+
+    background: var(--white);
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-green);
+
+    box-shadow:
+        0 0 0 3px rgba(27, 142, 62, 0.10);
+}
+
+
+/* =========================================
+   ADMIN INFORMATION
+========================================= */
+
+.admin-info {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    flex-shrink: 0;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--light-green);
+
+    color: var(--primary-green);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-name {
+    color: var(--primary-text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-role {
+    margin-top: 2px;
+
+    color: var(--secondary-text);
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.content {
+    flex: 1;
+
+    padding: 28px 30px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* PAGE HEADER */
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin-bottom: 5px;
+
+    color: var(--primary-text);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page-header p {
+    color: var(--secondary-text);
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   SCROLLBARS
+========================================= */
+
+.sidebar-menu::-webkit-scrollbar,
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb {
+    background: #C9CECB;
+
+    border-radius: 10px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover,
+.content::-webkit-scrollbar-thumb:hover {
+    background: #AEB5B1;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .topbar {
+        padding: 0 20px;
+    }
+
+    .content {
+        padding: 24px;
+    }
+
+    .search-box {
+        max-width: 300px;
+    }
+}

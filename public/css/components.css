@@ -1,0 +1,287 @@
+/* =========================================
+   CITYPULSE SHARED COMPONENTS
+========================================= */
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: var(--radius-small);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--dark-green);
+}
+
+.btn-warning {
+    background: var(--warning-orange);
+    color: var(--white);
+}
+
+.btn-info {
+    background: var(--info-blue);
+    color: var(--white);
+}
+
+.btn-danger {
+    background: var(--danger-red);
+    color: var(--white);
+}
+
+.btn-dark {
+    background: var(--primary-text);
+    color: var(--white);
+}
+
+.btn-outline {
+    background: var(--white);
+
+    color: var(--primary-green);
+
+    border:
+        1px solid var(--primary-green);
+}
+
+.btn-outline:hover {
+    background: var(--light-green);
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card {
+    background: var(--white);
+
+    border:
+        1px solid var(--border-gray);
+
+    border-radius:
+        var(--radius-medium);
+
+    box-shadow:
+        var(--shadow-small);
+}
+
+
+/* =========================================
+   BADGES
+========================================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.badge-success {
+    background: var(--light-green);
+    color: var(--dark-green);
+}
+
+.badge-warning {
+    background: #FFF4DA;
+    color: #9A6700;
+}
+
+.badge-danger {
+    background: #FDECEC;
+    color: var(--danger-red);
+}
+
+.badge-info {
+    background: #EAF1FE;
+    color: var(--info-blue);
+}
+
+
+/* =========================================
+   FORM COMPONENTS
+========================================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border:
+        1px solid var(--border-gray);
+
+    border-radius:
+        var(--radius-small);
+
+    background: var(--white);
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-control::placeholder {
+    color: #9CA3AF;
+}
+
+.form-control:focus {
+    border-color:
+        var(--primary-green);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(27, 142, 62, 0.10);
+}
+
+
+/* =========================================
+   ALERTS
+========================================= */
+
+.alert-error {
+    padding: 12px 14px;
+
+    margin-bottom: 20px;
+
+    border:
+        1px solid #F3C3C3;
+
+    border-radius:
+        var(--radius-small);
+
+    background: #FDECEC;
+
+    color: var(--danger-red);
+
+    font-size: 13px;
+}
+
+.alert-success {
+    padding: 12px 14px;
+
+    border:
+        1px solid #CDEBD6;
+
+    border-radius:
+        var(--radius-small);
+
+    background:
+        var(--light-green);
+
+    color:
+        var(--dark-green);
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state {
+    padding: 28px;
+
+    color:
+        var(--secondary-text);
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   TABLE HELPERS
+========================================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.table-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* =========================================
+   STATUS HELPERS
+========================================= */
+
+.status-low {
+    color: var(--low-risk-green);
+}
+
+.status-medium {
+    color: var(--warning-orange);
+}
+
+.status-high {
+    color: var(--danger-red);
+}
