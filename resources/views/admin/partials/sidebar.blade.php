@@ -1,5 +1,7 @@
 <aside class="sidebar">
 
+    <!-- Brand -->
+
     <div class="sidebar-brand">
 
         <div class="brand-logo">
@@ -20,6 +22,8 @@
 
     </div>
 
+
+    <!-- Navigation -->
 
     <nav class="sidebar-menu">
 
@@ -48,16 +52,16 @@
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.incident-reports.index') }}"
+            class="menu-item {{ request()->routeIs('admin.incident-reports.*') ? 'active' : '' }}"
         >
             Incident Reports
         </a>
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.crime-records.index') }}"
+            class="menu-item {{ request()->routeIs('admin.crime-records.*') ? 'active' : '' }}"
         >
             Crime Records
         </a>
@@ -70,6 +74,8 @@
             Safety Alerts
         </a>
 
+
+        <!-- Analytics -->
 
         <div class="menu-title">
             Analytics
@@ -116,6 +122,8 @@
         </a>
 
 
+        <!-- System -->
+
         <div class="menu-title">
             System
         </div>
@@ -145,11 +153,12 @@
         </a>
 
 
+        <!-- Logout -->
+
         <form
             method="POST"
             action="{{ route('admin.logout') }}"
         >
-
             @csrf
 
             <button

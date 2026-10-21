@@ -1,21 +1,17 @@
 /* =========================================
-   CITYPULSE TOURIST ACCOUNT DETAILS
+   TOURIST ACCOUNT DETAILS
 ========================================= */
 
 
 /* =========================================
-   CONTENT
+   PAGE CONTENT
 ========================================= */
 
-.tourist-account-details-page .content {
-    height: calc(100vh - var(--topbar-height));
-
-    box-sizing: border-box;
-
-    padding: 16px 28px 18px;
+.tourist-account-show-page .content {
+    padding: 22px 28px 32px;
 
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 
@@ -23,22 +19,18 @@
    PAGE HEADER
 ========================================= */
 
-.account-details-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    margin-bottom: 13px;
+.account-show-header {
+    margin-bottom: 16px;
 }
 
 .back-link {
     display: inline-block;
 
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: var(--primary-green);
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
 }
 
@@ -46,13 +38,15 @@
     color: var(--dark-green);
 }
 
-.account-details-header h1 {
+.account-show-header h1 {
     margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 26px;
+    font-size: 29px;
     font-weight: 700;
+
+    line-height: 1.2;
 }
 
 
@@ -60,38 +54,37 @@
    PROFILE OVERVIEW
 ========================================= */
 
-.profile-overview-card {
+.account-profile-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     gap: 24px;
 
-    padding: 16px 20px;
+    margin-bottom: 16px;
 
-    margin-bottom: 12px;
+    padding: 18px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
     border-radius: 10px;
 
-    box-shadow:
-        0 2px 6px rgba(31, 41, 51, 0.04);
+    box-shadow: var(--shadow-small);
 }
 
-.profile-main {
+.account-profile-main {
+    min-width: 0;
+
     display: flex;
     align-items: center;
 
-    gap: 14px;
-
-    min-width: 0;
+    gap: 16px;
 }
 
-.profile-large-avatar {
-    width: 68px;
-    height: 68px;
+.account-profile-avatar {
+    width: 84px;
+    height: 84px;
 
     flex-shrink: 0;
 
@@ -101,49 +94,64 @@
     align-items: center;
     justify-content: center;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
     background: var(--light-green);
 
     color: var(--primary-green);
 
-    font-size: 25px;
+    font-size: 28px;
     font-weight: 700;
 }
 
-.profile-large-avatar img {
+.account-profile-avatar img {
     width: 100%;
     height: 100%;
 
     object-fit: cover;
 }
 
-.profile-main-info {
+.account-profile-info {
     min-width: 0;
 }
 
-.profile-main-info h2 {
-    margin: 0 0 4px;
+.account-profile-info h2 {
+    margin: 0 0 9px;
 
     color: var(--primary-text);
 
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 700;
+
+    line-height: 1.25;
 }
 
-.profile-main-info p {
-    margin: 4px 0 0;
+.account-profile-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
+    gap: 9px;
+}
+
+.account-profile-email {
     color: var(--secondary-text);
 
-    font-size: 10px;
+    font-size: 13px;
 }
 
-.profile-role {
+
+/* =========================================
+   BADGES
+========================================= */
+
+.account-role-badge,
+.account-auth-badge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
 
-    padding: 4px 9px;
+    padding: 5px 9px;
 
     border-radius: 20px;
 
@@ -151,7 +159,7 @@
 
     color: var(--dark-green);
 
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
 }
 
@@ -160,12 +168,15 @@
    ACCOUNT ID
 ========================================= */
 
-.account-id-area {
-    max-width: 320px;
+.account-id-block {
+    width: 300px;
+    max-width: 38%;
 
-    padding: 10px 14px;
+    flex-shrink: 0;
 
-    background: var(--light-gray-bg);
+    padding: 12px 14px;
+
+    background: var(--light-gray);
 
     border: 1px solid var(--border-gray);
     border-radius: 8px;
@@ -174,11 +185,11 @@
 .account-id-label {
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
     color: var(--secondary-text);
 
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 700;
 
     text-transform: uppercase;
@@ -191,16 +202,18 @@
 
     color: var(--primary-text);
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 600;
+
+    line-height: 1.45;
 }
 
 
 /* =========================================
-   ACCOUNT STATISTICS
+   ACTIVITY SUMMARY
 ========================================= */
 
-.account-statistics-grid {
+.account-stats-grid {
     display: grid;
 
     grid-template-columns:
@@ -208,50 +221,54 @@
 
     gap: 12px;
 
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .account-stat-card {
-    min-height: 78px;
+    min-height: 92px;
 
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
 
-    padding: 13px 15px;
+    gap: 18px;
+
+    padding: 16px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
+    border-left: 4px solid var(--primary-green);
     border-radius: 9px;
 
-    box-shadow:
-        0 2px 6px rgba(31, 41, 51, 0.03);
+    box-shadow: var(--shadow-small);
 }
 
 .account-stat-label {
     color: var(--secondary-text);
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 700;
 
     text-transform: uppercase;
 
-    letter-spacing: 0.4px;
+    line-height: 1.35;
 }
 
-.account-stat-number {
-    margin-top: 5px;
+.account-stat-value {
+    flex-shrink: 0;
 
     color: var(--primary-green);
 
-    font-size: 25px;
+    font-size: 27px;
     font-weight: 700;
+
+    line-height: 1;
 }
 
 
 /* =========================================
-   DETAIL PANELS
+   DETAILS GRID
 ========================================= */
 
 .account-details-grid {
@@ -260,54 +277,61 @@
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 12px;
-
-    margin-bottom: 12px;
+    gap: 14px;
 }
 
-.details-panel {
+
+/* =========================================
+   DETAIL CARDS
+========================================= */
+
+.account-detail-card {
     overflow: hidden;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
-    border-radius: 9px;
+    border-radius: 10px;
 
-    box-shadow:
-        0 2px 6px rgba(31, 41, 51, 0.03);
+    box-shadow: var(--shadow-small);
 }
 
-.details-panel-header {
-    min-height: 42px;
+.account-detail-header {
+    min-height: 48px;
 
     display: flex;
     align-items: center;
 
-    padding: 9px 14px;
+    padding: 11px 15px;
 
     border-bottom: 1px solid var(--border-gray);
 }
 
-.details-panel-header h2 {
+.account-detail-header h2 {
     margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
-.details-content {
-    padding: 2px 14px;
+.account-detail-body {
+    padding: 4px 15px;
 }
 
-.detail-row {
-    min-height: 43px;
+
+/* =========================================
+   DETAIL ROWS
+========================================= */
+
+.account-detail-row {
+    min-height: 52px;
 
     display: grid;
 
     grid-template-columns:
-        145px
+        140px
         minmax(0, 1fr);
 
     align-items: center;
@@ -317,90 +341,28 @@
     border-bottom: 1px solid var(--border-gray);
 }
 
-.detail-row:last-child {
+.account-detail-row:last-child {
     border-bottom: none;
 }
 
-.detail-label {
+.account-detail-label {
     color: var(--secondary-text);
 
-    font-size: 9px;
+    font-size: 13px;
     font-weight: 600;
 }
 
-.detail-value {
+.account-detail-value {
     min-width: 0;
 
     overflow-wrap: anywhere;
 
     color: var(--primary-text);
 
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 600;
-}
 
-
-/* =========================================
-   BADGES
-========================================= */
-
-.account-role-badge,
-.verification-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 4px 9px;
-
-    border-radius: 20px;
-
-    font-size: 8px;
-    font-weight: 700;
-}
-
-.account-role-badge {
-    background: var(--light-green);
-
-    color: var(--dark-green);
-}
-
-.verification-badge {
-    background: var(--light-green);
-
-    color: var(--primary-green);
-}
-
-
-/* =========================================
-   NOTICE
-========================================= */
-
-.account-notice {
-    padding: 11px 15px;
-
-    background: var(--light-green);
-
-    border: 1px solid #CDE8D5;
-    border-radius: 9px;
-}
-
-.account-notice h3 {
-    margin: 0 0 3px;
-
-    color: var(--dark-green);
-
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.account-notice p {
-    margin: 0;
-
-    color: var(--secondary-text);
-
-    font-size: 9px;
-
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 
@@ -408,54 +370,44 @@
    RESPONSIVE
 ========================================= */
 
-@media (max-width: 1100px) {
-
-    .tourist-account-details-page .content {
-        height: auto;
-
-        overflow-y: auto;
-    }
-}
-
-
 @media (max-width: 900px) {
 
-    .account-details-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .profile-overview-card {
+    .account-profile-card {
         align-items: flex-start;
 
         flex-direction: column;
     }
 
-    .account-id-area {
+    .account-id-block {
         width: 100%;
         max-width: 100%;
+    }
+
+    .account-details-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 
-@media (max-width: 650px) {
+@media (max-width: 700px) {
 
-    .tourist-account-details-page .content {
-        padding: 17px 14px;
+    .tourist-account-show-page .content {
+        padding: 18px 14px 28px;
     }
 
-    .account-statistics-grid {
+    .account-show-header h1 {
+        font-size: 26px;
+    }
+
+    .account-stats-grid {
         grid-template-columns: 1fr;
     }
 
-    .profile-main {
-        align-items: flex-start;
-    }
-
-    .detail-row {
+    .account-detail-row {
         grid-template-columns: 1fr;
 
-        gap: 4px;
+        gap: 5px;
 
-        padding: 9px 0;
+        padding: 11px 0;
     }
 }

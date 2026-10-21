@@ -4,25 +4,27 @@
 
 @section('body-class', 'tourist-accounts-page')
 
+
 @push('styles')
-    <link rel="stylesheet" href="/css/pages/tourist-accounts.css">
+
+    <link
+        rel="stylesheet"
+        href="/css/pages/tourist-accounts.css"
+    >
+
 @endpush
+
 
 @section('content')
 
-    <div class="accounts-page-header">
 
-        <div>
+    <!-- Page Header -->
 
-            <h1>
-                Tourist Accounts
-            </h1>
+    <div class="tourist-accounts-header">
 
-            <p>
-                Manage and review registered tourist accounts.
-            </p>
-
-        </div>
+        <h1>
+            Tourist Accounts
+        </h1>
 
 
         <button
@@ -35,54 +37,77 @@
     </div>
 
 
-    <section class="accounts-toolbar">
+
+    <!-- Summary -->
+
+    <section class="tourist-account-summary">
+
+        <div class="tourist-total-card">
+
+            <div class="tourist-total-label">
+                Total Tourists
+            </div>
+
+            <div class="tourist-total-number">
+                {{ number_format($totalTourists ?? 0) }}
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- Filters -->
+
+    <section class="tourist-account-filter-panel">
 
         <form
             method="GET"
             action="{{ route('admin.tourist-accounts.index') }}"
-            class="accounts-filter-form"
+            class="tourist-account-filter-form"
         >
 
-            <div class="account-search">
+            <div class="account-search-field">
 
                 <input
                     type="search"
                     name="search"
-                    value="{{ $search }}"
-                    placeholder="Search tourist accounts..."
+                    value="{{ $search ?? '' }}"
+                    placeholder="Search accounts"
                 >
 
             </div>
 
 
-            <div class="account-filter">
+            <div class="account-period-field">
 
                 <select name="period">
 
                     <option
                         value="all"
-                        {{ $period === 'all' ? 'selected' : '' }}
+                        {{ ($period ?? 'all') === 'all' ? 'selected' : '' }}
                     >
                         All Dates
                     </option>
 
                     <option
                         value="7"
-                        {{ $period === '7' ? 'selected' : '' }}
+                        {{ ($period ?? '') === '7' ? 'selected' : '' }}
                     >
                         Last 7 Days
                     </option>
 
                     <option
                         value="30"
-                        {{ $period === '30' ? 'selected' : '' }}
+                        {{ ($period ?? '') === '30' ? 'selected' : '' }}
                     >
                         Last 30 Days
                     </option>
 
                     <option
                         value="90"
-                        {{ $period === '90' ? 'selected' : '' }}
+                        {{ ($period ?? '') === '90' ? 'selected' : '' }}
                     >
                         Last 90 Days
                     </option>
@@ -94,17 +119,20 @@
 
             <button
                 type="submit"
-                class="apply-filter-button"
+                class="account-filter-button"
             >
-                Apply Filters
+                Filter
             </button>
 
 
-            @if($search !== '' || $period !== 'all')
+            @if(
+                ($search ?? '') !== '' ||
+                ($period ?? 'all') !== 'all'
+            )
 
                 <a
                     href="{{ route('admin.tourist-accounts.index') }}"
-                    class="clear-filter-button"
+                    class="account-clear-button"
                 >
                     Clear
                 </a>
@@ -113,25 +141,15 @@
 
         </form>
 
-
-        <div class="total-tourists-card">
-
-            <div class="total-tourists-label">
-                Total Tourists
-            </div>
-
-            <div class="total-tourists-number">
-                {{ number_format($totalTourists) }}
-            </div>
-
-        </div>
-
     </section>
 
 
-    <section class="accounts-panel">
 
-        <div class="accounts-panel-header">
+    <!-- Account Directory -->
+
+    <section class="tourist-account-panel">
+
+        <div class="tourist-account-panel-header">
 
             <div>
 
@@ -140,8 +158,7 @@
                 </h2>
 
                 <p>
-                    {{ $tourists->total() }}
-                    tourist account{{ $tourists->total() === 1 ? '' : 's' }}
+                    {{ $tourists->total() }} accounts
                 </p>
 
             </div>
@@ -151,18 +168,18 @@
 
         @if($tourists->count() > 0)
 
-            <div class="accounts-table-wrapper">
+            <div class="tourist-account-table-wrapper">
 
-                <table class="accounts-table">
+                <table class="tourist-account-table">
 
                     <thead>
 
                         <tr>
                             <th>Tourist</th>
                             <th>Email</th>
-                            <th>Contact Number</th>
-                            <th>Account Type</th>
-                            <th>Date Registered</th>
+                            <th>Phone</th>
+                            <th>Registered</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
 
@@ -177,9 +194,9 @@
 
                                 <td>
 
-                                    <div class="account-user">
+                                    <div class="tourist-profile">
 
-                                        <div class="account-avatar">
+                                        <div class="tourist-avatar">
 
                                             @if(!empty($tourist->profile_image_url))
 
@@ -190,37 +207,25 @@
 
                                             @else
 
-                                                <span>
-
-                                                    {{
-                                                        strtoupper(
-                                                            substr(
-                                                                $tourist->first_name ?? 'T',
-                                                                0,
-                                                                1
-                                                            )
+                                                {{
+                                                    strtoupper(
+                                                        substr(
+                                                            $tourist->first_name ?? 'T',
+                                                            0,
+                                                            1
                                                         )
-                                                    }}
-
-                                                </span>
+                                                    )
+                                                }}
 
                                             @endif
 
                                         </div>
 
 
-                                        <div class="account-user-info">
+                                        <div class="tourist-name">
 
-                                            <div class="account-name">
-
-                                                {{ $tourist->first_name ?? 'Tourist' }}
-                                                {{ $tourist->last_name ?? '' }}
-
-                                            </div>
-
-                                            <div class="account-id">
-                                                Tourist Account
-                                            </div>
+                                            {{ $tourist->first_name ?? '' }}
+                                            {{ $tourist->last_name ?? '' }}
 
                                         </div>
 
@@ -232,31 +237,20 @@
                                 <td>
 
                                     <span class="account-email">
-
-                                        {{ $tourist->email ?? 'No email available' }}
-
+                                        {{ $tourist->email ?? '—' }}
                                     </span>
 
                                 </td>
 
 
                                 <td>
-                                    {{ $tourist->phone_number ?? 'Not provided' }}
+                                    {{ $tourist->phone_number ?? '—' }}
                                 </td>
 
 
                                 <td>
 
-                                    <span class="tourist-role-badge">
-                                        Tourist
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    @if($tourist->created_at)
+                                    @if(!empty($tourist->created_at))
 
                                         {{
                                             \Carbon\Carbon::parse(
@@ -275,11 +269,17 @@
 
                                 <td>
 
+                                    <span class="tourist-role-badge">
+                                        Tourist
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
                                     <a
-                                        href="{{ route(
-                                            'admin.tourist-accounts.show',
-                                            $tourist->id
-                                        ) }}"
+                                        href="{{ route('admin.tourist-accounts.show', $tourist->id) }}"
                                         class="view-account-button"
                                     >
                                         View
@@ -298,9 +298,12 @@
             </div>
 
 
-            <div class="accounts-pagination">
 
-                <div class="pagination-information">
+            <!-- Pagination -->
+
+            <div class="tourist-account-pagination">
+
+                <div class="pagination-info">
 
                     Showing
 
@@ -308,7 +311,7 @@
                         {{ $tourists->firstItem() }}
                     </strong>
 
-                    to
+                    –
 
                     <strong>
                         {{ $tourists->lastItem() }}
@@ -319,8 +322,6 @@
                     <strong>
                         {{ $tourists->total() }}
                     </strong>
-
-                    accounts
 
                 </div>
 
@@ -347,9 +348,8 @@
 
                     <span class="pagination-current">
 
-                        Page
                         {{ $tourists->currentPage() }}
-                        of
+                        /
                         {{ $tourists->lastPage() }}
 
                     </span>
@@ -379,15 +379,11 @@
 
         @else
 
-            <div class="accounts-empty-state">
+            <div class="tourist-account-empty">
 
                 <h3>
-                    No tourist accounts found
+                    No accounts found
                 </h3>
-
-                <p>
-                    Try changing your search or filters.
-                </p>
 
             </div>
 
@@ -396,42 +392,45 @@
     </section>
 
 
-    <section class="account-information-grid">
 
-        <div class="account-information-card">
+    <!-- Supporting Information -->
 
-            <div class="information-title">
+    <section class="tourist-support-grid">
+
+        <div class="support-card">
+
+            <h3>
                 Account Logs
-            </div>
+            </h3>
 
             <p>
-                Review tourist registration records and account information.
+                Registration and account activity.
             </p>
 
         </div>
 
 
-        <div class="account-information-card">
+        <div class="support-card">
 
-            <div class="information-title">
+            <h3>
                 Security Policy
-            </div>
+            </h3>
 
             <p>
-                Tourist account information is available only to authorized administrators.
+                Accounts use Supabase authentication.
             </p>
 
         </div>
 
 
-        <div class="account-information-card">
+        <div class="support-card">
 
-            <div class="information-title">
+            <h3>
                 Data Management
-            </div>
+            </h3>
 
             <p>
-                CityPulse uses the same Supabase account data used by the tourist application.
+                Tourist profiles sync with the mobile app.
             </p>
 
         </div>

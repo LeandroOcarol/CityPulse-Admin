@@ -1,45 +1,25 @@
 @extends('admin.layouts.app')
 
 @section('title', 'CityPulse | Tourist Spots')
-
 @section('body-class', 'tourist-spots-page')
 
-
 @push('styles')
-
-    <link
-        rel="stylesheet"
-        href="/css/pages/tourist-spots.css"
-    >
-
+    <link rel="stylesheet" href="/css/pages/tourist-spots.css">
 @endpush
-
 
 @section('content')
 
+    <!-- Page Header -->
 
-    <!-- =========================================
-         PAGE HEADER
-    ========================================== -->
+    <div class="spots-header-row">
 
-    <div class="tourist-spots-header">
-
-        <div>
-
-            <h1>
-                Tourist Spots
-            </h1>
-
-            <p>
-                Manage destinations.
-            </p>
-
-        </div>
-
+        <h1>
+            Tourist Spots
+        </h1>
 
         <a
             href="{{ route('admin.tourist-spots.create') }}"
-            class="add-spot-button"
+            class="spots-add-button"
         >
             Add Spot
         </a>
@@ -47,10 +27,7 @@
     </div>
 
 
-
-    <!-- =========================================
-         SUCCESS MESSAGE
-    ========================================== -->
+    <!-- Success Message -->
 
     @if(session('success'))
 
@@ -61,34 +38,39 @@
     @endif
 
 
+    <!-- Summary -->
 
-    <!-- =========================================
-         SUMMARY
-    ========================================== -->
+    <section class="spots-summary-grid">
 
-    <section class="tourist-spots-summary">
+        <div class="spots-summary-card">
 
-        <div class="summary-card">
+            <div class="spots-summary-content">
 
-            <div class="summary-label">
-                Tourist Spots
-            </div>
+                <span class="spots-summary-label">
+                    Tourist Spots
+                </span>
 
-            <div class="summary-number">
-                {{ number_format($totalSpots) }}
+                <strong class="spots-summary-value">
+                    {{ number_format($totalSpots ?? 0) }}
+                </strong>
+
             </div>
 
         </div>
 
 
-        <div class="summary-card">
+        <div class="spots-summary-card">
 
-            <div class="summary-label">
-                Categories
-            </div>
+            <div class="spots-summary-content">
 
-            <div class="summary-number">
-                {{ number_format($totalCategories) }}
+                <span class="spots-summary-label">
+                    Categories
+                </span>
+
+                <strong class="spots-summary-value">
+                    {{ number_format($totalCategories ?? 0) }}
+                </strong>
+
             </div>
 
         </div>
@@ -96,48 +78,48 @@
     </section>
 
 
+    <!-- Filters -->
 
-    <!-- =========================================
-         FILTERS
-    ========================================== -->
-
-    <section class="tourist-spots-filter-panel">
+    <section class="spots-filter-card">
 
         <form
             method="GET"
             action="{{ route('admin.tourist-spots.index') }}"
-            class="tourist-spots-filter-form"
+            class="spots-filter-form"
         >
 
-            <div class="spots-search">
+            <div class="spots-filter-main">
 
                 <input
                     type="search"
                     name="search"
-                    value="{{ $search }}"
+                    value="{{ $search ?? '' }}"
                     placeholder="Search spots"
+                    class="spots-search-input"
                 >
 
             </div>
 
 
-            <div class="spots-category-filter">
+            <div class="spots-filter-side">
 
-                <select name="category">
+                <select
+                    name="category"
+                    class="spots-category-select"
+                >
 
                     <option
                         value="all"
-                        {{ $category === 'all' ? 'selected' : '' }}
+                        {{ ($category ?? 'all') === 'all' ? 'selected' : '' }}
                     >
                         All Categories
                     </option>
-
 
                     @foreach($categories as $categoryOption)
 
                         <option
                             value="{{ $categoryOption }}"
-                            {{ $category === $categoryOption ? 'selected' : '' }}
+                            {{ ($category ?? 'all') === $categoryOption ? 'selected' : '' }}
                         >
                             {{ $categoryOption }}
                         </option>
@@ -146,41 +128,41 @@
 
                 </select>
 
-            </div>
 
-
-            <button
-                type="submit"
-                class="spots-filter-button"
-            >
-                Filter
-            </button>
-
-
-            @if($search !== '' || $category !== 'all')
-
-                <a
-                    href="{{ route('admin.tourist-spots.index') }}"
-                    class="spots-clear-button"
+                <button
+                    type="submit"
+                    class="spots-filter-button"
                 >
-                    Clear
-                </a>
+                    Filter
+                </button>
 
-            @endif
+
+                @if(
+                    ($search ?? '') !== '' ||
+                    ($category ?? 'all') !== 'all'
+                )
+
+                    <a
+                        href="{{ route('admin.tourist-spots.index') }}"
+                        class="spots-clear-button"
+                    >
+                        Clear
+                    </a>
+
+                @endif
+
+            </div>
 
         </form>
 
     </section>
 
 
+    <!-- Spot Directory -->
 
-    <!-- =========================================
-         SPOT DIRECTORY
-    ========================================== -->
+    <section class="spots-table-card">
 
-    <section class="tourist-spots-panel">
-
-        <div class="tourist-spots-panel-header">
+        <div class="spots-table-header">
 
             <div>
 
@@ -188,267 +170,291 @@
                     Spot Directory
                 </h2>
 
-                <p>
+                <span>
                     {{ $touristSpots->total() }} spots
-                </p>
+                </span>
 
             </div>
 
         </div>
 
 
-        @if($touristSpots->count() > 0)
+        <div class="spots-table-wrap">
 
-            <div class="tourist-spots-table-wrapper">
+            <table class="spots-table">
 
-                <table class="tourist-spots-table">
+                <thead>
 
-                    <thead>
+                    <tr>
+                        <th>Spot</th>
+                        <th>Category</th>
+                        <th>Coordinates</th>
+                        <th>Hours</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @forelse($touristSpots as $spot)
 
                         <tr>
-                            <th>Spot</th>
-                            <th>Category</th>
-                            <th>Coordinates</th>
-                            <th>Added</th>
-                            <th>Actions</th>
-                        </tr>
 
-                    </thead>
+                            <td>
 
+                                <div class="spot-cell">
 
-                    <tbody>
+                                    <div class="spot-thumbnail">
 
-                        @foreach($touristSpots as $spot)
+                                        @if(!empty($spot->image_url))
 
-                            <tr>
+                                            <img
+                                                src="{{ $spot->image_url }}"
+                                                alt="{{ $spot->name }}"
+                                            >
 
-                                <td>
+                                        @else
 
-                                    <div class="spot-info">
-
-                                        <div class="spot-image">
-
-                                            @if(!empty($spot->image))
-
-                                                <img
-                                                    src="{{ $spot->image }}"
-                                                    alt=""
-                                                >
-
-                                            @else
-
-                                                <div class="spot-image-placeholder">
-
-                                                    {{
-                                                        strtoupper(
-                                                            substr(
-                                                                $spot->name ?? 'S',
-                                                                0,
-                                                                1
-                                                            )
-                                                        )
-                                                    }}
-
-                                                </div>
-
-                                            @endif
-
-                                        </div>
-
-
-                                        <div class="spot-text">
-
-                                            <div class="spot-name">
-                                                {{ $spot->name ?? 'Unnamed Spot' }}
-                                            </div>
-
-                                            <div class="spot-description">
-
+                                            <span>
                                                 {{
-                                                    \Illuminate\Support\Str::limit(
-                                                        $spot->description ?? '',
-                                                        55
+                                                    strtoupper(
+                                                        substr(
+                                                            $spot->name ?? 'S',
+                                                            0,
+                                                            1
+                                                        )
                                                     )
                                                 }}
+                                            </span>
 
-                                            </div>
-
-                                        </div>
+                                        @endif
 
                                     </div>
 
-                                </td>
+
+                                    <div class="spot-cell-info">
+
+                                        <strong>
+                                            {{ $spot->name }}
+                                        </strong>
+
+                                        @if(!empty($spot->address))
+
+                                            <span>
+                                                {{
+                                                    \Illuminate\Support\Str::limit(
+                                                        $spot->address,
+                                                        45
+                                                    )
+                                                }}
+                                            </span>
+
+                                        @elseif(!empty($spot->description))
+
+                                            <span>
+                                                {{
+                                                    \Illuminate\Support\Str::limit(
+                                                        $spot->description,
+                                                        45
+                                                    )
+                                                }}
+                                            </span>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
+                            </td>
 
 
-                                <td>
+                            <td>
 
-                                    <span class="spot-category-badge">
-                                        {{ $spot->category ?? 'Uncategorized' }}
-                                    </span>
+                                <span class="spot-category-badge">
+                                    {{ $spot->category ?? '—' }}
+                                </span>
 
-                                </td>
+                            </td>
 
 
-                                <td>
+                            <td>
 
-                                    <div class="spot-coordinates">
+                                @if(
+                                    $spot->latitude !== null &&
+                                    $spot->longitude !== null
+                                )
+
+                                    <div class="spot-coordinate-group">
 
                                         <span>
-                                            {{ $spot->latitude }}
+                                            {{ number_format($spot->latitude, 6) }}
                                         </span>
 
                                         <span>
-                                            {{ $spot->longitude }}
+                                            {{ number_format($spot->longitude, 6) }}
                                         </span>
 
                                     </div>
 
-                                </td>
+                                @else
+
+                                    —
+
+                                @endif
+
+                            </td>
 
 
-                                <td>
-
-                                    @if($spot->created_at)
-
-                                        {{
-                                            \Carbon\Carbon::parse(
-                                                $spot->created_at
-                                            )->format('M d, Y')
-                                        }}
-
-                                    @else
-
-                                        —
-
-                                    @endif
-
-                                </td>
+                            <td>
+                                {{ $spot->opening_hours ?? '—' }}
+                            </td>
 
 
-                                <td>
+                            <td>
 
-                                    <div class="spot-actions">
+                                @if(!empty($spot->created_at))
 
-                                        <a
-                                            href="#"
-                                            class="spot-action-button view"
-                                        >
-                                            View
-                                        </a>
+                                    {{
+                                        \Carbon\Carbon::parse(
+                                            $spot->created_at
+                                        )->format('M d, Y')
+                                    }}
 
-                                        <a
-                                            href="#"
-                                            class="spot-action-button edit"
-                                        >
-                                            Edit
-                                        </a>
+                                @else
 
-                                    </div>
+                                    —
 
-                                </td>
+                                @endif
 
-                            </tr>
+                            </td>
 
-                        @endforeach
 
-                    </tbody>
+                            <td>
 
-                </table>
+                                <div class="spot-action-group">
+
+                                    <a
+                                        href="{{ route('admin.tourist-spots.show', $spot->tourist_id) }}"
+                                        class="spot-action-button spot-view-button"
+                                    >
+                                        View
+                                    </a>
+
+                                    <a
+                                        href="{{ route('admin.tourist-spots.edit', $spot->tourist_id) }}"
+                                        class="spot-action-button spot-edit-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="spots-empty-state"
+                            >
+                                No tourist spots found.
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Pagination -->
+
+        <div class="spots-pagination">
+
+            <div class="spots-pagination-info">
+
+                Showing
+
+                <strong>
+                    {{ $touristSpots->firstItem() ?? 0 }}
+                </strong>
+
+                –
+
+                <strong>
+                    {{ $touristSpots->lastItem() ?? 0 }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ $touristSpots->total() }}
+                </strong>
 
             </div>
 
 
-            <!-- =================================
-                 PAGINATION
-            ================================== -->
+            <div class="spots-pagination-controls">
 
-            <div class="tourist-spots-pagination">
+                @if($touristSpots->onFirstPage())
 
-                <div class="pagination-info">
-
-                    Showing
-
-                    <strong>
-                        {{ $touristSpots->firstItem() }}
-                    </strong>
-
-                    –
-
-                    <strong>
-                        {{ $touristSpots->lastItem() }}
-                    </strong>
-
-                    of
-
-                    <strong>
-                        {{ $touristSpots->total() }}
-                    </strong>
-
-                </div>
-
-
-                <div class="pagination-controls">
-
-                    @if($touristSpots->onFirstPage())
-
-                        <span class="pagination-button disabled">
-                            Previous
-                        </span>
-
-                    @else
-
-                        <a
-                            href="{{ $touristSpots->previousPageUrl() }}"
-                            class="pagination-button"
-                        >
-                            Previous
-                        </a>
-
-                    @endif
-
-
-                    <span class="pagination-current">
-
-                        {{ $touristSpots->currentPage() }}
-                        /
-                        {{ $touristSpots->lastPage() }}
-
+                    <span class="spots-page-button disabled">
+                        Previous
                     </span>
 
+                @else
 
-                    @if($touristSpots->hasMorePages())
+                    <a
+                        href="{{ $touristSpots->previousPageUrl() }}"
+                        class="spots-page-button"
+                    >
+                        Previous
+                    </a>
 
-                        <a
-                            href="{{ $touristSpots->nextPageUrl() }}"
-                            class="pagination-button"
-                        >
-                            Next
-                        </a>
+                @endif
 
-                    @else
 
-                        <span class="pagination-button disabled">
-                            Next
-                        </span>
+                <span class="spots-page-current">
 
-                    @endif
+                    {{ $touristSpots->currentPage() }}
+                    /
+                    {{ $touristSpots->lastPage() }}
 
-                </div>
+                </span>
+
+
+                @if($touristSpots->hasMorePages())
+
+                    <a
+                        href="{{ $touristSpots->nextPageUrl() }}"
+                        class="spots-page-button"
+                    >
+                        Next
+                    </a>
+
+                @else
+
+                    <span class="spots-page-button disabled">
+                        Next
+                    </span>
+
+                @endif
 
             </div>
 
-
-        @else
-
-            <div class="tourist-spots-empty">
-
-                <h3>
-                    No spots found
-                </h3>
-
-            </div>
-
-        @endif
+        </div>
 
     </section>
 

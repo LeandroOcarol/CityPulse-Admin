@@ -1,27 +1,86 @@
+/* =========================================
+   CITYPULSE DESIGN VARIABLES
+========================================= */
+
 :root {
+
+    /* =========================================
+       BRAND COLORS
+    ========================================= */
+
     --primary-green: #1B8E3E;
     --dark-green: #146B30;
     --light-green: #EAF7EE;
 
+
+    /* =========================================
+       BASE COLORS
+    ========================================= */
+
     --white: #FFFFFF;
+
+    --light-gray: #F5F7F6;
     --light-gray-bg: #F5F7F6;
+
     --border-gray: #E0E0E0;
+
+
+    /* =========================================
+       TEXT COLORS
+    ========================================= */
 
     --primary-text: #1F2933;
     --secondary-text: #6B7280;
+
+
+    /* =========================================
+       STATUS COLORS
+    ========================================= */
 
     --danger-red: #D32F2F;
     --warning-orange: #F59E0B;
     --low-risk-green: #22C55E;
     --info-blue: #2563EB;
 
+
+    /* =========================================
+       LAYOUT
+    ========================================= */
+
     --sidebar-width: 250px;
-    --topbar-height: 76px;
+    --topbar-height: 68px;
 
-    --radius-small: 8px;
-    --radius-medium: 12px;
-    --radius-large: 18px;
 
-    --shadow-small: 0 2px 8px rgba(31, 41, 51, 0.05);
-    --shadow-medium: 0 8px 25px rgba(31, 41, 51, 0.08);
+    /* =========================================
+       BORDER RADIUS
+    ========================================= */
+
+    --radius-small: 6px;
+    --radius-medium: 9px;
+    --radius-large: 12px;
+
+
+    /* =========================================
+       SHADOWS
+    ========================================= */
+
+    --shadow-small:
+        0 2px 6px rgba(31, 41, 51, 0.04);
+
+    --shadow-medium:
+        0 4px 12px rgba(31, 41, 51, 0.06);
+
+
+    /* =========================================
+       TEXT SIZES
+    ========================================= */
+
+    --text-small: 12px;
+    --text-normal: 14px;
+    --text-medium: 15px;
+    --text-large: 16px;
+
+    --heading-small: 16px;
+    --heading-medium: 20px;
+    --heading-large: 29px;
 }

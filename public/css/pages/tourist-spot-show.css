@@ -1,0 +1,388 @@
+/* =========================================
+   TOURIST SPOT DETAILS
+========================================= */
+
+
+/* Page */
+
+.tourist-spot-show-page .content {
+    padding: 24px 28px 32px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Header */
+
+.spot-show-header {
+    margin-bottom: 16px;
+}
+
+.spot-show-back {
+    display: inline-block;
+
+    margin-bottom: 6px;
+
+    color: var(--primary-green);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.spot-show-back:hover {
+    color: var(--dark-green);
+}
+
+.spot-show-header h1 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 28px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+/* Overview */
+
+.spot-overview-card {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    margin-bottom: 16px;
+
+    padding: 18px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.spot-overview-image {
+    width: 92px;
+    height: 92px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--light-green);
+
+    color: var(--primary-green);
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.spot-overview-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.spot-overview-info {
+    min-width: 0;
+}
+
+.spot-overview-info h2 {
+    margin: 0 0 9px;
+
+    color: var(--primary-text);
+
+    font-size: 23px;
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    overflow-wrap: anywhere;
+}
+
+.spot-overview-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 9px;
+}
+
+.spot-show-category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 25px;
+
+    padding: 0 10px;
+
+    border-radius: 20px;
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.spot-show-address {
+    color: var(--secondary-text);
+
+    font-size: 13px;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* Details Grid */
+
+.spot-show-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    align-items: stretch;
+}
+
+.spot-show-column {
+    min-width: 0;
+}
+
+
+/* Left Column */
+
+.spot-show-left {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* Right Column */
+
+.spot-show-right {
+    display: grid;
+
+    grid-template-rows:
+        minmax(150px, auto)
+        minmax(230px, 1fr);
+
+    gap: 16px;
+}
+
+
+/* Cards */
+
+.spot-show-card {
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.spot-show-card-header {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.spot-show-card-header h2 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.spot-show-card-body {
+    padding: 4px 16px;
+}
+
+
+/* Detail Rows */
+
+.spot-detail-row {
+    min-height: 52px;
+
+    display: grid;
+
+    grid-template-columns:
+        135px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.spot-detail-row:last-child {
+    border-bottom: none;
+}
+
+.spot-detail-label {
+    color: var(--secondary-text);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.spot-detail-value {
+    min-width: 0;
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1.45;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* Description */
+
+.spot-description-card {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* History */
+
+.spot-history-card {
+    min-height: 230px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Text Content */
+
+.spot-text-content {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 0 16px 18px;
+}
+
+.spot-text-content p {
+    margin: 0;
+    padding: 0;
+
+    max-width: 100%;
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    white-space: pre-line;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* Responsive */
+
+@media (max-width: 950px) {
+
+    .spot-show-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .spot-show-right {
+        grid-template-rows: auto;
+    }
+
+    .spot-description-card {
+        min-height: 140px;
+    }
+
+    .spot-history-card {
+        min-height: 190px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .tourist-spot-show-page .content {
+        padding: 18px 14px 28px;
+    }
+
+    .spot-show-header h1 {
+        font-size: 25px;
+    }
+
+    .spot-overview-card {
+        align-items: flex-start;
+    }
+
+    .spot-overview-image {
+        width: 78px;
+        height: 78px;
+    }
+
+    .spot-overview-info h2 {
+        font-size: 20px;
+    }
+
+    .spot-detail-row {
+        grid-template-columns: 1fr;
+
+        gap: 5px;
+
+        padding: 11px 0;
+    }
+
+    .spot-description-card,
+    .spot-history-card {
+        min-height: auto;
+    }
+}

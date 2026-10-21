@@ -4,98 +4,161 @@
 
 
 /* =========================================
-   BUTTONS
-========================================= */
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    padding: 10px 16px;
-
-    border: none;
-    border-radius: var(--radius-small);
-
-    font-size: 12px;
-    font-weight: 600;
-
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.btn-primary {
-    background: var(--primary-green);
-    color: var(--white);
-}
-
-.btn-primary:hover {
-    background: var(--dark-green);
-}
-
-.btn-warning {
-    background: var(--warning-orange);
-    color: var(--white);
-}
-
-.btn-info {
-    background: var(--info-blue);
-    color: var(--white);
-}
-
-.btn-danger {
-    background: var(--danger-red);
-    color: var(--white);
-}
-
-.btn-dark {
-    background: var(--primary-text);
-    color: var(--white);
-}
-
-.btn-outline {
-    background: var(--white);
-
-    color: var(--primary-green);
-
-    border:
-        1px solid var(--primary-green);
-}
-
-.btn-outline:hover {
-    background: var(--light-green);
-}
-
-
-/* =========================================
-   CARDS
+   STANDARD CARD
 ========================================= */
 
 .card {
     background: var(--white);
 
-    border:
-        1px solid var(--border-gray);
+    border: 1px solid var(--border-gray);
+    border-radius: var(--radius-medium);
 
-    border-radius:
-        var(--radius-medium);
+    box-shadow: var(--shadow-small);
+}
+
+
+/* =========================================
+   STANDARD PAGE TITLE
+========================================= */
+
+.page-title {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: var(--heading-large);
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================
+   STANDARD SUBTITLE
+========================================= */
+
+.page-subtitle {
+    margin: 5px 0 0;
+
+    color: var(--secondary-text);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   STANDARD SECTION TITLE
+========================================= */
+
+.section-title {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: var(--heading-small);
+    font-weight: 700;
+}
+
+
+/* =========================================
+   PRIMARY BUTTON
+========================================= */
+
+.button-primary {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--primary-green);
+    border-radius: 7px;
+
+    background: var(--primary-green);
+
+    color: var(--white);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.button-primary:hover {
+    background: var(--dark-green);
+
+    border-color: var(--dark-green);
+}
+
+
+/* =========================================
+   SECONDARY BUTTON
+========================================= */
+
+.button-secondary {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--border-gray);
+    border-radius: 7px;
+
+    background: var(--white);
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.button-secondary:hover {
+    border-color: var(--primary-green);
+
+    color: var(--primary-green);
+}
+
+
+/* =========================================
+   STANDARD INPUT
+========================================= */
+
+.form-control {
+    width: 100%;
+    min-height: 40px;
+
+    padding: 0 12px;
+
+    border: 1px solid var(--border-gray);
+    border-radius: 7px;
+
+    background: var(--white);
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--primary-green);
 
     box-shadow:
-        var(--shadow-small);
+        0 0 0 3px rgba(27, 142, 62, 0.08);
 }
 
 
@@ -106,133 +169,41 @@
 .badge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
 
     padding: 5px 9px;
 
     border-radius: 20px;
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-
-    white-space: nowrap;
 }
 
-.badge-success {
+.badge-green {
     background: var(--light-green);
+
     color: var(--dark-green);
 }
 
-.badge-warning {
-    background: #FFF4DA;
-    color: #9A6700;
-}
-
-.badge-danger {
-    background: #FDECEC;
-    color: var(--danger-red);
-}
-
-.badge-info {
-    background: #EAF1FE;
-    color: var(--info-blue);
-}
-
 
 /* =========================================
-   FORM COMPONENTS
+   SUCCESS MESSAGE
 ========================================= */
 
-.form-group {
-    margin-bottom: 20px;
-}
+.success-message {
+    margin-bottom: 14px;
 
-.form-label {
-    display: block;
+    padding: 11px 14px;
 
-    margin-bottom: 8px;
+    border: 1px solid #CDE8D5;
+    border-radius: 8px;
 
-    color: var(--primary-text);
+    background: var(--light-green);
+
+    color: var(--dark-green);
 
     font-size: 13px;
     font-weight: 600;
-}
-
-.form-control {
-    width: 100%;
-
-    padding: 13px 14px;
-
-    border:
-        1px solid var(--border-gray);
-
-    border-radius:
-        var(--radius-small);
-
-    background: var(--white);
-
-    color: var(--primary-text);
-
-    font-size: 14px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.form-control::placeholder {
-    color: #9CA3AF;
-}
-
-.form-control:focus {
-    border-color:
-        var(--primary-green);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(27, 142, 62, 0.10);
-}
-
-
-/* =========================================
-   ALERTS
-========================================= */
-
-.alert-error {
-    padding: 12px 14px;
-
-    margin-bottom: 20px;
-
-    border:
-        1px solid #F3C3C3;
-
-    border-radius:
-        var(--radius-small);
-
-    background: #FDECEC;
-
-    color: var(--danger-red);
-
-    font-size: 13px;
-}
-
-.alert-success {
-    padding: 12px 14px;
-
-    border:
-        1px solid #CDEBD6;
-
-    border-radius:
-        var(--radius-small);
-
-    background:
-        var(--light-green);
-
-    color:
-        var(--dark-green);
-
-    font-size: 13px;
 }
 
 
@@ -241,47 +212,21 @@
 ========================================= */
 
 .empty-state {
-    padding: 28px;
-
-    color:
-        var(--secondary-text);
+    padding: 48px 20px;
 
     text-align: center;
-
-    font-size: 12px;
 }
 
+.empty-state h3 {
+    margin: 0 0 5px;
 
-/* =========================================
-   TABLE HELPERS
-========================================= */
-
-.table-wrapper {
-    width: 100%;
-
-    overflow-x: auto;
+    font-size: 16px;
 }
 
-.table-actions {
-    display: flex;
-    align-items: center;
+.empty-state p {
+    margin: 0;
 
-    gap: 6px;
-}
+    color: var(--secondary-text);
 
-
-/* =========================================
-   STATUS HELPERS
-========================================= */
-
-.status-low {
-    color: var(--low-risk-green);
-}
-
-.status-medium {
-    color: var(--warning-orange);
-}
-
-.status-high {
-    color: var(--danger-red);
+    font-size: 13px;
 }

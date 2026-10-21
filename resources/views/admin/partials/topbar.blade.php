@@ -1,46 +1,94 @@
+@php
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN DISPLAY NAME
+    |--------------------------------------------------------------------------
+    |
+    | Supports both:
+    |
+    | first_name + last_name
+    |
+    | and:
+    |
+    | name
+    |
+    */
+
+    $adminUser = session('admin_user', []);
+
+    $firstName = data_get(
+        $adminUser,
+        'first_name',
+        ''
+    );
+
+    $lastName = data_get(
+        $adminUser,
+        'last_name',
+        ''
+    );
+
+    $storedName = data_get(
+        $adminUser,
+        'name',
+        ''
+    );
+
+    $adminName = trim(
+        $firstName . ' ' . $lastName
+    );
+
+    if ($adminName === '') {
+        $adminName = $storedName ?: 'Administrator';
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN INITIAL
+    |--------------------------------------------------------------------------
+    */
+
+    $adminInitial = strtoupper(
+        substr(
+            $adminName,
+            0,
+            1
+        )
+    );
+
+@endphp
+
+
 <header class="topbar">
 
-    <div class="search-box">
+    <!-- =========================================
+         LEFT SPACER
+    ========================================== -->
 
-        <input
-            type="search"
-            placeholder="Search accounts, spots, or reports..."
-            aria-label="Search CityPulse"
-        >
-
-    </div>
+    <div class="topbar-spacer"></div>
 
 
-    <div class="admin-info">
 
-        <div class="admin-avatar">
+    <!-- =========================================
+         ADMIN PROFILE
+    ========================================== -->
 
-            {{
-                strtoupper(
-                    substr(
-                        session(
-                            'admin_user.first_name',
-                            'A'
-                        ),
-                        0,
-                        1
-                    )
-                )
-            }}
+    <div class="topbar-admin">
 
+        <div class="topbar-avatar">
+            {{ $adminInitial }}
         </div>
 
 
-        <div>
+        <div class="topbar-admin-info">
 
-            <div class="admin-name">
-
-                {{ session('admin_user.first_name') }}
-                {{ session('admin_user.last_name') }}
-
+            <div class="topbar-admin-name">
+                {{ $adminName }}
             </div>
 
-            <div class="admin-role">
+            <div class="topbar-admin-role">
                 Administrator
             </div>
 

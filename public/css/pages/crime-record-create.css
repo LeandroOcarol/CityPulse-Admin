@@ -1,0 +1,304 @@
+/* =========================================
+   CRIME RECORD FORM
+========================================= */
+
+
+/* Page */
+
+.crime-record-create-page .content,
+.crime-record-edit-page .content {
+    padding: 24px 28px 32px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Header */
+
+.crime-create-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 16px;
+}
+
+.crime-create-back {
+    display: inline-block;
+
+    margin-bottom: 6px;
+
+    color: var(--primary-green);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.crime-create-back:hover {
+    color: var(--dark-green);
+}
+
+.crime-create-header h1 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 28px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.crime-create-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+/* Buttons */
+
+.crime-create-cancel,
+.crime-create-save {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.crime-create-cancel {
+    border: 1px solid var(--border-gray);
+
+    background: var(--white);
+
+    color: var(--secondary-text);
+}
+
+.crime-create-save {
+    border: 1px solid var(--primary-green);
+
+    background: var(--primary-green);
+
+    color: var(--white);
+
+    cursor: pointer;
+}
+
+.crime-create-save:hover {
+    border-color: var(--dark-green);
+
+    background: var(--dark-green);
+}
+
+
+/* Errors */
+
+.crime-create-errors {
+    margin-bottom: 16px;
+
+    padding: 13px 16px;
+
+    border: 1px solid #F3B8B8;
+    border-radius: 9px;
+
+    background: #FDECEC;
+
+    color: var(--danger-red);
+
+    font-size: 13px;
+}
+
+.crime-create-errors strong {
+    display: block;
+
+    margin-bottom: 6px;
+}
+
+.crime-create-errors ul {
+    margin: 0;
+
+    padding-left: 18px;
+}
+
+
+/* Form */
+
+.crime-create-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.crime-create-card {
+    overflow: hidden;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.crime-create-card-header {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.crime-create-card-header h2 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.crime-create-card-body {
+    padding: 16px;
+}
+
+
+/* Grid */
+
+.crime-create-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+.crime-create-field {
+    min-width: 0;
+}
+
+.crime-create-field-full {
+    grid-column: 1 / -1;
+}
+
+
+/* Fields */
+
+.crime-create-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.crime-create-field input,
+.crime-create-field select {
+    width: 100%;
+    min-height: 42px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--border-gray);
+    border-radius: 9px;
+
+    background: var(--white);
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.crime-create-field input:focus,
+.crime-create-field select:focus {
+    border-color: var(--primary-green);
+}
+
+
+/* Bottom Actions */
+
+.crime-create-bottom-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 800px) {
+
+    .crime-create-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .crime-create-header-actions {
+        width: 100%;
+    }
+
+    .crime-create-header-actions a,
+    .crime-create-header-actions button {
+        flex: 1;
+    }
+
+    .crime-create-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crime-create-field-full {
+        grid-column: auto;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .crime-record-create-page .content,
+    .crime-record-edit-page .content {
+        padding: 18px 14px 28px;
+    }
+
+    .crime-create-header h1 {
+        font-size: 25px;
+    }
+
+    .crime-create-bottom-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .crime-create-bottom-actions a,
+    .crime-create-bottom-actions button {
+        width: 100%;
+    }
+}

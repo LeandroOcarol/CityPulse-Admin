@@ -1,89 +1,90 @@
 /* =========================================
-   CITYPULSE - ADD TOURIST SPOT
+   TOURIST SPOT FORM
 ========================================= */
 
 
-/* =========================================
-   PAGE CONTENT
-========================================= */
+/* Page */
 
-.tourist-spot-create-page .content {
-    padding: 18px 28px 24px;
+.tourist-spot-create-page .content,
+.tourist-spot-edit-page .content {
+    padding: 24px 28px 32px;
 
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* Header */
 
 .spot-create-header {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 18px;
 
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
-.back-link {
+.spot-create-heading {
+    min-width: 0;
+}
+
+.spot-create-back {
     display: inline-block;
 
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: var(--primary-green);
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
 }
 
-.back-link:hover {
+.spot-create-back:hover {
     color: var(--dark-green);
 }
 
-.spot-create-header h1 {
+.spot-create-heading h1 {
     margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 27px;
+    font-size: 28px;
     font-weight: 700;
+
+    line-height: 1.2;
 }
 
-.header-actions {
+.spot-create-header-actions {
     display: flex;
     align-items: center;
 
-    gap: 8px;
+    gap: 10px;
 }
 
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* Buttons */
 
-.cancel-button,
-.save-button {
-    min-height: 38px;
+.spot-create-cancel-button,
+.spot-create-save-button {
+    min-height: 40px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 0 16px;
+    padding: 0 17px;
 
-    border-radius: 7px;
+    border-radius: 9px;
 
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 700;
 
     cursor: pointer;
 }
 
-.cancel-button {
+.spot-create-cancel-button {
     border: 1px solid var(--border-gray);
 
     background: var(--white);
@@ -91,13 +92,13 @@
     color: var(--primary-text);
 }
 
-.cancel-button:hover {
+.spot-create-cancel-button:hover {
     border-color: var(--primary-green);
 
     color: var(--primary-green);
 }
 
-.save-button {
+.spot-create-save-button {
     border: 1px solid var(--primary-green);
 
     background: var(--primary-green);
@@ -105,78 +106,126 @@
     color: var(--white);
 }
 
-.save-button:hover {
+.spot-create-save-button:hover {
     background: var(--dark-green);
 
     border-color: var(--dark-green);
 }
 
 
-/* =========================================
-   VALIDATION ERROR
-========================================= */
+/* Validation */
 
-.form-error-box {
-    margin-bottom: 14px;
+.spot-form-errors {
+    margin-bottom: 16px;
 
-    padding: 12px 15px;
+    padding: 13px 15px;
 
-    border: 1px solid #F4C7C3;
-    border-radius: 8px;
+    border: 1px solid #F1C5C5;
+    border-radius: 9px;
 
-    background: #FFF5F4;
+    background: #FFF5F5;
 
     color: var(--danger-red);
 
-    font-size: 10px;
+    font-size: 13px;
+
+    line-height: 1.5;
 }
 
-.form-error-box strong {
-    font-size: 10px;
+.spot-form-errors strong {
+    display: block;
+
+    margin-bottom: 6px;
 }
 
-.form-error-box ul {
-    margin: 6px 0 0;
+.spot-form-errors ul {
+    margin: 0;
 
-    padding-left: 17px;
-}
-
-.form-error-box li {
-    margin: 2px 0;
+    padding-left: 18px;
 }
 
 
-/* =========================================
-   FORM CARDS
-========================================= */
+/* Form */
+
+.spot-create-form {
+    width: 100%;
+}
+
+
+/* Cards */
 
 .spot-form-card {
     overflow: hidden;
 
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
-    border-radius: 9px;
+    border-radius: 10px;
 
-    box-shadow:
-        0 2px 6px rgba(31, 41, 51, 0.03);
+    box-shadow: var(--shadow-small);
 }
 
-.form-card-header {
-    min-height: 43px;
+.spot-form-card-header {
+    min-height: 50px;
 
     display: flex;
     align-items: center;
 
-    padding: 9px 15px;
+    padding: 12px 16px;
 
     border-bottom: 1px solid var(--border-gray);
 }
 
-.form-card-header h2 {
+.spot-form-card-header h2 {
     margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.spot-form-card-body {
+    padding: 16px;
+}
+
+
+/* Form Layout */
+
+.spot-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 14px;
+}
+
+.spot-form-group {
+    min-width: 0;
+
+    margin-bottom: 14px;
+}
+
+.spot-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.spot-form-grid .spot-form-group {
+    margin-bottom: 0;
+}
+
+
+/* Labels */
+
+.spot-form-group label {
+    display: block;
+
+    margin-bottom: 6px;
 
     color: var(--primary-text);
 
@@ -184,63 +233,22 @@
     font-weight: 700;
 }
 
-.form-card-body {
-    padding: 15px;
-}
 
+/* Inputs */
 
-/* =========================================
-   FORM GRID
-========================================= */
-
-.two-column-form {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 14px;
-}
-
-.form-group {
-    margin-bottom: 13px;
-}
-
-.form-group:last-child {
-    margin-bottom: 0;
-}
-
-.form-group label {
-    display: block;
-
-    margin-bottom: 6px;
-
-    color: var(--primary-text);
-
-    font-size: 9px;
-    font-weight: 700;
-}
-
-
-/* =========================================
-   FORM CONTROLS
-========================================= */
-
-.form-group input,
-.form-group textarea {
+.spot-form-group input,
+.spot-form-group textarea {
     width: 100%;
 
-    box-sizing: border-box;
-
     border: 1px solid var(--border-gray);
-    border-radius: 7px;
+    border-radius: 9px;
 
     background: var(--white);
 
     color: var(--primary-text);
 
     font-family: inherit;
-    font-size: 10px;
+    font-size: 14px;
 
     outline: none;
 
@@ -249,87 +257,64 @@
         box-shadow 0.2s ease;
 }
 
-.form-group input {
-    height: 39px;
+.spot-form-group input {
+    min-height: 42px;
 
-    padding: 0 11px;
+    padding: 0 13px;
 }
 
-.form-group textarea {
-    min-height: 88px;
+.spot-form-group textarea {
+    min-height: 112px;
 
-    padding: 10px 11px;
+    padding: 11px 13px;
 
-    line-height: 1.45;
+    line-height: 1.55;
 
     resize: vertical;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.spot-form-group input:focus,
+.spot-form-group textarea:focus {
     border-color: var(--primary-green);
 
     box-shadow:
         0 0 0 3px rgba(27, 142, 62, 0.08);
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: #A0A6A3;
+.spot-form-group input::placeholder,
+.spot-form-group textarea::placeholder {
+    color: #9CA3AF;
 }
 
 
-/* =========================================
-   LOCATION
-========================================= */
+/* Bottom Actions */
 
-.location-note {
-    margin-top: 2px;
-
-    padding: 9px 11px;
-
-    border-radius: 7px;
-
-    background: var(--light-green);
-
-    color: var(--dark-green);
-
-    font-size: 9px;
-}
-
-
-/* =========================================
-   BOTTOM ACTIONS
-========================================= */
-
-.form-bottom-actions {
+.spot-form-bottom-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
 
-    gap: 8px;
+    gap: 10px;
 
     padding-top: 2px;
 }
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* Responsive */
 
-@media (max-width: 750px) {
+@media (max-width: 850px) {
 
     .spot-create-header {
-        align-items: flex-start;
+        align-items: stretch;
 
         flex-direction: column;
     }
 
-    .header-actions {
-        width: 100%;
+    .spot-create-header-actions {
+        justify-content: flex-end;
     }
 
-    .two-column-form {
+    .spot-form-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -337,20 +322,24 @@
 
 @media (max-width: 650px) {
 
-    .tourist-spot-create-page .content {
-        padding: 17px 14px;
+    .tourist-spot-create-page .content,
+    .tourist-spot-edit-page .content {
+        padding: 18px 14px 28px;
     }
 
-    .header-actions {
-        display: none;
+    .spot-create-heading h1 {
+        font-size: 25px;
     }
 
-    .form-bottom-actions {
+    .spot-create-header-actions,
+    .spot-form-bottom-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .spot-create-cancel-button,
+    .spot-create-save-button {
         width: 100%;
-    }
-
-    .form-bottom-actions .cancel-button,
-    .form-bottom-actions .save-button {
-        flex: 1;
     }
 }

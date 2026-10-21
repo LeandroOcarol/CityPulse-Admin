@@ -1,34 +1,23 @@
 @extends('admin.layouts.app')
 
 @section('title', 'CityPulse | Add Tourist Spot')
-
 @section('body-class', 'tourist-spot-create-page')
 
-
 @push('styles')
-
-    <link
-        rel="stylesheet"
-        href="/css/pages/tourist-spot-create.css"
-    >
-
+    <link rel="stylesheet" href="/css/pages/tourist-spot-create.css">
 @endpush
-
 
 @section('content')
 
-
-    <!-- =========================================
-         PAGE HEADER
-    ========================================== -->
+    <!-- Page Header -->
 
     <div class="spot-create-header">
 
-        <div>
+        <div class="spot-create-heading">
 
             <a
                 href="{{ route('admin.tourist-spots.index') }}"
-                class="back-link"
+                class="spot-create-back"
             >
                 Back to Tourist Spots
             </a>
@@ -40,11 +29,11 @@
         </div>
 
 
-        <div class="header-actions">
+        <div class="spot-create-header-actions">
 
             <a
                 href="{{ route('admin.tourist-spots.index') }}"
-                class="cancel-button"
+                class="spot-create-cancel-button"
             >
                 Cancel
             </a>
@@ -52,7 +41,7 @@
             <button
                 type="submit"
                 form="tourist-spot-form"
-                class="save-button"
+                class="spot-create-save-button"
             >
                 Save Spot
             </button>
@@ -62,17 +51,14 @@
     </div>
 
 
-
-    <!-- =========================================
-         VALIDATION ERRORS
-    ========================================== -->
+    <!-- Validation Errors -->
 
     @if($errors->any())
 
-        <div class="form-error-box">
+        <div class="spot-form-errors">
 
             <strong>
-                Check the required fields.
+                Check the highlighted fields.
             </strong>
 
             <ul>
@@ -92,40 +78,36 @@
     @endif
 
 
-
-    <!-- =========================================
-         FORM
-    ========================================== -->
+    <!-- Form -->
 
     <form
         id="tourist-spot-form"
         method="POST"
         action="{{ route('admin.tourist-spots.store') }}"
+        class="spot-create-form"
     >
 
         @csrf
 
 
-        <!-- =====================================
-             PRIMARY INFORMATION
-        ====================================== -->
+        <!-- Basic Information -->
 
         <section class="spot-form-card">
 
-            <div class="form-card-header">
+            <div class="spot-form-card-header">
 
                 <h2>
-                    Primary Information
+                    Information
                 </h2>
 
             </div>
 
 
-            <div class="form-card-body">
+            <div class="spot-form-card-body">
 
-                <div class="two-column-form">
+                <div class="spot-form-grid">
 
-                    <div class="form-group">
+                    <div class="spot-form-group">
 
                         <label for="name">
                             Spot Name
@@ -143,7 +125,7 @@
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="spot-form-group">
 
                         <label for="category">
                             Category
@@ -155,7 +137,7 @@
                             name="category"
                             value="{{ old('category') }}"
                             list="category-list"
-                            placeholder="e.g. Historical"
+                            placeholder="e.g. Historical Landmark"
                             required
                         >
 
@@ -163,10 +145,7 @@
 
                             @foreach($categories as $categoryOption)
 
-                                <option
-                                    value="{{ $categoryOption }}"
-                                >
-                                </option>
+                                <option value="{{ $categoryOption }}"></option>
 
                             @endforeach
 
@@ -177,7 +156,7 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="spot-form-group">
 
                     <label for="description">
                         Description
@@ -187,14 +166,14 @@
                         id="description"
                         name="description"
                         rows="4"
-                        placeholder="Spot description"
+                        placeholder="Enter a short description"
                         required
                     >{{ old('description') }}</textarea>
 
                 </div>
 
 
-                <div class="form-group">
+                <div class="spot-form-group">
 
                     <label for="history">
                         History
@@ -204,7 +183,7 @@
                         id="history"
                         name="history"
                         rows="4"
-                        placeholder="Historical information"
+                        placeholder="Enter historical information"
                     >{{ old('history') }}</textarea>
 
                 </div>
@@ -214,14 +193,11 @@
         </section>
 
 
-
-        <!-- =====================================
-             LOCATION
-        ====================================== -->
+        <!-- Location -->
 
         <section class="spot-form-card">
 
-            <div class="form-card-header">
+            <div class="spot-form-card-header">
 
                 <h2>
                     Location
@@ -230,11 +206,11 @@
             </div>
 
 
-            <div class="form-card-body">
+            <div class="spot-form-card-body">
 
-                <div class="two-column-form">
+                <div class="spot-form-grid">
 
-                    <div class="form-group">
+                    <div class="spot-form-group">
 
                         <label for="latitude">
                             Latitude
@@ -246,14 +222,14 @@
                             name="latitude"
                             value="{{ old('latitude') }}"
                             step="0.00000001"
-                            placeholder="10.00000000"
+                            placeholder="10.315699"
                             required
                         >
 
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="spot-form-group">
 
                         <label for="longitude">
                             Longitude
@@ -265,7 +241,7 @@
                             name="longitude"
                             value="{{ old('longitude') }}"
                             step="0.00000001"
-                            placeholder="123.00000000"
+                            placeholder="123.885437"
                             required
                         >
 
@@ -274,9 +250,19 @@
                 </div>
 
 
-                <div class="location-note">
+                <div class="spot-form-group">
 
-                    Coordinates are used by the CityPulse map.
+                    <label for="address">
+                        Address
+                    </label>
+
+                    <input
+                        id="address"
+                        type="text"
+                        name="address"
+                        value="{{ old('address') }}"
+                        placeholder="Street, barangay, or area"
+                    >
 
                 </div>
 
@@ -285,14 +271,47 @@
         </section>
 
 
-
-        <!-- =====================================
-             MEDIA
-        ====================================== -->
+        <!-- Opening Hours -->
 
         <section class="spot-form-card">
 
-            <div class="form-card-header">
+            <div class="spot-form-card-header">
+
+                <h2>
+                    Hours
+                </h2>
+
+            </div>
+
+
+            <div class="spot-form-card-body">
+
+                <div class="spot-form-group">
+
+                    <label for="opening_hours">
+                        Opening Hours
+                    </label>
+
+                    <input
+                        id="opening_hours"
+                        type="text"
+                        name="opening_hours"
+                        value="{{ old('opening_hours') }}"
+                        placeholder="e.g. 8:00 AM - 5:00 PM"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Media -->
+
+        <section class="spot-form-card">
+
+            <div class="spot-form-card-header">
 
                 <h2>
                     Media
@@ -301,19 +320,19 @@
             </div>
 
 
-            <div class="form-card-body">
+            <div class="spot-form-card-body">
 
-                <div class="form-group">
+                <div class="spot-form-group">
 
-                    <label for="image">
+                    <label for="image_url">
                         Image URL
                     </label>
 
                     <input
-                        id="image"
+                        id="image_url"
                         type="url"
-                        name="image"
-                        value="{{ old('image') }}"
+                        name="image_url"
+                        value="{{ old('image_url') }}"
                         placeholder="https://..."
                     >
 
@@ -324,23 +343,20 @@
         </section>
 
 
+        <!-- Bottom Actions -->
 
-        <!-- =====================================
-             BOTTOM ACTIONS
-        ====================================== -->
-
-        <div class="form-bottom-actions">
+        <div class="spot-form-bottom-actions">
 
             <a
                 href="{{ route('admin.tourist-spots.index') }}"
-                class="cancel-button"
+                class="spot-create-cancel-button"
             >
                 Cancel
             </a>
 
             <button
                 type="submit"
-                class="save-button"
+                class="spot-create-save-button"
             >
                 Save Spot
             </button>
