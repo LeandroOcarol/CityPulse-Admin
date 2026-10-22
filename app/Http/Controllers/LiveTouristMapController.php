@@ -13,6 +13,12 @@ class LiveTouristMapController extends Controller
             return redirect()->route('admin.login');
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | LIVE TOURIST LOCATIONS
+        |--------------------------------------------------------------------------
+        */
+
         $tourists = DB::table('user_locations as ul')
             ->leftJoin(
                 'profiles as p',
@@ -71,6 +77,79 @@ class LiveTouristMapController extends Controller
                 return $tourist;
             });
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | ACTIVE TOURIST SPOTS
+        |--------------------------------------------------------------------------
+        */
+
+        $touristSpots = DB::table('tourist_spots')
+            ->where('is_active', true)
+            ->select(
+                'tourist_id',
+                'name',
+                'category',
+                'address',
+                'opening_hours',
+                'image_url'
+            )
+            ->selectRaw(
+                'extensions.ST_Y(
+                    location::extensions.geometry
+                ) AS latitude'
+            )
+            ->selectRaw(
+                'extensions.ST_X(
+                    location::extensions.geometry
+                ) AS longitude'
+            )
+            ->orderBy('name')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GEOFENCE ZONES
+        |--------------------------------------------------------------------------
+        */
+
+        $geofenceZones = DB::table('geofence_zones as gz')
+            ->leftJoin(
+                'tourist_spots as ts',
+                'ts.tourist_id',
+                '=',
+                'gz.tourist_id'
+            )
+            ->select(
+                'gz.zone_id',
+                'gz.tourist_id',
+                'gz.zone_name',
+                'gz.zone_type',
+                'gz.radius_meters',
+                'gz.alert_message',
+                'ts.name as tourist_spot_name'
+            )
+            ->selectRaw(
+                'extensions.ST_Y(
+                    gz.center::extensions.geometry
+                ) AS latitude'
+            )
+            ->selectRaw(
+                'extensions.ST_X(
+                    gz.center::extensions.geometry
+                ) AS longitude'
+            )
+            ->orderBy('gz.zone_name')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUMMARY COUNTS
+        |--------------------------------------------------------------------------
+        */
+
         $totalTracked = $tourists->count();
 
         $recentCount = $tourists
@@ -81,12 +160,26 @@ class LiveTouristMapController extends Controller
             ->where('location_status', 'Stale')
             ->count();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | VIEW
+        |--------------------------------------------------------------------------
+        */
+
         return view(
             'admin.live-tourist-map.index',
             [
                 'tourists' => $tourists,
+
+                'touristSpots' => $touristSpots,
+
+                'geofenceZones' => $geofenceZones,
+
                 'totalTracked' => $totalTracked,
+
                 'recentCount' => $recentCount,
+
                 'staleCount' => $staleCount,
             ]
         );
