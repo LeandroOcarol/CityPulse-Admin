@@ -12,75 +12,159 @@
 
 @section('content')
 
-    <!-- Page Header -->
-
     <div class="spot-show-header">
 
-        <a
-            href="{{ route('admin.tourist-spots.index') }}"
-            class="spot-show-back"
-        >
-            Back to Tourist Spots
-        </a>
+        <div>
 
-        <h1>
-            Tourist Spot
-        </h1>
+            <a
+                href="{{ route('admin.tourist-spots.index') }}"
+                class="spot-show-back"
+            >
+                Back to Tourist Spots
+            </a>
 
-    </div>
+            <h1>
+                Tourist Spot
+            </h1>
+
+        </div>
 
 
-    <!-- Spot Overview -->
+        <div class="spot-show-actions">
 
-    <section class="spot-overview-card">
+            <a
+                href="{{ route('admin.tourist-spots.edit', $spot->tourist_id) }}"
+                class="spot-show-edit"
+            >
+                Edit Spot
+            </a>
 
-        <div class="spot-overview-image">
 
-            @if(!empty($spot->image_url))
+            @if($spot->is_active)
 
-                <img
-                    src="{{ $spot->image_url }}"
-                    alt="{{ $spot->name }}"
+                <form
+                    method="POST"
+                    action="{{ route('admin.tourist-spots.status', $spot->tourist_id) }}"
+                    class="spot-show-status-form"
+                    onsubmit="return confirm('Deactivate this tourist spot? Historical records will remain available.');"
                 >
+                    @csrf
+                    @method('PATCH')
+
+                    <input
+                        type="hidden"
+                        name="is_active"
+                        value="0"
+                    >
+
+                    <button
+                        type="submit"
+                        class="spot-show-deactivate"
+                    >
+                        Deactivate
+                    </button>
+
+                </form>
 
             @else
 
-                <span>
-                    {{
-                        strtoupper(
-                            substr(
-                                $spot->name ?? 'S',
-                                0,
-                                1
-                            )
-                        )
-                    }}
-                </span>
+                <form
+                    method="POST"
+                    action="{{ route('admin.tourist-spots.status', $spot->tourist_id) }}"
+                    class="spot-show-status-form"
+                    onsubmit="return confirm('Reactivate this tourist spot?');"
+                >
+                    @csrf
+                    @method('PATCH')
+
+                    <input
+                        type="hidden"
+                        name="is_active"
+                        value="1"
+                    >
+
+                    <button
+                        type="submit"
+                        class="spot-show-reactivate"
+                    >
+                        Reactivate
+                    </button>
+
+                </form>
 
             @endif
 
         </div>
 
+    </div>
 
-        <div class="spot-overview-info">
 
-            <h2>
-                {{ $spot->name }}
-            </h2>
+    @if(session('success'))
 
-            <div class="spot-overview-meta">
+        <div class="spot-show-success">
+            {{ session('success') }}
+        </div>
 
-                <span class="spot-show-category">
-                    {{ $spot->category }}
-                </span>
+    @endif
 
-                @if(!empty($spot->address))
 
-                    <span class="spot-show-address">
-                        {{ $spot->address }}
+    <section class="spot-overview">
+
+        <div class="spot-overview-main">
+
+            <div>
+
+                <div class="spot-title-row">
+
+                    <h2>
+                        {{ $spot->name }}
+                    </h2>
+
+                    @if($spot->is_active)
+
+                        <span class="spot-status spot-status-active">
+                            Active
+                        </span>
+
+                    @else
+
+                        <span class="spot-status spot-status-inactive">
+                            Inactive
+                        </span>
+
+                    @endif
+
+                </div>
+
+
+                <div class="spot-overview-meta">
+
+                    <span>
+                        {{ $spot->category }}
                     </span>
 
-                @endif
+                    @if(!empty($spot->address))
+
+                        <span>
+                            {{ $spot->address }}
+                        </span>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+
+            <div class="spot-id">
+
+                <span>
+                    Spot ID
+                </span>
+
+                <strong>
+                    #{{ $spot->tourist_id }}
+                </strong>
 
             </div>
 
@@ -89,86 +173,84 @@
     </section>
 
 
-    <!-- Details Grid -->
+    <div class="spot-details-grid">
 
-    <div class="spot-show-grid">
+        <div class="spot-details-column">
 
+            <section class="spot-card">
 
-        <!-- Left Column -->
-
-        <div class="spot-show-column spot-show-left">
-
-
-            <!-- Information -->
-
-            <section class="spot-show-card">
-
-                <div class="spot-show-card-header">
+                <div class="spot-card-header">
                     <h2>Information</h2>
                 </div>
 
 
-                <div class="spot-show-card-body">
+                <div class="spot-card-body">
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
+                        <span class="spot-info-label">
                             Name
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
                             {{ $spot->name }}
                         </span>
 
                     </div>
 
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
+                        <span class="spot-info-label">
                             Category
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
                             {{ $spot->category }}
                         </span>
 
                     </div>
 
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
-                            Address
+                        <span class="spot-info-label">
+                            Status
                         </span>
 
-                        <span class="spot-detail-value">
-                            {{ $spot->address ?? '—' }}
+                        <span class="spot-info-value">
+
+                            @if($spot->is_active)
+                                Active
+                            @else
+                                Inactive
+                            @endif
+
                         </span>
 
                     </div>
 
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
-                            Hours
+                        <span class="spot-info-label">
+                            Opening Hours
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
                             {{ $spot->opening_hours ?? '—' }}
                         </span>
 
                     </div>
 
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
-                            Added
+                        <span class="spot-info-label">
+                            Created
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
 
                             @if(!empty($spot->created_at))
 
@@ -193,24 +275,35 @@
             </section>
 
 
-            <!-- Location -->
+            <section class="spot-card">
 
-            <section class="spot-show-card">
-
-                <div class="spot-show-card-header">
+                <div class="spot-card-header">
                     <h2>Location</h2>
                 </div>
 
 
-                <div class="spot-show-card-body">
+                <div class="spot-card-body">
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
+                        <span class="spot-info-label">
+                            Address
+                        </span>
+
+                        <span class="spot-info-value">
+                            {{ $spot->address ?? '—' }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="spot-info-row">
+
+                        <span class="spot-info-label">
                             Latitude
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
 
                             @if($spot->latitude !== null)
 
@@ -227,13 +320,13 @@
                     </div>
 
 
-                    <div class="spot-detail-row">
+                    <div class="spot-info-row">
 
-                        <span class="spot-detail-label">
+                        <span class="spot-info-label">
                             Longitude
                         </span>
 
-                        <span class="spot-detail-value">
+                        <span class="spot-info-value">
 
                             @if($spot->longitude !== null)
 
@@ -253,19 +346,37 @@
 
             </section>
 
+
+            @if(!empty($spot->image_url))
+
+                <section class="spot-card">
+
+                    <div class="spot-card-header">
+                        <h2>Image</h2>
+                    </div>
+
+                    <div class="spot-image-container">
+
+                        <img
+                            src="{{ $spot->image_url }}"
+                            alt="{{ $spot->name }}"
+                            class="spot-image"
+                        >
+
+                    </div>
+
+                </section>
+
+            @endif
+
         </div>
 
 
-        <!-- Right Column -->
+        <div class="spot-details-column">
 
-        <div class="spot-show-column spot-show-right">
+            <section class="spot-card spot-description-card">
 
-
-            <!-- Description -->
-
-            <section class="spot-show-card spot-description-card">
-
-                <div class="spot-show-card-header">
+                <div class="spot-card-header">
                     <h2>Description</h2>
                 </div>
 
@@ -276,11 +387,9 @@
             </section>
 
 
-            <!-- History -->
+            <section class="spot-card spot-history-card">
 
-            <section class="spot-show-card spot-history-card">
-
-                <div class="spot-show-card-header">
+                <div class="spot-card-header">
                     <h2>History</h2>
                 </div>
 

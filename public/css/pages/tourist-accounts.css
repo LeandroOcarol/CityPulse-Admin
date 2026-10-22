@@ -2,107 +2,72 @@
    TOURIST ACCOUNTS
 ========================================= */
 
-
-/* =========================================
-   PAGE CONTENT
-========================================= */
-
 .tourist-accounts-page .content {
-    padding: 22px 28px 32px;
+    padding: 24px 28px 32px;
 
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* Header */
 
-.tourist-accounts-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 20px;
-
+.tourist-header {
     margin-bottom: 16px;
 }
 
-.tourist-accounts-header h1 {
+.tourist-header h1 {
     margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 29px;
+    font-size: 28px;
     font-weight: 700;
 
     line-height: 1.2;
 }
 
-.tourist-accounts-header p {
-    margin: 5px 0 0;
 
-    color: var(--secondary-text);
+/* Success */
 
-    font-size: 13px;
+.tourist-success {
+    margin-bottom: 16px;
 
-    line-height: 1.45;
-}
+    padding: 12px 14px;
 
+    border: 1px solid #B8E0C2;
+    border-radius: 9px;
 
-/* =========================================
-   EXPORT BUTTON
-========================================= */
+    background: var(--light-green);
 
-.export-button {
-    min-height: 40px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 16px;
-
-    border: 1px solid var(--primary-green);
-    border-radius: 7px;
-
-    background: var(--primary-green);
-
-    color: var(--white);
+    color: var(--dark-green);
 
     font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.export-button:hover {
-    background: var(--dark-green);
-
-    border-color: var(--dark-green);
+    font-weight: 600;
 }
 
 
-/* =========================================
-   SUMMARY
-========================================= */
+/* Summary */
 
-.tourist-account-summary {
-    width: 100%;
+.tourist-summary-grid {
+    display: grid;
 
-    margin-bottom: 14px;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 16px;
 }
 
-.tourist-total-card {
-    width: 100%;
-    min-height: 74px;
+.tourist-summary-card {
+    min-height: 76px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 16px;
 
     padding: 14px 18px;
 
@@ -110,12 +75,12 @@
 
     border: 1px solid var(--border-gray);
     border-left: 4px solid var(--primary-green);
-    border-radius: 9px;
+    border-radius: 10px;
 
     box-shadow: var(--shadow-small);
 }
 
-.tourist-total-label {
+.tourist-summary-label {
     color: var(--secondary-text);
 
     font-size: 13px;
@@ -123,107 +88,106 @@
 
     text-transform: uppercase;
 
-    line-height: 1.3;
+    letter-spacing: 0.04em;
 }
 
-.tourist-total-number {
+.tourist-summary-value {
     flex-shrink: 0;
 
     color: var(--primary-green);
 
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 700;
-
-    line-height: 1;
 }
 
 
-/* =========================================
-   FILTER PANEL
-========================================= */
+/* Filters */
 
-.tourist-account-filter-panel {
-    margin-bottom: 14px;
+.tourist-filter-card {
+    margin-bottom: 16px;
 
     padding: 12px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
-    border-radius: 9px;
+    border-radius: 10px;
 
     box-shadow: var(--shadow-small);
 }
 
-.tourist-account-filter-form {
-    display: flex;
+.tourist-filter-form {
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, 1fr)
+        auto;
+
+    gap: 10px;
+
     align-items: center;
-
-    gap: 9px;
 }
 
-.account-search-field {
-    flex: 1;
-
-    min-width: 240px;
+.tourist-search {
+    min-width: 0;
 }
 
-.account-period-field {
-    width: 180px;
-}
+.tourist-search input,
+.tourist-filter-controls select {
+    min-height: 40px;
 
-.account-search-field input,
-.account-period-field select {
-    width: 100%;
-    height: 40px;
-
-    padding: 0 12px;
+    padding: 0 13px;
 
     border: 1px solid var(--border-gray);
-    border-radius: 7px;
+    border-radius: 9px;
 
     background: var(--white);
 
     color: var(--primary-text);
 
-    font-size: 13px;
+    font-size: 14px;
 
     outline: none;
 }
 
-.account-search-field input:focus,
-.account-period-field select:focus {
-    border-color: var(--primary-green);
-
-    box-shadow:
-        0 0 0 3px rgba(27, 142, 62, 0.08);
+.tourist-search input {
+    width: 100%;
 }
 
+.tourist-search input:focus,
+.tourist-filter-controls select:focus {
+    border-color: var(--primary-green);
+}
 
-/* =========================================
-   FILTER BUTTONS
-========================================= */
+.tourist-filter-controls {
+    display: flex;
+    align-items: center;
 
-.account-filter-button,
-.account-clear-button {
+    gap: 8px;
+}
+
+.tourist-filter-controls select {
+    min-width: 145px;
+}
+
+.tourist-filter-button,
+.tourist-clear-button {
     min-height: 40px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 0 14px;
+    padding: 0 15px;
 
-    border-radius: 7px;
+    border-radius: 9px;
 
     font-size: 13px;
     font-weight: 700;
-
-    white-space: nowrap;
 }
 
-.account-filter-button {
-    border: 1px solid var(--primary-green);
+.tourist-filter-button {
+    border: none;
 
     background: var(--primary-green);
 
@@ -232,56 +196,41 @@
     cursor: pointer;
 }
 
-.account-filter-button:hover {
+.tourist-filter-button:hover {
     background: var(--dark-green);
-
-    border-color: var(--dark-green);
 }
 
-.account-clear-button {
+.tourist-clear-button {
     border: 1px solid var(--border-gray);
 
     background: var(--white);
 
     color: var(--secondary-text);
-}
 
-.account-clear-button:hover {
-    border-color: var(--primary-green);
-
-    color: var(--primary-green);
+    text-decoration: none;
 }
 
 
-/* =========================================
-   DIRECTORY PANEL
-========================================= */
+/* Table */
 
-.tourist-account-panel {
+.tourist-table-card {
     overflow: hidden;
-
-    margin-bottom: 16px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
-    border-radius: 9px;
+    border-radius: 10px;
 
     box-shadow: var(--shadow-small);
 }
 
-.tourist-account-panel-header {
-    min-height: 52px;
-
-    display: flex;
-    align-items: center;
-
-    padding: 11px 14px;
+.tourist-table-header {
+    padding: 14px;
 
     border-bottom: 1px solid var(--border-gray);
 }
 
-.tourist-account-panel-header h2 {
+.tourist-table-header h2 {
     margin: 0;
 
     color: var(--primary-text);
@@ -290,136 +239,100 @@
     font-weight: 700;
 }
 
-.tourist-account-panel-header p {
-    margin: 3px 0 0;
+.tourist-table-header span {
+    display: block;
+
+    margin-top: 2px;
 
     color: var(--secondary-text);
 
-    font-size: 12px;
+    font-size: 13px;
 }
 
-
-/* =========================================
-   TABLE
-========================================= */
-
-.tourist-account-table-wrapper {
+.tourist-table-wrapper {
     width: 100%;
 
     overflow-x: auto;
 }
 
-.tourist-account-table {
+.tourist-table {
     width: 100%;
 
     border-collapse: collapse;
-
-    table-layout: fixed;
 }
 
-.tourist-account-table thead {
+.tourist-table thead th {
+    padding: 12px 14px;
+
     background: var(--light-gray);
-}
 
-.tourist-account-table th {
-    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-gray);
 
     color: var(--secondary-text);
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
 
     text-align: left;
 
     text-transform: uppercase;
 
-    letter-spacing: 0.4px;
+    letter-spacing: 0.04em;
+
+    white-space: nowrap;
 }
 
-.tourist-account-table td {
-    padding: 11px 12px;
+.tourist-table tbody td {
+    padding: 14px;
 
-    border-top: 1px solid var(--border-gray);
+    border-bottom: 1px solid var(--border-gray);
 
     color: var(--primary-text);
 
-    font-size: 13px;
+    font-size: 14px;
 
     vertical-align: middle;
 }
 
-.tourist-account-table tbody tr:hover {
-    background: #FAFBFA;
+.tourist-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tourist-row-inactive {
+    background: #FAFAFA;
 }
 
 
-/* =========================================
-   COLUMN WIDTHS
-========================================= */
+/* Profile */
 
-.tourist-account-table th:nth-child(1),
-.tourist-account-table td:nth-child(1) {
-    width: 24%;
-}
-
-.tourist-account-table th:nth-child(2),
-.tourist-account-table td:nth-child(2) {
-    width: 24%;
-}
-
-.tourist-account-table th:nth-child(3),
-.tourist-account-table td:nth-child(3) {
-    width: 16%;
-}
-
-.tourist-account-table th:nth-child(4),
-.tourist-account-table td:nth-child(4) {
-    width: 15%;
-}
-
-.tourist-account-table th:nth-child(5),
-.tourist-account-table td:nth-child(5) {
-    width: 11%;
-}
-
-.tourist-account-table th:nth-child(6),
-.tourist-account-table td:nth-child(6) {
-    width: 10%;
-}
-
-
-/* =========================================
-   TOURIST PROFILE
-========================================= */
-
-.tourist-profile {
-    min-width: 0;
-
+.tourist-profile-cell {
     display: flex;
     align-items: center;
 
     gap: 10px;
+
+    min-width: 190px;
 }
 
 .tourist-avatar {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
 
     flex-shrink: 0;
-
-    overflow: hidden;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 8px;
+    overflow: hidden;
+
+    border-radius: 50%;
 
     background: var(--light-green);
 
-    color: var(--primary-green);
+    color: var(--dark-green);
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
 }
 
@@ -427,63 +340,35 @@
     width: 100%;
     height: 100%;
 
+    display: block;
+
     object-fit: cover;
 }
 
-.tourist-name {
-    min-width: 0;
-
-    overflow: hidden;
+.tourist-name strong {
+    display: block;
 
     color: var(--primary-text);
 
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
 }
 
-.account-email {
+.tourist-name span {
     display: block;
 
-    overflow: hidden;
+    margin-top: 2px;
 
-    text-overflow: ellipsis;
+    color: var(--secondary-text);
 
-    white-space: nowrap;
+    font-size: 12px;
 }
 
 
-/* =========================================
-   ROLE BADGE
-========================================= */
+/* Status */
 
-.tourist-role-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 5px 9px;
-
-    border-radius: 20px;
-
-    background: var(--light-green);
-
-    color: var(--dark-green);
-
-    font-size: 11px;
-    font-weight: 700;
-}
-
-
-/* =========================================
-   VIEW BUTTON
-========================================= */
-
-.view-account-button {
-    min-height: 32px;
+.tourist-status {
+    min-height: 25px;
 
     display: inline-flex;
     align-items: center;
@@ -491,28 +376,104 @@
 
     padding: 0 10px;
 
-    border: 1px solid var(--primary-green);
-    border-radius: 6px;
-
-    background: var(--white);
-
-    color: var(--primary-green);
+    border-radius: 20px;
 
     font-size: 12px;
     font-weight: 700;
 }
 
-.view-account-button:hover {
+.tourist-status-active {
     background: var(--light-green);
+
+    color: var(--dark-green);
+}
+
+.tourist-status-inactive {
+    background: #F3F4F6;
+
+    color: var(--secondary-text);
 }
 
 
-/* =========================================
-   PAGINATION
-========================================= */
+/* Actions */
 
-.tourist-account-pagination {
-    min-height: 50px;
+.tourist-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+.tourist-status-form {
+    margin: 0;
+}
+
+.tourist-view-button,
+.tourist-deactivate-button,
+.tourist-reactivate-button {
+    min-height: 32px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 11px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.tourist-view-button {
+    border: 1px solid var(--primary-green);
+
+    background: var(--white);
+
+    color: var(--primary-green);
+}
+
+.tourist-view-button:hover {
+    background: var(--light-green);
+}
+
+.tourist-deactivate-button {
+    border: 1px solid var(--danger-red);
+
+    background: var(--white);
+
+    color: var(--danger-red);
+
+    cursor: pointer;
+}
+
+.tourist-deactivate-button:hover {
+    background: #FDECEC;
+}
+
+.tourist-reactivate-button {
+    border: 1px solid var(--primary-green);
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    cursor: pointer;
+}
+
+.tourist-reactivate-button:hover {
+    background: #DDF1E3;
+}
+
+
+/* Pagination */
+
+.tourist-pagination {
+    min-height: 52px;
 
     display: flex;
     align-items: center;
@@ -520,25 +481,25 @@
 
     gap: 14px;
 
-    padding: 10px 13px;
+    padding: 10px 14px;
 
     border-top: 1px solid var(--border-gray);
 }
 
-.pagination-info {
+.tourist-pagination-info {
     color: var(--secondary-text);
 
-    font-size: 12px;
+    font-size: 13px;
 }
 
-.pagination-controls {
+.tourist-pagination-controls {
     display: flex;
     align-items: center;
 
     gap: 7px;
 }
 
-.pagination-button {
+.tourist-page-button {
     min-height: 32px;
 
     display: inline-flex;
@@ -548,7 +509,7 @@
     padding: 0 10px;
 
     border: 1px solid var(--border-gray);
-    border-radius: 6px;
+    border-radius: 7px;
 
     background: var(--white);
 
@@ -556,137 +517,77 @@
 
     font-size: 12px;
     font-weight: 600;
+
+    text-decoration: none;
 }
 
-.pagination-button:hover {
-    border-color: var(--primary-green);
-
-    color: var(--primary-green);
-}
-
-.pagination-button.disabled {
+.tourist-page-button.disabled {
     color: #A6ACA8;
 
     cursor: default;
 }
 
-.pagination-current {
+.tourist-page-current {
     color: var(--secondary-text);
 
     font-size: 12px;
 }
 
 
-/* =========================================
-   EMPTY STATE
-========================================= */
+/* Empty */
 
-.tourist-account-empty {
-    padding: 48px 20px;
+.tourist-empty {
+    padding: 32px 14px !important;
+
+    color: var(--secondary-text) !important;
 
     text-align: center;
 }
 
-.tourist-account-empty h3 {
-    margin: 0;
 
-    color: var(--primary-text);
+/* Responsive */
 
-    font-size: 16px;
-}
+@media (max-width: 1050px) {
 
+    .tourist-filter-form {
+        grid-template-columns: 1fr;
+    }
 
-/* =========================================
-   SUPPORTING INFORMATION
-========================================= */
-
-.tourist-support-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 12px;
-}
-
-.support-card {
-    padding: 15px;
-
-    background: var(--white);
-
-    border: 1px solid var(--border-gray);
-    border-radius: 9px;
-
-    box-shadow: var(--shadow-small);
-}
-
-.support-card h3 {
-    margin: 0 0 5px;
-
-    color: var(--primary-text);
-
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.support-card p {
-    margin: 0;
-
-    color: var(--secondary-text);
-
-    font-size: 12px;
-
-    line-height: 1.5;
-}
-
-
-/* =========================================
-   RESPONSIVE
-========================================= */
-
-@media (max-width: 1000px) {
-
-    .tourist-account-filter-form {
+    .tourist-filter-controls {
         flex-wrap: wrap;
     }
 
-    .tourist-account-table {
+    .tourist-table {
         min-width: 900px;
-    }
-
-    .tourist-support-grid {
-        grid-template-columns: 1fr;
     }
 }
 
 
-@media (max-width: 650px) {
+@media (max-width: 760px) {
 
     .tourist-accounts-page .content {
         padding: 18px 14px 28px;
     }
 
-    .tourist-accounts-header {
-        flex-direction: column;
+    .tourist-header h1 {
+        font-size: 25px;
     }
 
-    .tourist-accounts-header h1 {
-        font-size: 26px;
+    .tourist-summary-grid {
+        grid-template-columns: 1fr;
     }
 
-    .tourist-account-filter-form {
+    .tourist-filter-controls {
         align-items: stretch;
 
         flex-direction: column;
     }
 
-    .account-search-field,
-    .account-period-field {
+    .tourist-filter-controls select {
         width: 100%;
-        min-width: 0;
     }
 
-    .tourist-account-pagination {
+    .tourist-pagination {
         align-items: flex-start;
 
         flex-direction: column;

@@ -12,74 +12,71 @@
 
 @section('content')
 
-    <div class="incidents-header">
-
-        <h1>
-            Incident Reports
-        </h1>
-
+    <div class="incident-header">
+        <h1>Incident Reports</h1>
     </div>
 
 
-    <section class="incidents-summary-grid">
+    @if(session('success'))
 
-        <div class="incidents-summary-card">
+        <div class="incident-success">
+            {{ session('success') }}
+        </div>
 
-            <div class="incidents-summary-content">
+    @endif
 
-                <span class="incidents-summary-label">
-                    Incident Reports
-                </span>
 
-                <strong class="incidents-summary-value">
-                    {{ number_format($totalIncidents) }}
-                </strong>
+    <section class="incident-summary-grid">
 
-            </div>
+        <div class="incident-summary-card">
+
+            <span class="incident-summary-label">
+                Incident Reports
+            </span>
+
+            <strong class="incident-summary-value">
+                {{ number_format($totalIncidents) }}
+            </strong>
 
         </div>
 
 
-        <div class="incidents-summary-card">
+        <div class="incident-summary-card">
 
-            <div class="incidents-summary-content">
+            <span class="incident-summary-label">
+                Pending
+            </span>
 
-                <span class="incidents-summary-label">
-                    Pending
-                </span>
-
-                <strong class="incidents-summary-value">
-                    {{ number_format($pendingIncidents) }}
-                </strong>
-
-            </div>
+            <strong class="incident-summary-value">
+                {{ number_format($pendingIncidents) }}
+            </strong>
 
         </div>
 
     </section>
 
 
-    <section class="incidents-filter-card">
+    <section class="incident-filter-card">
 
         <form
             method="GET"
             action="{{ route('admin.incident-reports.index') }}"
-            class="incidents-filter-form"
+            class="incident-filter-form"
         >
 
-            <div class="incidents-search">
+            <div class="incident-search">
 
                 <input
                     type="search"
                     name="search"
                     value="{{ $search }}"
-                    placeholder="Search reports"
+                    placeholder="Search incident reports"
                 >
 
             </div>
 
 
-            <div class="incidents-filter-controls">
+            <div class="incident-filter-controls">
 
                 <select name="type">
 
@@ -103,27 +100,40 @@
 
                 <select name="status">
 
-                    <option value="all">
+                    <option
+                        value="all"
+                        {{ $status === 'all' ? 'selected' : '' }}
+                    >
                         All Statuses
                     </option>
 
-                    @foreach($statuses as $statusOption)
+                    <option
+                        value="Pending"
+                        {{ $status === 'Pending' ? 'selected' : '' }}
+                    >
+                        Pending
+                    </option>
 
-                        <option
-                            value="{{ $statusOption }}"
-                            {{ $status === $statusOption ? 'selected' : '' }}
-                        >
-                            {{ $statusOption }}
-                        </option>
+                    <option
+                        value="Approved"
+                        {{ $status === 'Approved' ? 'selected' : '' }}
+                    >
+                        Approved
+                    </option>
 
-                    @endforeach
+                    <option
+                        value="Rejected"
+                        {{ $status === 'Rejected' ? 'selected' : '' }}
+                    >
+                        Rejected
+                    </option>
 
                 </select>
 
 
                 <button
                     type="submit"
-                    class="incidents-filter-button"
+                    class="incident-filter-button"
                 >
                     Filter
                 </button>
@@ -131,13 +141,13 @@
 
                 @if(
                     $search !== '' ||
-                    $status !== 'all' ||
-                    $type !== 'all'
+                    $type !== 'all' ||
+                    $status !== 'all'
                 )
 
                     <a
                         href="{{ route('admin.incident-reports.index') }}"
-                        class="incidents-clear-button"
+                        class="incident-clear-button"
                     >
                         Clear
                     </a>
@@ -151,18 +161,18 @@
     </section>
 
 
-    <section class="incidents-table-card">
+    <section class="incident-table-card">
 
-        <div class="incidents-table-header">
+        <div class="incident-table-header">
 
             <div>
 
                 <h2>
-                    Report Directory
+                    Incident Directory
                 </h2>
 
                 <span>
-                    {{ $incidents->total() }} reports
+                    {{ number_format($incidents->total()) }} records
                 </span>
 
             </div>
@@ -170,9 +180,9 @@
         </div>
 
 
-        <div class="incidents-table-wrapper">
+        <div class="incident-table-wrapper">
 
-            <table class="incidents-table">
+            <table class="incident-table">
 
                 <thead>
 
@@ -182,7 +192,7 @@
                         <th>Reporter</th>
                         <th>Status</th>
                         <th>Date</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
 
                 </thead>
@@ -195,12 +205,17 @@
                         @php
 
                             $reporterName = trim(
-                                ($incident->first_name ?? '') .
-                                ' ' .
+                                ($incident->first_name ?? '') . ' ' .
                                 ($incident->last_name ?? '')
                             );
 
-                            $incidentTypeName =
+                            if ($reporterName === '') {
+                                $reporterName =
+                                    $incident->email
+                                    ?? 'Unknown';
+                            }
+
+                            $incidentType =
                                 $incident->incident_name
                                 ?? $incident->other_type
                                 ?? 'Other';
@@ -219,21 +234,12 @@
                                 <div class="incident-report-cell">
 
                                     <strong>
-                                        {{ $incident->title ?? 'Incident Report' }}
+                                        {{ $incident->title }}
                                     </strong>
 
-                                    @if(!empty($incident->description))
-
-                                        <span>
-                                            {{
-                                                \Illuminate\Support\Str::limit(
-                                                    $incident->description,
-                                                    55
-                                                )
-                                            }}
-                                        </span>
-
-                                    @endif
+                                    <span>
+                                        #{{ $incident->incident_id }}
+                                    </span>
 
                                 </div>
 
@@ -241,23 +247,7 @@
 
 
                             <td>
-
-                                <div class="incident-type-cell">
-
-                                    <strong>
-                                        {{ $incidentTypeName }}
-                                    </strong>
-
-                                    @if(!empty($incident->report_category))
-
-                                        <span>
-                                            {{ $incident->report_category }}
-                                        </span>
-
-                                    @endif
-
-                                </div>
-
+                                {{ $incidentType }}
                             </td>
 
 
@@ -266,7 +256,7 @@
                                 <div class="incident-reporter-cell">
 
                                     <strong>
-                                        {{ $reporterName !== '' ? $reporterName : 'Tourist' }}
+                                        {{ $reporterName }}
                                     </strong>
 
                                     @if(!empty($incident->email))
@@ -285,7 +275,7 @@
                             <td>
 
                                 <span class="incident-status incident-status-{{ $statusClass }}">
-                                    {{ $incident->status ?? 'Pending' }}
+                                    {{ $incident->status }}
                                 </span>
 
                             </td>
@@ -312,12 +302,35 @@
 
                             <td>
 
-                                <a
-                                    href="{{ route('admin.incident-reports.show', $incident->incident_id) }}"
-                                    class="incident-view-button"
-                                >
-                                    View
-                                </a>
+                                <div class="incident-actions">
+
+                                    <a
+                                        href="{{ route('admin.incident-reports.show', $incident->incident_id) }}"
+                                        class="incident-view-button"
+                                    >
+                                        View
+                                    </a>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ route('admin.incident-reports.destroy', $incident->incident_id) }}"
+                                        class="incident-delete-form"
+                                        onsubmit="return confirm('Are you sure you want to permanently delete this incident report?');"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="incident-delete-button"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
 
                             </td>
 
@@ -329,7 +342,7 @@
 
                             <td
                                 colspan="6"
-                                class="incidents-empty"
+                                class="incident-empty"
                             >
                                 No incident reports found.
                             </td>
@@ -345,9 +358,9 @@
         </div>
 
 
-        <div class="incidents-pagination">
+        <div class="incident-pagination">
 
-            <div class="incidents-pagination-info">
+            <div class="incident-pagination-info">
 
                 Showing
 
@@ -364,17 +377,17 @@
                 of
 
                 <strong>
-                    {{ $incidents->total() }}
+                    {{ number_format($incidents->total()) }}
                 </strong>
 
             </div>
 
 
-            <div class="incidents-pagination-controls">
+            <div class="incident-pagination-controls">
 
                 @if($incidents->onFirstPage())
 
-                    <span class="incidents-page-button disabled">
+                    <span class="incident-page-button disabled">
                         Previous
                     </span>
 
@@ -382,7 +395,7 @@
 
                     <a
                         href="{{ $incidents->previousPageUrl() }}"
-                        class="incidents-page-button"
+                        class="incident-page-button"
                     >
                         Previous
                     </a>
@@ -390,12 +403,10 @@
                 @endif
 
 
-                <span class="incidents-page-current">
-
+                <span class="incident-page-current">
                     {{ $incidents->currentPage() }}
                     /
                     {{ $incidents->lastPage() }}
-
                 </span>
 
 
@@ -403,14 +414,14 @@
 
                     <a
                         href="{{ $incidents->nextPageUrl() }}"
-                        class="incidents-page-button"
+                        class="incident-page-button"
                     >
                         Next
                     </a>
 
                 @else
 
-                    <span class="incidents-page-button disabled">
+                    <span class="incident-page-button disabled">
                         Next
                     </span>
 

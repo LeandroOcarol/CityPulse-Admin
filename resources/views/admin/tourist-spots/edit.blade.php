@@ -9,8 +9,6 @@
 
 @section('content')
 
-    <!-- Page Header -->
-
     <div class="spot-create-header">
 
         <div class="spot-create-heading">
@@ -51,8 +49,6 @@
     </div>
 
 
-    <!-- Validation Errors -->
-
     @if($errors->any())
 
         <div class="spot-form-errors">
@@ -78,27 +74,23 @@
     @endif
 
 
-    <!-- Form -->
-
     <form
         id="tourist-spot-edit-form"
         method="POST"
         action="{{ route('admin.tourist-spots.update', $spot->tourist_id) }}"
         class="spot-create-form"
+        enctype="multipart/form-data"
     >
 
         @csrf
         @method('PUT')
 
 
-        <!-- Information -->
-
         <section class="spot-form-card">
 
             <div class="spot-form-card-header">
                 <h2>Information</h2>
             </div>
-
 
             <div class="spot-form-card-body">
 
@@ -139,9 +131,7 @@
                         <datalist id="category-list">
 
                             @foreach($categories as $categoryOption)
-
                                 <option value="{{ $categoryOption }}"></option>
-
                             @endforeach
 
                         </datalist>
@@ -186,14 +176,11 @@
         </section>
 
 
-        <!-- Location -->
-
         <section class="spot-form-card">
 
             <div class="spot-form-card-header">
                 <h2>Location</h2>
             </div>
-
 
             <div class="spot-form-card-body">
 
@@ -257,14 +244,11 @@
         </section>
 
 
-        <!-- Hours -->
-
         <section class="spot-form-card">
 
             <div class="spot-form-card-header">
                 <h2>Hours</h2>
             </div>
-
 
             <div class="spot-form-card-body">
 
@@ -288,16 +272,69 @@
         </section>
 
 
-        <!-- Media -->
-
         <section class="spot-form-card">
 
             <div class="spot-form-card-header">
                 <h2>Media</h2>
             </div>
 
-
             <div class="spot-form-card-body">
+
+                <div class="spot-form-group">
+
+                    <label>
+                        Tourist Spot Photo
+                    </label>
+
+                    <input
+                        id="spot_photo"
+                        type="file"
+                        name="spot_photo"
+                        accept="image/jpeg,image/png,image/webp"
+                        hidden
+                    >
+
+                    <div>
+
+                        <label
+                            for="spot_photo"
+                            class="spot-photo-button"
+                        >
+                            Replace Photo
+                        </label>
+
+                    </div>
+
+                    <small>
+                        JPG, JPEG, PNG, or WEBP. Maximum file size: 10 MB.
+                    </small>
+
+                </div>
+
+
+                <div
+                    id="photo-preview-container"
+                    class="spot-form-group"
+                    {{ empty(old('image_url', $spot->image_url)) ? 'hidden' : '' }}
+                >
+
+                    <label>
+                        Current Photo
+                    </label>
+
+                    <div>
+
+                        <img
+                            id="photo-preview"
+                            src="{{ old('image_url', $spot->image_url) }}"
+                            alt="Tourist spot photo preview"
+                            width="240"
+                        >
+
+                    </div>
+
+                </div>
+
 
                 <div class="spot-form-group">
 
@@ -313,14 +350,16 @@
                         placeholder="https://..."
                     >
 
+                    <small id="image-url-helper">
+                        You may replace the current image by uploading a new photo or entering another image URL.
+                    </small>
+
                 </div>
 
             </div>
 
         </section>
 
-
-        <!-- Bottom Actions -->
 
         <div class="spot-form-bottom-actions">
 
@@ -343,3 +382,142 @@
     </form>
 
 @endsection
+
+
+@push('scripts')
+
+    <script>
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const photoInput =
+                    document.getElementById('spot_photo');
+
+                const imageUrlInput =
+                    document.getElementById('image_url');
+
+                const imageUrlHelper =
+                    document.getElementById('image-url-helper');
+
+                const previewContainer =
+                    document.getElementById(
+                        'photo-preview-container'
+                    );
+
+                const preview =
+                    document.getElementById(
+                        'photo-preview'
+                    );
+
+
+                function showPreview(source) {
+
+                    if (!source) {
+
+                        preview.src = '';
+
+                        previewContainer.hidden = true;
+
+                        return;
+
+                    }
+
+                    preview.src = source;
+
+                    previewContainer.hidden = false;
+
+                }
+
+
+                function enableImageUrl() {
+
+                    imageUrlInput.disabled = false;
+
+                    imageUrlHelper.textContent =
+                        'You may replace the current image by uploading a new photo or entering another image URL.';
+
+                }
+
+
+                function disableImageUrl() {
+
+                    imageUrlInput.value = '';
+
+                    imageUrlInput.disabled = true;
+
+                    imageUrlHelper.textContent =
+                        'Image URL is disabled because a new local photo has been selected.';
+
+                }
+
+
+                photoInput.addEventListener(
+                    'change',
+                    function () {
+
+                        const file =
+                            photoInput.files[0];
+
+
+                        if (!file) {
+
+                            enableImageUrl();
+
+                            showPreview(
+                                imageUrlInput.value.trim()
+                            );
+
+                            return;
+
+                        }
+
+
+                        disableImageUrl();
+
+
+                        const reader =
+                            new FileReader();
+
+
+                        reader.onload =
+                            function (event) {
+
+                                showPreview(
+                                    event.target.result
+                                );
+
+                            };
+
+
+                        reader.readAsDataURL(file);
+
+                    }
+                );
+
+
+                imageUrlInput.addEventListener(
+                    'input',
+                    function () {
+
+                        if (
+                            photoInput.files.length > 0
+                        ) {
+                            return;
+                        }
+
+
+                        showPreview(
+                            imageUrlInput.value.trim()
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    </script>
+
+@endpush

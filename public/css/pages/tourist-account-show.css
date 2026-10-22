@@ -2,28 +2,27 @@
    TOURIST ACCOUNT DETAILS
 ========================================= */
 
-
-/* =========================================
-   PAGE CONTENT
-========================================= */
-
 .tourist-account-show-page .content {
-    padding: 22px 28px 32px;
+    padding: 24px 28px 32px;
 
     overflow-x: hidden;
     overflow-y: auto;
 }
 
 
-/* =========================================
-   PAGE HEADER
-========================================= */
+/* Header */
 
-.account-show-header {
+.tourist-show-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 16px;
+
     margin-bottom: 16px;
 }
 
-.back-link {
+.tourist-show-back {
     display: inline-block;
 
     margin-bottom: 6px;
@@ -32,34 +31,99 @@
 
     font-size: 13px;
     font-weight: 700;
+
+    text-decoration: none;
 }
 
-.back-link:hover {
+.tourist-show-back:hover {
     color: var(--dark-green);
 }
 
-.account-show-header h1 {
+.tourist-show-header h1 {
     margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 29px;
+    font-size: 28px;
     font-weight: 700;
 
     line-height: 1.2;
 }
 
+.tourist-show-status-form {
+    margin: 0;
+}
 
-/* =========================================
-   PROFILE OVERVIEW
-========================================= */
+.tourist-show-deactivate,
+.tourist-show-reactivate {
+    min-height: 40px;
 
-.account-profile-card {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.tourist-show-deactivate {
+    border: 1px solid var(--danger-red);
+
+    background: var(--white);
+
+    color: var(--danger-red);
+}
+
+.tourist-show-deactivate:hover {
+    background: #FDECEC;
+}
+
+.tourist-show-reactivate {
+    border: 1px solid var(--primary-green);
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+}
+
+.tourist-show-reactivate:hover {
+    background: #DDF1E3;
+}
+
+
+/* Success */
+
+.tourist-show-success {
+    margin-bottom: 16px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #B8E0C2;
+    border-radius: 9px;
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Profile */
+
+.tourist-profile-overview {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 24px;
+    gap: 20px;
 
     margin-bottom: 16px;
 
@@ -73,60 +137,51 @@
     box-shadow: var(--shadow-small);
 }
 
-.account-profile-main {
+.tourist-profile-main {
     min-width: 0;
 
     display: flex;
     align-items: center;
 
-    gap: 16px;
+    gap: 14px;
 }
 
-.account-profile-avatar {
-    width: 84px;
-    height: 84px;
+.tourist-profile-avatar {
+    width: 64px;
+    height: 64px;
 
     flex-shrink: 0;
-
-    overflow: hidden;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 10px;
+    overflow: hidden;
+
+    border-radius: 50%;
 
     background: var(--light-green);
 
-    color: var(--primary-green);
+    color: var(--dark-green);
 
-    font-size: 28px;
+    font-size: 18px;
     font-weight: 700;
 }
 
-.account-profile-avatar img {
+.tourist-profile-avatar img {
     width: 100%;
     height: 100%;
+
+    display: block;
 
     object-fit: cover;
 }
 
-.account-profile-info {
+.tourist-profile-info {
     min-width: 0;
 }
 
-.account-profile-info h2 {
-    margin: 0 0 9px;
-
-    color: var(--primary-text);
-
-    font-size: 23px;
-    font-weight: 700;
-
-    line-height: 1.25;
-}
-
-.account-profile-meta {
+.tourist-profile-name-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -134,117 +189,118 @@
     gap: 9px;
 }
 
-.account-profile-email {
-    color: var(--secondary-text);
+.tourist-profile-name-row h2 {
+    margin: 0;
 
-    font-size: 13px;
+    color: var(--primary-text);
+
+    font-size: 22px;
+    font-weight: 700;
 }
 
+.tourist-show-status {
+    min-height: 25px;
 
-/* =========================================
-   BADGES
-========================================= */
-
-.account-role-badge,
-.account-auth-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 5px 9px;
+    padding: 0 10px;
 
     border-radius: 20px;
 
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tourist-show-status-active {
     background: var(--light-green);
 
     color: var(--dark-green);
-
-    font-size: 11px;
-    font-weight: 700;
 }
 
+.tourist-show-status-inactive {
+    background: #F3F4F6;
 
-/* =========================================
-   ACCOUNT ID
-========================================= */
-
-.account-id-block {
-    width: 300px;
-    max-width: 38%;
-
-    flex-shrink: 0;
-
-    padding: 12px 14px;
-
-    background: var(--light-gray);
-
-    border: 1px solid var(--border-gray);
-    border-radius: 8px;
+    color: var(--secondary-text);
 }
 
-.account-id-label {
+.tourist-profile-role,
+.tourist-profile-email {
     display: block;
 
-    margin-bottom: 5px;
+    margin-top: 4px;
 
     color: var(--secondary-text);
 
-    font-size: 11px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-}
-
-.account-id-value {
-    display: block;
+    font-size: 13px;
 
     overflow-wrap: anywhere;
+}
 
-    color: var(--primary-text);
+.tourist-profile-id {
+    max-width: 340px;
+
+    text-align: right;
+}
+
+.tourist-profile-id span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: var(--secondary-text);
 
     font-size: 12px;
     font-weight: 600;
+}
 
-    line-height: 1.45;
+.tourist-profile-id strong {
+    display: block;
+
+    color: var(--primary-text);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================================
-   ACTIVITY SUMMARY
-========================================= */
+/* Activity */
 
-.account-stats-grid {
+.tourist-activity-grid {
     display: grid;
 
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        repeat(4, minmax(0, 1fr));
 
     gap: 12px;
 
     margin-bottom: 16px;
 }
 
-.account-stat-card {
-    min-height: 92px;
+.tourist-activity-card {
+    min-height: 76px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    gap: 18px;
+    gap: 12px;
 
-    padding: 16px;
+    padding: 14px 16px;
 
     background: var(--white);
 
     border: 1px solid var(--border-gray);
     border-left: 4px solid var(--primary-green);
-    border-radius: 9px;
+    border-radius: 10px;
 
     box-shadow: var(--shadow-small);
 }
 
-.account-stat-label {
+.tourist-activity-card span {
     color: var(--secondary-text);
 
     font-size: 12px;
@@ -252,40 +308,33 @@
 
     text-transform: uppercase;
 
-    line-height: 1.35;
+    letter-spacing: 0.03em;
 }
 
-.account-stat-value {
-    flex-shrink: 0;
-
+.tourist-activity-card strong {
     color: var(--primary-green);
 
-    font-size: 27px;
+    font-size: 22px;
     font-weight: 700;
-
-    line-height: 1;
 }
 
 
-/* =========================================
-   DETAILS GRID
-========================================= */
+/* Details */
 
-.account-details-grid {
+.tourist-details-grid {
     display: grid;
 
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 14px;
+    gap: 16px;
+
+    align-items: start;
 }
 
+.tourist-detail-card {
+    min-width: 0;
 
-/* =========================================
-   DETAIL CARDS
-========================================= */
-
-.account-detail-card {
     overflow: hidden;
 
     background: var(--white);
@@ -296,18 +345,18 @@
     box-shadow: var(--shadow-small);
 }
 
-.account-detail-header {
-    min-height: 48px;
+.tourist-detail-header {
+    min-height: 50px;
 
     display: flex;
     align-items: center;
 
-    padding: 11px 15px;
+    padding: 12px 16px;
 
     border-bottom: 1px solid var(--border-gray);
 }
 
-.account-detail-header h2 {
+.tourist-detail-header h2 {
     margin: 0;
 
     color: var(--primary-text);
@@ -316,46 +365,39 @@
     font-weight: 700;
 }
 
-.account-detail-body {
-    padding: 4px 15px;
+.tourist-detail-body {
+    padding: 4px 16px;
 }
 
-
-/* =========================================
-   DETAIL ROWS
-========================================= */
-
-.account-detail-row {
-    min-height: 52px;
+.tourist-detail-row {
+    min-height: 54px;
 
     display: grid;
 
     grid-template-columns:
-        140px
+        135px
         minmax(0, 1fr);
 
     align-items: center;
 
-    gap: 15px;
+    gap: 16px;
 
     border-bottom: 1px solid var(--border-gray);
 }
 
-.account-detail-row:last-child {
+.tourist-detail-row:last-child {
     border-bottom: none;
 }
 
-.account-detail-label {
+.tourist-detail-label {
     color: var(--secondary-text);
 
     font-size: 13px;
     font-weight: 600;
 }
 
-.account-detail-value {
+.tourist-detail-value {
     min-width: 0;
-
-    overflow-wrap: anywhere;
 
     color: var(--primary-text);
 
@@ -363,27 +405,25 @@
     font-weight: 600;
 
     line-height: 1.45;
+
+    overflow-wrap: anywhere;
 }
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* Responsive */
+
+@media (max-width: 1050px) {
+
+    .tourist-activity-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
 
 @media (max-width: 900px) {
 
-    .account-profile-card {
-        align-items: flex-start;
-
-        flex-direction: column;
-    }
-
-    .account-id-block {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .account-details-grid {
+    .tourist-details-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -395,15 +435,42 @@
         padding: 18px 14px 28px;
     }
 
-    .account-show-header h1 {
-        font-size: 26px;
+    .tourist-show-header {
+        align-items: stretch;
+
+        flex-direction: column;
     }
 
-    .account-stats-grid {
+    .tourist-show-header h1 {
+        font-size: 25px;
+    }
+
+    .tourist-show-status-form {
+        width: 100%;
+    }
+
+    .tourist-show-deactivate,
+    .tourist-show-reactivate {
+        width: 100%;
+    }
+
+    .tourist-profile-overview {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .tourist-profile-id {
+        max-width: 100%;
+
+        text-align: left;
+    }
+
+    .tourist-activity-grid {
         grid-template-columns: 1fr;
     }
 
-    .account-detail-row {
+    .tourist-detail-row {
         grid-template-columns: 1fr;
 
         gap: 5px;

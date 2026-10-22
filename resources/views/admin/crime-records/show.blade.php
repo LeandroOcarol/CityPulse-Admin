@@ -43,12 +43,35 @@
         </div>
 
 
-        <a
-            href="{{ route('admin.crime-records.edit', $record->crime_id) }}"
-            class="crime-show-edit"
-        >
-            Edit Record
-        </a>
+        <div class="crime-show-header-actions">
+
+            <a
+                href="{{ route('admin.crime-records.edit', $record->crime_id) }}"
+                class="crime-show-edit"
+            >
+                Edit Record
+            </a>
+
+
+            <form
+                method="POST"
+                action="{{ route('admin.crime-records.destroy', $record->crime_id) }}"
+                class="crime-show-delete-form"
+                onsubmit="return confirm('Are you sure you want to permanently delete this crime record?');"
+            >
+                @csrf
+                @method('DELETE')
+
+                <button
+                    type="submit"
+                    class="crime-show-delete"
+                >
+                    Delete Record
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 

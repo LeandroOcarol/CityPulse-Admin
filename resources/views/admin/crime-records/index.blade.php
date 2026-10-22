@@ -366,6 +366,24 @@
                                         Edit
                                     </a>
 
+                                    <form
+                                        method="POST"
+                                        action="{{ route('admin.crime-records.destroy', $record->crime_id) }}"
+                                        class="crime-delete-form"
+                                        onsubmit="return confirm('Are you sure you want to permanently delete this crime record?');"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="crime-delete-button"
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </form>
+
                                 </div>
 
                             </td>

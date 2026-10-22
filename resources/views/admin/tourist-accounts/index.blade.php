@@ -1,437 +1,516 @@
 @extends('admin.layouts.app')
 
 @section('title', 'CityPulse | Tourist Accounts')
-
 @section('body-class', 'tourist-accounts-page')
 
-
 @push('styles')
-
     <link
         rel="stylesheet"
-        href="/css/pages/tourist-accounts.css"
+        href="{{ asset('css/pages/tourist-accounts.css') }}"
     >
-
 @endpush
-
 
 @section('content')
 
-
-    <!-- Page Header -->
-
-    <div class="tourist-accounts-header">
+    <div class="tourist-header">
 
         <h1>
             Tourist Accounts
         </h1>
 
-
-        <button
-            type="button"
-            class="export-button"
-        >
-            Export Data
-        </button>
-
     </div>
 
 
+    @if(session('success'))
 
-    <!-- Summary -->
+        <div class="tourist-success">
+            {{ session('success') }}
+        </div>
 
-    <section class="tourist-account-summary">
+    @endif
 
-        <div class="tourist-total-card">
 
-            <div class="tourist-total-label">
+    <section class="tourist-summary-grid">
+
+        <div class="tourist-summary-card">
+
+            <span class="tourist-summary-label">
                 Total Tourists
-            </div>
+            </span>
 
-            <div class="tourist-total-number">
-                {{ number_format($totalTourists ?? 0) }}
-            </div>
+            <strong class="tourist-summary-value">
+                {{ number_format($totalTourists) }}
+            </strong>
+
+        </div>
+
+
+        <div class="tourist-summary-card">
+
+            <span class="tourist-summary-label">
+                Active
+            </span>
+
+            <strong class="tourist-summary-value">
+                {{ number_format($activeTourists) }}
+            </strong>
+
+        </div>
+
+
+        <div class="tourist-summary-card">
+
+            <span class="tourist-summary-label">
+                Inactive
+            </span>
+
+            <strong class="tourist-summary-value">
+                {{ number_format($inactiveTourists) }}
+            </strong>
 
         </div>
 
     </section>
 
 
-
-    <!-- Filters -->
-
-    <section class="tourist-account-filter-panel">
+    <section class="tourist-filter-card">
 
         <form
             method="GET"
             action="{{ route('admin.tourist-accounts.index') }}"
-            class="tourist-account-filter-form"
+            class="tourist-filter-form"
         >
 
-            <div class="account-search-field">
+            <div class="tourist-search">
 
                 <input
                     type="search"
                     name="search"
-                    value="{{ $search ?? '' }}"
-                    placeholder="Search accounts"
+                    value="{{ $search }}"
+                    placeholder="Search name, email, or phone"
                 >
 
             </div>
 
 
-            <div class="account-period-field">
+            <div class="tourist-filter-controls">
+
+                <select name="status">
+
+                    <option
+                        value="all"
+                        {{ $status === 'all' ? 'selected' : '' }}
+                    >
+                        All Statuses
+                    </option>
+
+                    <option
+                        value="active"
+                        {{ $status === 'active' ? 'selected' : '' }}
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="inactive"
+                        {{ $status === 'inactive' ? 'selected' : '' }}
+                    >
+                        Inactive
+                    </option>
+
+                </select>
+
 
                 <select name="period">
 
                     <option
                         value="all"
-                        {{ ($period ?? 'all') === 'all' ? 'selected' : '' }}
+                        {{ $period === 'all' ? 'selected' : '' }}
                     >
-                        All Dates
+                        All Time
                     </option>
 
                     <option
                         value="7"
-                        {{ ($period ?? '') === '7' ? 'selected' : '' }}
+                        {{ $period === '7' ? 'selected' : '' }}
                     >
                         Last 7 Days
                     </option>
 
                     <option
                         value="30"
-                        {{ ($period ?? '') === '30' ? 'selected' : '' }}
+                        {{ $period === '30' ? 'selected' : '' }}
                     >
                         Last 30 Days
                     </option>
 
                     <option
                         value="90"
-                        {{ ($period ?? '') === '90' ? 'selected' : '' }}
+                        {{ $period === '90' ? 'selected' : '' }}
                     >
                         Last 90 Days
                     </option>
 
                 </select>
 
-            </div>
 
-
-            <button
-                type="submit"
-                class="account-filter-button"
-            >
-                Filter
-            </button>
-
-
-            @if(
-                ($search ?? '') !== '' ||
-                ($period ?? 'all') !== 'all'
-            )
-
-                <a
-                    href="{{ route('admin.tourist-accounts.index') }}"
-                    class="account-clear-button"
+                <button
+                    type="submit"
+                    class="tourist-filter-button"
                 >
-                    Clear
-                </a>
+                    Filter
+                </button>
 
-            @endif
+
+                @if(
+                    $search !== '' ||
+                    $status !== 'all' ||
+                    $period !== 'all'
+                )
+
+                    <a
+                        href="{{ route('admin.tourist-accounts.index') }}"
+                        class="tourist-clear-button"
+                    >
+                        Clear
+                    </a>
+
+                @endif
+
+            </div>
 
         </form>
 
     </section>
 
 
+    <section class="tourist-table-card">
 
-    <!-- Account Directory -->
-
-    <section class="tourist-account-panel">
-
-        <div class="tourist-account-panel-header">
+        <div class="tourist-table-header">
 
             <div>
 
                 <h2>
-                    Account Directory
+                    Tourist Directory
                 </h2>
 
-                <p>
-                    {{ $tourists->total() }} accounts
-                </p>
+                <span>
+                    {{ number_format($tourists->total()) }} accounts
+                </span>
 
             </div>
 
         </div>
 
 
-        @if($tourists->count() > 0)
+        <div class="tourist-table-wrapper">
 
-            <div class="tourist-account-table-wrapper">
+            <table class="tourist-table">
 
-                <table class="tourist-account-table">
+                <thead>
 
-                    <thead>
+                    <tr>
+                        <th>Tourist</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
 
-                        <tr>
-                            <th>Tourist</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Registered</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                        </tr>
-
-                    </thead>
+                </thead>
 
 
-                    <tbody>
+                <tbody>
 
-                        @foreach($tourists as $tourist)
+                    @forelse($tourists as $tourist)
 
-                            <tr>
+                        @php
 
-                                <td>
+                            $fullName = trim(
+                                ($tourist->first_name ?? '') . ' ' .
+                                ($tourist->last_name ?? '')
+                            );
 
-                                    <div class="tourist-profile">
+                            if ($fullName === '') {
+                                $fullName = 'Unnamed Tourist';
+                            }
 
-                                        <div class="tourist-avatar">
+                            $initials =
+                                strtoupper(
+                                    mb_substr(
+                                        $tourist->first_name ?? 'T',
+                                        0,
+                                        1
+                                    )
+                                    .
+                                    mb_substr(
+                                        $tourist->last_name ?? '',
+                                        0,
+                                        1
+                                    )
+                                );
 
-                                            @if(!empty($tourist->profile_image_url))
-
-                                                <img
-                                                    src="{{ $tourist->profile_image_url }}"
-                                                    alt=""
-                                                >
-
-                                            @else
-
-                                                {{
-                                                    strtoupper(
-                                                        substr(
-                                                            $tourist->first_name ?? 'T',
-                                                            0,
-                                                            1
-                                                        )
-                                                    )
-                                                }}
-
-                                            @endif
-
-                                        </div>
+                        @endphp
 
 
-                                        <div class="tourist-name">
+                        <tr class="{{ !$tourist->is_active ? 'tourist-row-inactive' : '' }}">
 
-                                            {{ $tourist->first_name ?? '' }}
-                                            {{ $tourist->last_name ?? '' }}
+                            <td>
 
-                                        </div>
+                                <div class="tourist-profile-cell">
+
+                                    <div class="tourist-avatar">
+
+                                        @if(!empty($tourist->profile_image_url))
+
+                                            <img
+                                                src="{{ $tourist->profile_image_url }}"
+                                                alt="{{ $fullName }}"
+                                            >
+
+                                        @else
+
+                                            <span>
+                                                {{ $initials }}
+                                            </span>
+
+                                        @endif
 
                                     </div>
 
-                                </td>
+
+                                    <div class="tourist-name">
+
+                                        <strong>
+                                            {{ $fullName }}
+                                        </strong>
+
+                                        <span>
+                                            Tourist
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
 
 
-                                <td>
+                            <td>
+                                {{ $tourist->email ?? '—' }}
+                            </td>
 
-                                    <span class="account-email">
-                                        {{ $tourist->email ?? '—' }}
+
+                            <td>
+                                {{ $tourist->phone_number ?? '—' }}
+                            </td>
+
+
+                            <td>
+
+                                @if($tourist->is_active)
+
+                                    <span class="tourist-status tourist-status-active">
+                                        Active
                                     </span>
 
-                                </td>
+                                @else
 
-
-                                <td>
-                                    {{ $tourist->phone_number ?? '—' }}
-                                </td>
-
-
-                                <td>
-
-                                    @if(!empty($tourist->created_at))
-
-                                        {{
-                                            \Carbon\Carbon::parse(
-                                                $tourist->created_at
-                                            )->format('M d, Y')
-                                        }}
-
-                                    @else
-
-                                        —
-
-                                    @endif
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="tourist-role-badge">
-                                        Tourist
+                                    <span class="tourist-status tourist-status-inactive">
+                                        Inactive
                                     </span>
 
-                                </td>
+                                @endif
+
+                            </td>
 
 
-                                <td>
+                            <td>
+
+                                @if(!empty($tourist->created_at))
+
+                                    {{
+                                        \Carbon\Carbon::parse(
+                                            $tourist->created_at
+                                        )->format('M d, Y')
+                                    }}
+
+                                @else
+
+                                    —
+
+                                @endif
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="tourist-actions">
 
                                     <a
                                         href="{{ route('admin.tourist-accounts.show', $tourist->id) }}"
-                                        class="view-account-button"
+                                        class="tourist-view-button"
                                     >
                                         View
                                     </a>
 
-                                </td>
 
-                            </tr>
+                                    @if($tourist->is_active)
 
-                        @endforeach
+                                        <form
+                                            method="POST"
+                                            action="{{ route('admin.tourist-accounts.status', $tourist->id) }}"
+                                            class="tourist-status-form"
+                                            onsubmit="return confirm('Deactivate this tourist account? The account data and history will remain stored.');"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
 
-                    </tbody>
+                                            <input
+                                                type="hidden"
+                                                name="is_active"
+                                                value="0"
+                                            >
 
-                </table>
+                                            <button
+                                                type="submit"
+                                                class="tourist-deactivate-button"
+                                            >
+                                                Deactivate
+                                            </button>
+
+                                        </form>
+
+                                    @else
+
+                                        <form
+                                            method="POST"
+                                            action="{{ route('admin.tourist-accounts.status', $tourist->id) }}"
+                                            class="tourist-status-form"
+                                            onsubmit="return confirm('Reactivate this tourist account?');"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <input
+                                                type="hidden"
+                                                name="is_active"
+                                                value="1"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="tourist-reactivate-button"
+                                            >
+                                                Reactivate
+                                            </button>
+
+                                        </form>
+
+                                    @endif
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="tourist-empty"
+                            >
+                                No tourist accounts found.
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="tourist-pagination">
+
+            <div class="tourist-pagination-info">
+
+                Showing
+
+                <strong>
+                    {{ $tourists->firstItem() ?? 0 }}
+                </strong>
+
+                –
+
+                <strong>
+                    {{ $tourists->lastItem() ?? 0 }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ number_format($tourists->total()) }}
+                </strong>
 
             </div>
 
 
+            <div class="tourist-pagination-controls">
 
-            <!-- Pagination -->
+                @if($tourists->onFirstPage())
 
-            <div class="tourist-account-pagination">
-
-                <div class="pagination-info">
-
-                    Showing
-
-                    <strong>
-                        {{ $tourists->firstItem() }}
-                    </strong>
-
-                    –
-
-                    <strong>
-                        {{ $tourists->lastItem() }}
-                    </strong>
-
-                    of
-
-                    <strong>
-                        {{ $tourists->total() }}
-                    </strong>
-
-                </div>
-
-
-                <div class="pagination-controls">
-
-                    @if($tourists->onFirstPage())
-
-                        <span class="pagination-button disabled">
-                            Previous
-                        </span>
-
-                    @else
-
-                        <a
-                            href="{{ $tourists->previousPageUrl() }}"
-                            class="pagination-button"
-                        >
-                            Previous
-                        </a>
-
-                    @endif
-
-
-                    <span class="pagination-current">
-
-                        {{ $tourists->currentPage() }}
-                        /
-                        {{ $tourists->lastPage() }}
-
+                    <span class="tourist-page-button disabled">
+                        Previous
                     </span>
 
+                @else
 
-                    @if($tourists->hasMorePages())
+                    <a
+                        href="{{ $tourists->previousPageUrl() }}"
+                        class="tourist-page-button"
+                    >
+                        Previous
+                    </a>
 
-                        <a
-                            href="{{ $tourists->nextPageUrl() }}"
-                            class="pagination-button"
-                        >
-                            Next
-                        </a>
+                @endif
 
-                    @else
 
-                        <span class="pagination-button disabled">
-                            Next
-                        </span>
+                <span class="tourist-page-current">
 
-                    @endif
+                    {{ $tourists->currentPage() }}
+                    /
+                    {{ $tourists->lastPage() }}
 
-                </div>
+                </span>
+
+
+                @if($tourists->hasMorePages())
+
+                    <a
+                        href="{{ $tourists->nextPageUrl() }}"
+                        class="tourist-page-button"
+                    >
+                        Next
+                    </a>
+
+                @else
+
+                    <span class="tourist-page-button disabled">
+                        Next
+                    </span>
+
+                @endif
 
             </div>
-
-
-        @else
-
-            <div class="tourist-account-empty">
-
-                <h3>
-                    No accounts found
-                </h3>
-
-            </div>
-
-        @endif
-
-    </section>
-
-
-
-    <!-- Supporting Information -->
-
-    <section class="tourist-support-grid">
-
-        <div class="support-card">
-
-            <h3>
-                Account Logs
-            </h3>
-
-            <p>
-                Registration and account activity.
-            </p>
-
-        </div>
-
-
-        <div class="support-card">
-
-            <h3>
-                Security Policy
-            </h3>
-
-            <p>
-                Accounts use Supabase authentication.
-            </p>
-
-        </div>
-
-
-        <div class="support-card">
-
-            <h3>
-                Data Management
-            </h3>
-
-            <p>
-                Tourist profiles sync with the mobile app.
-            </p>
 
         </div>
 

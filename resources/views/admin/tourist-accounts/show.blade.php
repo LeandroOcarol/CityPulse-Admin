@@ -1,161 +1,260 @@
 @extends('admin.layouts.app')
 
 @section('title', 'CityPulse | Tourist Account')
-
 @section('body-class', 'tourist-account-show-page')
 
-
 @push('styles')
-
     <link
         rel="stylesheet"
-        href="/css/pages/tourist-account-show.css"
+        href="{{ asset('css/pages/tourist-account-show.css') }}"
     >
-
 @endpush
-
 
 @section('content')
 
+    @php
 
-    <!-- Page Header -->
+        $fullName = trim(
+            ($tourist->first_name ?? '') . ' ' .
+            ($tourist->last_name ?? '')
+        );
 
-    <div class="account-show-header">
+        if ($fullName === '') {
+            $fullName = 'Unnamed Tourist';
+        }
 
-        <a
-            href="{{ route('admin.tourist-accounts.index') }}"
-            class="back-link"
-        >
-            Back to Tourist Accounts
-        </a>
+        $initials =
+            strtoupper(
+                mb_substr(
+                    $tourist->first_name ?? 'T',
+                    0,
+                    1
+                )
+                .
+                mb_substr(
+                    $tourist->last_name ?? '',
+                    0,
+                    1
+                )
+            );
 
-        <h1>
-            Tourist Account
-        </h1>
+    @endphp
+
+
+    <div class="tourist-show-header">
+
+        <div>
+
+            <a
+                href="{{ route('admin.tourist-accounts.index') }}"
+                class="tourist-show-back"
+            >
+                Back to Tourist Accounts
+            </a>
+
+            <h1>
+                Tourist Account
+            </h1>
+
+        </div>
+
+
+        @if($tourist->is_active)
+
+            <form
+                method="POST"
+                action="{{ route('admin.tourist-accounts.status', $tourist->id) }}"
+                class="tourist-show-status-form"
+                onsubmit="return confirm('Deactivate this tourist account? Account history and related records will remain stored.');"
+            >
+                @csrf
+                @method('PATCH')
+
+                <input
+                    type="hidden"
+                    name="is_active"
+                    value="0"
+                >
+
+                <button
+                    type="submit"
+                    class="tourist-show-deactivate"
+                >
+                    Deactivate Account
+                </button>
+
+            </form>
+
+        @else
+
+            <form
+                method="POST"
+                action="{{ route('admin.tourist-accounts.status', $tourist->id) }}"
+                class="tourist-show-status-form"
+                onsubmit="return confirm('Reactivate this tourist account?');"
+            >
+                @csrf
+                @method('PATCH')
+
+                <input
+                    type="hidden"
+                    name="is_active"
+                    value="1"
+                >
+
+                <button
+                    type="submit"
+                    class="tourist-show-reactivate"
+                >
+                    Reactivate Account
+                </button>
+
+            </form>
+
+        @endif
 
     </div>
 
 
+    @if(session('success'))
 
-    <!-- Profile Overview -->
+        <div class="tourist-show-success">
+            {{ session('success') }}
+        </div>
 
-    <section class="account-profile-card">
+    @endif
 
-        <div class="account-profile-main">
 
-            <div class="account-profile-avatar">
+    <section class="tourist-profile-overview">
+
+        <div class="tourist-profile-main">
+
+            <div class="tourist-profile-avatar">
 
                 @if(!empty($tourist->profile_image_url))
 
                     <img
                         src="{{ $tourist->profile_image_url }}"
-                        alt=""
+                        alt="{{ $fullName }}"
                     >
 
                 @else
 
-                    {{
-                        strtoupper(
-                            substr(
-                                $tourist->first_name ?? 'T',
-                                0,
-                                1
-                            )
-                        )
-                    }}
+                    <span>
+                        {{ $initials }}
+                    </span>
 
                 @endif
 
             </div>
 
 
-            <div class="account-profile-info">
+            <div class="tourist-profile-info">
 
-                <h2>
+                <div class="tourist-profile-name-row">
 
-                    {{ $tourist->first_name ?? '' }}
-                    {{ $tourist->last_name ?? '' }}
+                    <h2>
+                        {{ $fullName }}
+                    </h2>
 
-                </h2>
+                    @if($tourist->is_active)
 
+                        <span class="tourist-show-status tourist-show-status-active">
+                            Active
+                        </span>
 
-                <div class="account-profile-meta">
+                    @else
 
-                    <span class="account-role-badge">
-                        Tourist
-                    </span>
-
-
-                    @if(!empty($tourist->email))
-
-                        <span class="account-profile-email">
-                            {{ $tourist->email }}
+                        <span class="tourist-show-status tourist-show-status-inactive">
+                            Inactive
                         </span>
 
                     @endif
 
                 </div>
 
+
+                <span class="tourist-profile-role">
+                    Tourist
+                </span>
+
+                @if(!empty($tourist->email))
+
+                    <span class="tourist-profile-email">
+                        {{ $tourist->email }}
+                    </span>
+
+                @endif
+
             </div>
 
         </div>
 
 
-        <div class="account-id-block">
+        <div class="tourist-profile-id">
 
-            <span class="account-id-label">
-                Account ID
+            <span>
+                User ID
             </span>
 
-            <span class="account-id-value">
+            <strong>
                 {{ $tourist->id }}
-            </span>
+            </strong>
 
         </div>
 
     </section>
 
 
+    <section class="tourist-activity-grid">
 
-    <!-- Activity Summary -->
+        <div class="tourist-activity-card">
 
-    <section class="account-stats-grid">
-
-
-        <div class="account-stat-card">
-
-            <span class="account-stat-label">
+            <span>
                 Total Trips
             </span>
 
-            <strong class="account-stat-value">
-                {{ number_format($tripCount ?? 0) }}
+            <strong>
+                {{ number_format($tripCount) }}
             </strong>
 
         </div>
 
 
-        <div class="account-stat-card">
+        <div class="tourist-activity-card">
 
-            <span class="account-stat-label">
+            <span>
                 Completed Trips
             </span>
 
-            <strong class="account-stat-value">
-                {{ number_format($completedTrips ?? 0) }}
+            <strong>
+                {{ number_format($completedTrips) }}
             </strong>
 
         </div>
 
 
-        <div class="account-stat-card">
+        <div class="tourist-activity-card">
 
-            <span class="account-stat-label">
+            <span>
                 Reviews
             </span>
 
-            <strong class="account-stat-value">
-                {{ number_format($reviewCount ?? 0) }}
+            <strong>
+                {{ number_format($reviewCount) }}
+            </strong>
+
+        </div>
+
+
+        <div class="tourist-activity-card">
+
+            <span>
+                Incident Reports
+            </span>
+
+            <strong>
+                {{ number_format($incidentCount) }}
             </strong>
 
         </div>
@@ -163,73 +262,50 @@
     </section>
 
 
+    <div class="tourist-details-grid">
 
-    <!-- Account Details -->
+        <section class="tourist-detail-card">
 
-    <div class="account-details-grid">
-
-
-        <!-- Personal Information -->
-
-        <section class="account-detail-card">
-
-            <div class="account-detail-header">
-
-                <h2>
-                    Personal Information
-                </h2>
-
+            <div class="tourist-detail-header">
+                <h2>Personal Information</h2>
             </div>
 
 
-            <div class="account-detail-body">
+            <div class="tourist-detail-body">
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
+                    <span class="tourist-detail-label">
                         First Name
                     </span>
 
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
                         {{ $tourist->first_name ?? '—' }}
                     </span>
 
                 </div>
 
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
+                    <span class="tourist-detail-label">
                         Last Name
                     </span>
 
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
                         {{ $tourist->last_name ?? '—' }}
                     </span>
 
                 </div>
 
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
-                        Email
+                    <span class="tourist-detail-label">
+                        Phone Number
                     </span>
 
-                    <span class="account-detail-value">
-                        {{ $tourist->email ?? '—' }}
-                    </span>
-
-                </div>
-
-
-                <div class="account-detail-row">
-
-                    <span class="account-detail-label">
-                        Phone
-                    </span>
-
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
                         {{ $tourist->phone_number ?? '—' }}
                     </span>
 
@@ -240,53 +316,61 @@
         </section>
 
 
+        <section class="tourist-detail-card">
 
-        <!-- Account Information -->
-
-        <section class="account-detail-card">
-
-            <div class="account-detail-header">
-
-                <h2>
-                    Account Information
-                </h2>
-
+            <div class="tourist-detail-header">
+                <h2>Account Information</h2>
             </div>
 
 
-            <div class="account-detail-body">
+            <div class="tourist-detail-body">
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
-                        Role
+                    <span class="tourist-detail-label">
+                        Email
                     </span>
 
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
+                        {{ $tourist->email ?? '—' }}
+                    </span>
 
-                        <span class="account-role-badge">
-                            Tourist
-                        </span>
+                </div>
+
+
+                <div class="tourist-detail-row">
+
+                    <span class="tourist-detail-label">
+                        Status
+                    </span>
+
+                    <span class="tourist-detail-value">
+
+                        @if($tourist->is_active)
+                            Active
+                        @else
+                            Inactive
+                        @endif
 
                     </span>
 
                 </div>
 
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
-                        Registered
+                    <span class="tourist-detail-label">
+                        Joined
                     </span>
 
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
 
                         @if(!empty($tourist->created_at))
 
                             {{
                                 \Carbon\Carbon::parse(
                                     $tourist->created_at
-                                )->format('F d, Y')
+                                )->format('F d, Y h:i A')
                             }}
 
                         @else
@@ -300,44 +384,26 @@
                 </div>
 
 
-                <div class="account-detail-row">
+                <div class="tourist-detail-row">
 
-                    <span class="account-detail-label">
+                    <span class="tourist-detail-label">
                         Last Sign In
                     </span>
 
-                    <span class="account-detail-value">
+                    <span class="tourist-detail-value">
 
                         @if(!empty($tourist->last_sign_in_at))
 
                             {{
                                 \Carbon\Carbon::parse(
                                     $tourist->last_sign_in_at
-                                )->format('M d, Y h:i A')
+                                )->format('F d, Y h:i A')
                             }}
 
                         @else
 
-                            —
-
+                            No sign-in recorded
                         @endif
-
-                    </span>
-
-                </div>
-
-
-                <div class="account-detail-row">
-
-                    <span class="account-detail-label">
-                        Authentication
-                    </span>
-
-                    <span class="account-detail-value">
-
-                        <span class="account-auth-badge">
-                            Supabase Auth
-                        </span>
 
                     </span>
 

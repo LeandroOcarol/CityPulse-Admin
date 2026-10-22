@@ -14,16 +14,21 @@
 
     @php
 
-        $reporterName = trim(
-            ($incident->first_name ?? '') .
-            ' ' .
-            ($incident->last_name ?? '')
-        );
-
         $incidentType =
             $incident->incident_name
             ?? $incident->other_type
             ?? 'Other';
+
+        $reporterName = trim(
+            ($incident->first_name ?? '') . ' ' .
+            ($incident->last_name ?? '')
+        );
+
+        if ($reporterName === '') {
+            $reporterName =
+                $incident->email
+                ?? 'Unknown';
+        }
 
         $statusClass = strtolower(
             $incident->status ?? 'pending'
@@ -32,25 +37,44 @@
     @endphp
 
 
-    <!-- Header -->
-
     <div class="incident-show-header">
 
-        <a
-            href="{{ route('admin.incident-reports.index') }}"
-            class="incident-show-back"
-        >
-            Back to Incident Reports
-        </a>
+        <div>
 
-        <h1>
-            Incident Report
-        </h1>
+            <a
+                href="{{ route('admin.incident-reports.index') }}"
+                class="incident-show-back"
+            >
+                Back to Incident Reports
+            </a>
+
+            <h1>
+                Incident Report
+            </h1>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="{{ route('admin.incident-reports.destroy', $incident->incident_id) }}"
+            class="incident-show-delete-form"
+            onsubmit="return confirm('Are you sure you want to permanently delete this incident report?');"
+        >
+            @csrf
+            @method('DELETE')
+
+            <button
+                type="submit"
+                class="incident-show-delete"
+            >
+                Delete Report
+            </button>
+
+        </form>
 
     </div>
 
-
-    <!-- Feedback -->
 
     @if(session('success'))
 
@@ -61,8 +85,6 @@
     @endif
 
 
-    <!-- Overview -->
-
     <section class="incident-show-overview">
 
         <div class="incident-show-overview-main">
@@ -70,17 +92,17 @@
             <div>
 
                 <h2>
-                    {{ $incident->title ?? 'Incident Report' }}
+                    {{ $incident->title }}
                 </h2>
 
                 <div class="incident-show-meta">
 
-                    <span class="incident-show-type">
-                        {{ $incidentType }}
+                    <span class="incident-show-status incident-show-status-{{ $statusClass }}">
+                        {{ $incident->status }}
                     </span>
 
-                    <span class="incident-show-status incident-show-status-{{ $statusClass }}">
-                        {{ $incident->status ?? 'Pending' }}
+                    <span class="incident-show-category">
+                        {{ $incidentType }}
                     </span>
 
                 </div>
@@ -91,7 +113,7 @@
             <div class="incident-show-id">
 
                 <span>
-                    Report ID
+                    Incident ID
                 </span>
 
                 <strong>
@@ -105,83 +127,84 @@
     </section>
 
 
-    <!-- Review Actions -->
+    @if($incident->status === 'Pending')
 
-    <section class="incident-review-card">
+        <section class="incident-review-card">
 
-        <div class="incident-review-info">
+            <div class="incident-review-content">
 
-            <h2>
-                Review Report
-            </h2>
+                <div>
 
-            <p>
-                Verify the submitted incident and select the appropriate status.
-            </p>
+                    <h2>
+                        Review Report
+                    </h2>
 
-        </div>
+                    <p>
+                        Approve or reject this submitted incident report.
+                    </p>
 
-
-        <div class="incident-review-actions">
-
-            <form
-                method="POST"
-                action="{{ route('admin.incident-reports.status', $incident->incident_id) }}"
-            >
-                @csrf
-                @method('PATCH')
-
-                <input
-                    type="hidden"
-                    name="status"
-                    value="Approved"
-                >
-
-                <button
-                    type="submit"
-                    class="incident-action-button incident-approve-button"
-                    {{ $incident->status === 'Approved' ? 'disabled' : '' }}
-                >
-                    Approve
-                </button>
-
-            </form>
+                </div>
 
 
-            <form
-                method="POST"
-                action="{{ route('admin.incident-reports.status', $incident->incident_id) }}"
-            >
-                @csrf
-                @method('PATCH')
+                <div class="incident-review-actions">
 
-                <input
-                    type="hidden"
-                    name="status"
-                    value="Rejected"
-                >
+                    <form
+                        method="POST"
+                        action="{{ route('admin.incident-reports.status', $incident->incident_id) }}"
+                    >
+                        @csrf
+                        @method('PATCH')
 
-                <button
-                    type="submit"
-                    class="incident-action-button incident-reject-button"
-                    {{ $incident->status === 'Rejected' ? 'disabled' : '' }}
-                >
-                    Reject
-                </button>
+                        <input
+                            type="hidden"
+                            name="status"
+                            value="Approved"
+                        >
 
-            </form>
+                        <button
+                            type="submit"
+                            class="incident-approve-button"
+                            onclick="return confirm('Approve this incident report?');"
+                        >
+                            Approve
+                        </button>
 
-        </div>
-
-    </section>
+                    </form>
 
 
-    <!-- Main Grid -->
+                    <form
+                        method="POST"
+                        action="{{ route('admin.incident-reports.status', $incident->incident_id) }}"
+                    >
+                        @csrf
+                        @method('PATCH')
+
+                        <input
+                            type="hidden"
+                            name="status"
+                            value="Rejected"
+                        >
+
+                        <button
+                            type="submit"
+                            class="incident-reject-button"
+                            onclick="return confirm('Reject this incident report?');"
+                        >
+                            Reject
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    @endif
+
 
     <div class="incident-show-grid">
-
-
-        <!-- Left Column -->
 
         <div class="incident-show-column">
 
@@ -195,48 +218,24 @@
                 <div class="incident-show-card-body">
 
                     <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Incident Type
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $incidentType }}
-                        </span>
-
+                        <span class="incident-show-label">Incident Type</span>
+                        <span class="incident-show-value">{{ $incidentType }}</span>
                     </div>
 
+                    <div class="incident-show-row">
+                        <span class="incident-show-label">Category</span>
+                        <span class="incident-show-value">{{ $incident->report_category ?? '—' }}</span>
+                    </div>
+
+                    <div class="incident-show-row">
+                        <span class="incident-show-label">Status</span>
+                        <span class="incident-show-value">{{ $incident->status }}</span>
+                    </div>
 
                     <div class="incident-show-row">
 
                         <span class="incident-show-label">
-                            Category
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $incident->report_category ?? '—' }}
-                        </span>
-
-                    </div>
-
-
-                    <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Status
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $incident->status ?? 'Pending' }}
-                        </span>
-
-                    </div>
-
-
-                    <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Reported
+                            Submitted
                         </span>
 
                         <span class="incident-show-value">
@@ -278,7 +277,7 @@
 
                             @else
 
-                                Not yet reviewed
+                                Not reviewed
                             @endif
 
                         </span>
@@ -300,41 +299,18 @@
                 <div class="incident-show-card-body">
 
                     <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Name
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $reporterName !== '' ? $reporterName : 'Tourist' }}
-                        </span>
-
+                        <span class="incident-show-label">Name</span>
+                        <span class="incident-show-value">{{ $reporterName }}</span>
                     </div>
 
-
                     <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Email
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $incident->email ?? '—' }}
-                        </span>
-
+                        <span class="incident-show-label">Email</span>
+                        <span class="incident-show-value">{{ $incident->email ?? '—' }}</span>
                     </div>
 
-
                     <div class="incident-show-row">
-
-                        <span class="incident-show-label">
-                            Phone
-                        </span>
-
-                        <span class="incident-show-value">
-                            {{ $incident->phone_number ?? '—' }}
-                        </span>
-
+                        <span class="incident-show-label">Phone</span>
+                        <span class="incident-show-value">{{ $incident->phone_number ?? '—' }}</span>
                     </div>
 
                 </div>
@@ -352,6 +328,16 @@
                 <div class="incident-show-card-body">
 
                     <div class="incident-show-row">
+                        <span class="incident-show-label">Zone</span>
+                        <span class="incident-show-value">{{ $incident->zone_name ?? 'Unassigned' }}</span>
+                    </div>
+
+                    <div class="incident-show-row">
+                        <span class="incident-show-label">Zone Type</span>
+                        <span class="incident-show-value">{{ $incident->zone_type ?? '—' }}</span>
+                    </div>
+
+                    <div class="incident-show-row">
 
                         <span class="incident-show-label">
                             Latitude
@@ -360,19 +346,14 @@
                         <span class="incident-show-value">
 
                             @if($incident->latitude !== null)
-
                                 {{ number_format($incident->latitude, 6) }}
-
                             @else
-
                                 —
-
                             @endif
 
                         </span>
 
                     </div>
-
 
                     <div class="incident-show-row">
 
@@ -383,13 +364,9 @@
                         <span class="incident-show-value">
 
                             @if($incident->longitude !== null)
-
                                 {{ number_format($incident->longitude, 6) }}
-
                             @else
-
                                 —
-
                             @endif
 
                         </span>
@@ -402,8 +379,6 @@
 
         </div>
 
-
-        <!-- Right Column -->
 
         <div class="incident-show-column">
 
@@ -420,33 +395,27 @@
             </section>
 
 
-            <section class="incident-show-card incident-image-card">
+            @if(!empty($incident->image_url))
 
-                <div class="incident-show-card-header">
-                    <h2>Attached Image</h2>
-                </div>
+                <section class="incident-show-card">
 
+                    <div class="incident-show-card-header">
+                        <h2>Incident Image</h2>
+                    </div>
 
-                <div class="incident-show-image-area">
-
-                    @if(!empty($incident->image_url))
+                    <div class="incident-image-container">
 
                         <img
                             src="{{ $incident->image_url }}"
-                            alt="Incident report attachment"
+                            alt="Incident report image"
+                            class="incident-image"
                         >
 
-                    @else
+                    </div>
 
-                        <span>
-                            No image attached.
-                        </span>
+                </section>
 
-                    @endif
-
-                </div>
-
-            </section>
+            @endif
 
         </div>
 

@@ -68,8 +68,8 @@
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.safety-alerts.index') }}"
+            class="menu-item {{ request()->routeIs('admin.safety-alerts.*') ? 'active' : '' }}"
         >
             Safety Alerts
         </a>
@@ -83,8 +83,8 @@
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.live-tourist-map.index') }}"
+            class="menu-item {{ request()->routeIs('admin.live-tourist-map.*') ? 'active' : '' }}"
         >
             Live Tourist Map
         </a>
@@ -130,16 +130,16 @@
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.ratings-feedback.index') }}"
+            class="menu-item {{ request()->routeIs('admin.ratings-feedback.*') ? 'active' : '' }}"
         >
             Ratings & Feedback
         </a>
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.reports.index') }}"
+            class="menu-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}"
         >
             Reports
         </a>

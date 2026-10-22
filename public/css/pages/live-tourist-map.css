@@ -1,0 +1,418 @@
+/* =========================================
+   LIVE TOURIST MAP
+========================================= */
+
+.live-tourist-map-page .content {
+    padding: 24px 28px 32px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* Header */
+
+.live-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 16px;
+}
+
+.live-map-header h1 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.live-map-refresh {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--primary-green);
+    border-radius: 9px;
+
+    background: var(--white);
+
+    color: var(--primary-green);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.live-map-refresh:hover {
+    background: var(--light-green);
+}
+
+
+/* Summary */
+
+.live-map-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.live-map-summary-card {
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 14px 18px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-left: 4px solid var(--primary-green);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.live-map-summary-card span {
+    color: var(--secondary-text);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+}
+
+.live-map-summary-card strong {
+    color: var(--primary-green);
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/* Layout */
+
+.live-map-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(300px, 0.85fr);
+
+    gap: 16px;
+
+    align-items: start;
+}
+
+
+/* Map Card */
+
+.live-map-card {
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.live-map-card-header {
+    min-height: 60px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.live-map-card-header h2 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.live-map-card-header span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--secondary-text);
+
+    font-size: 12px;
+}
+
+
+/* Leaflet Map */
+
+.live-map {
+    width: 100%;
+    height: 560px;
+
+    background: var(--light-gray);
+}
+
+.live-map .leaflet-container {
+    font-family: inherit;
+}
+
+
+/* Popup */
+
+.map-popup {
+    min-width: 190px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.map-popup strong {
+    color: var(--primary-text);
+
+    font-size: 14px;
+}
+
+.map-popup span {
+    color: var(--secondary-text);
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* Tourist List */
+
+.live-tourist-list-card {
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--white);
+
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-small);
+}
+
+.live-tourist-list-header {
+    min-height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 12px 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.live-tourist-list-header h2 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.live-tourist-list-header span {
+    color: var(--secondary-text);
+
+    font-size: 12px;
+}
+
+.live-tourist-list {
+    max-height: 560px;
+
+    overflow-y: auto;
+}
+
+.live-tourist-item {
+    padding: 14px 16px;
+
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.live-tourist-item:last-child {
+    border-bottom: none;
+}
+
+.live-tourist-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+.live-tourist-name {
+    min-width: 0;
+}
+
+.live-tourist-name strong {
+    display: block;
+
+    color: var(--primary-text);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.live-tourist-name span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--secondary-text);
+
+    font-size: 12px;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* Location Status */
+
+.live-location-status {
+    min-height: 24px;
+
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.live-location-recent {
+    background: var(--light-green);
+
+    color: var(--dark-green);
+}
+
+.live-location-stale {
+    background: #FFF2D8;
+
+    color: #9A6100;
+}
+
+
+/* Tourist Metadata */
+
+.live-tourist-meta {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    margin-top: 9px;
+}
+
+.live-tourist-meta span {
+    color: var(--secondary-text);
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* Empty */
+
+.live-tourist-empty {
+    padding: 30px 16px;
+
+    color: var(--secondary-text);
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+
+    .live-map-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .live-map {
+        height: 500px;
+    }
+
+    .live-tourist-list {
+        max-height: none;
+    }
+}
+
+
+@media (max-width: 750px) {
+
+    .live-tourist-map-page .content {
+        padding: 18px 14px 28px;
+    }
+
+    .live-map-header {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .live-map-header h1 {
+        font-size: 25px;
+    }
+
+    .live-map-refresh {
+        width: 100%;
+    }
+
+    .live-map-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .live-map {
+        height: 420px;
+    }
+}

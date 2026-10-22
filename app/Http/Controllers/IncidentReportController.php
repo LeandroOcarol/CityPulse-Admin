@@ -9,7 +9,7 @@ class IncidentReportController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Incident Report Directory
+    | Incident Reports Directory
     |--------------------------------------------------------------------------
     */
 
@@ -37,8 +37,8 @@ class IncidentReportController extends Controller
                 'i.user_id'
             )
             ->leftJoin(
-                'auth.users as u',
-                'u.id',
+                'auth.users as au',
+                'au.id',
                 '=',
                 'i.user_id'
             )
@@ -46,6 +46,7 @@ class IncidentReportController extends Controller
                 'i.incident_id',
                 'i.user_id',
                 'i.type_id',
+                'i.zone_id',
                 'i.other_type',
                 'i.title',
                 'i.description',
@@ -58,7 +59,7 @@ class IncidentReportController extends Controller
                 'it.report_category',
                 'p.first_name',
                 'p.last_name',
-                'u.email'
+                'au.email'
             )
             ->selectRaw(
                 'CASE
@@ -108,7 +109,7 @@ class IncidentReportController extends Controller
                     '%' . $search . '%'
                 )
                 ->orWhere(
-                    'u.email',
+                    'au.email',
                     'ilike',
                     '%' . $search . '%'
                 );
@@ -132,18 +133,10 @@ class IncidentReportController extends Controller
             ->count();
 
         $pendingIncidents = DB::table('incidents')
-            ->whereRaw('LOWER(status) = ?', ['pending'])
+            ->where('status', 'Pending')
             ->count();
 
-        $statuses = DB::table('incidents')
-            ->whereNotNull('status')
-            ->where('status', '!=', '')
-            ->distinct()
-            ->orderBy('status')
-            ->pluck('status');
-
         $incidentTypes = DB::table('incident_types')
-            ->where('is_active', true)
             ->orderBy('incident_name')
             ->get([
                 'type_id',
@@ -156,7 +149,6 @@ class IncidentReportController extends Controller
                 'incidents' => $incidents,
                 'totalIncidents' => $totalIncidents,
                 'pendingIncidents' => $pendingIncidents,
-                'statuses' => $statuses,
                 'incidentTypes' => $incidentTypes,
                 'search' => $search,
                 'status' => $status,
@@ -193,7 +185,7 @@ class IncidentReportController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Update Incident Status
+    | Approve / Reject Incident Report
     |--------------------------------------------------------------------------
     */
 
@@ -216,26 +208,31 @@ class IncidentReportController extends Controller
             ],
         ]);
 
-        $adminId = data_get(
-            session('admin_user'),
-            'id'
-        );
+        $admin = session('admin_user');
 
-        $updateData = [
-            'status' => $validated['status'],
-            'reviewed_at' => now(),
-        ];
+        $reviewedBy = null;
 
         if (
-            is_string($adminId) &&
-            $this->isUuid($adminId)
+            is_array($admin) &&
+            !empty($admin['id']) &&
+            $this->isUuid($admin['id'])
         ) {
-            $updateData['reviewed_by'] = $adminId;
+            $reviewedBy = $admin['id'];
+        } elseif (
+            is_object($admin) &&
+            !empty($admin->id) &&
+            $this->isUuid($admin->id)
+        ) {
+            $reviewedBy = $admin->id;
         }
 
         DB::table('incidents')
             ->where('incident_id', $id)
-            ->update($updateData);
+            ->update([
+                'status' => $validated['status'],
+                'reviewed_at' => now(),
+                'reviewed_by' => $reviewedBy,
+            ]);
 
         return redirect()
             ->route(
@@ -244,14 +241,45 @@ class IncidentReportController extends Controller
             )
             ->with(
                 'success',
-                'Incident report status updated.'
+                'Incident report status updated successfully.'
             );
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | Incident Query
+    | Delete Incident Report
+    |--------------------------------------------------------------------------
+    */
+
+    public function destroy($id)
+    {
+        if (!session()->has('admin_user')) {
+            return redirect()->route('admin.login');
+        }
+
+        $incident = DB::table('incidents')
+            ->where('incident_id', $id)
+            ->first();
+
+        abort_if(!$incident, 404);
+
+        DB::table('incidents')
+            ->where('incident_id', $id)
+            ->delete();
+
+        return redirect()
+            ->route('admin.incident-reports.index')
+            ->with(
+                'success',
+                'Incident report deleted successfully.'
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Shared Incident Query
     |--------------------------------------------------------------------------
     */
 
@@ -271,10 +299,16 @@ class IncidentReportController extends Controller
                 'i.user_id'
             )
             ->leftJoin(
-                'auth.users as u',
-                'u.id',
+                'auth.users as au',
+                'au.id',
                 '=',
                 'i.user_id'
+            )
+            ->leftJoin(
+                'geofence_zones as gz',
+                'gz.zone_id',
+                '=',
+                'i.zone_id'
             )
             ->where('i.incident_id', $id)
             ->select(
@@ -296,7 +330,10 @@ class IncidentReportController extends Controller
                 'p.first_name',
                 'p.last_name',
                 'p.phone_number',
-                'u.email'
+                'p.profile_image_url',
+                'au.email',
+                'gz.zone_name',
+                'gz.zone_type'
             )
             ->selectRaw(
                 'CASE
@@ -318,15 +355,16 @@ class IncidentReportController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | UUID Validation
+    | UUID Check
     |--------------------------------------------------------------------------
     */
 
-    private function isUuid(string $value): bool
+    private function isUuid($value): bool
     {
-        return (bool) preg_match(
-            '/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i',
-            $value
-        );
+        return is_string($value) &&
+            preg_match(
+                '/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/',
+                $value
+            ) === 1;
     }
 }

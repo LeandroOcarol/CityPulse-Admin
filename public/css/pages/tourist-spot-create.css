@@ -113,6 +113,46 @@
 }
 
 
+/* Upload Button */
+
+.spot-photo-button {
+    width: auto;
+
+    min-width: 112px;
+    min-height: 40px;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--primary-green);
+    border-radius: 9px;
+
+    background: var(--white);
+
+    color: var(--primary-green);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.spot-photo-button:hover {
+    background: var(--light-green);
+
+    border-color: var(--dark-green);
+
+    color: var(--dark-green);
+}
+
+
 /* Validation */
 
 .spot-form-errors {
@@ -287,6 +327,36 @@
 }
 
 
+/* Helper Text */
+
+.spot-form-group small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--secondary-text);
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* Photo Preview */
+
+#photo-preview-container img {
+    display: block;
+
+    max-width: 240px;
+    max-height: 180px;
+
+    object-fit: cover;
+
+    border: 1px solid var(--border-gray);
+    border-radius: 9px;
+}
+
+
 /* Bottom Actions */
 
 .spot-form-bottom-actions {
@@ -341,5 +411,10 @@
     .spot-create-cancel-button,
     .spot-create-save-button {
         width: 100%;
+    }
+
+    .spot-photo-button {
+        width: auto;
+        align-self: flex-start;
     }
 }

@@ -4,15 +4,23 @@
 @section('body-class', 'dashboard-page')
 
 @push('styles')
-    <link rel="stylesheet" href="/css/pages/dashboard.css">
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/pages/dashboard.css') }}"
+    >
 @endpush
+
 
 @section('content')
 
-    <!-- Page Header -->
+    <!-- Header -->
 
     <div class="dashboard-header">
-        <h1>Dashboard</h1>
+
+        <h1>
+            Dashboard
+        </h1>
+
     </div>
 
 
@@ -27,22 +35,25 @@
             Add Tourist Spot
         </a>
 
+
         <a
-            href="#"
+            href="{{ route('admin.crime-records.create') }}"
             class="action-button action-button-orange"
         >
             Add Crime Record
         </a>
 
+
         <a
-            href="#"
+            href="{{ route('admin.safety-alerts.create') }}"
             class="action-button action-button-green"
         >
             Create Safety Alert
         </a>
 
+
         <a
-            href="#"
+            href="{{ route('admin.reports.index') }}"
             class="action-button action-button-dark"
         >
             Generate Report
@@ -51,107 +62,106 @@
     </section>
 
 
-    <!-- Summary -->
+    <!-- Summary Cards -->
 
     <section class="dashboard-stats">
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Total Tourists
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($totalTourists ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($totalTourists) }}
+            </div>
 
         </div>
 
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Tourist Spots
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($totalSpots ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($totalSpots) }}
+            </div>
 
         </div>
 
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Incident Reports
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($totalIncidents ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($totalIncidents) }}
+            </div>
 
         </div>
 
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Crime Records
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($totalCrimeRecords ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($totalCrimeRecords) }}
+            </div>
 
         </div>
 
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Safety Alerts
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($totalSafetyAlerts ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($totalSafetyAlerts) }}
+            </div>
 
         </div>
 
 
         <div class="dashboard-stat-card">
 
-            <span class="dashboard-stat-title">
+            <div class="dashboard-stat-title">
                 Completed Trips
-            </span>
+            </div>
 
-            <strong class="dashboard-stat-value">
-                {{ number_format($completedTrips ?? 0) }}
-            </strong>
+            <div class="dashboard-stat-value">
+                {{ number_format($completedTrips) }}
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- Main Grid -->
+    <!-- Main Dashboard Grid -->
 
-    <section class="dashboard-main-grid">
+    <div class="dashboard-main-grid">
 
+        <!-- Recent Incident Reports -->
 
-        <!-- Latest Incident Reports -->
-
-        <div class="dashboard-panel">
+        <section class="dashboard-panel">
 
             <div class="dashboard-panel-header">
 
                 <h2>
-                    Latest Incident Reports
+                    Recent Incident Reports
                 </h2>
 
                 <a
-                    href="#"
+                    href="{{ route('admin.incident-reports.index') }}"
                     class="panel-link"
                 >
                     View All
@@ -177,14 +187,14 @@
 
                     <tbody>
 
-                        @forelse(($recentIncidents ?? []) as $incident)
+                        @forelse($recentIncidents as $incident)
 
                             <tr>
 
                                 <td>
 
                                     <div class="incident-title">
-                                        Incident Report
+                                        {{ $incident->title ?? 'Untitled Incident' }}
                                     </div>
 
                                     @if(!empty($incident->description))
@@ -194,7 +204,7 @@
                                             {{
                                                 \Illuminate\Support\Str::limit(
                                                     $incident->description,
-                                                    45
+                                                    70
                                                 )
                                             }}
 
@@ -208,15 +218,17 @@
                                 <td>
 
                                     @php
+
                                         $incidentStatus = strtolower(
                                             $incident->status ?? 'pending'
                                         );
+
                                     @endphp
 
                                     <span
                                         class="status-badge status-{{ $incidentStatus }}"
                                     >
-                                        {{ ucfirst($incidentStatus) }}
+                                        {{ $incident->status ?? 'Pending' }}
                                     </span>
 
                                 </td>
@@ -224,19 +236,13 @@
 
                                 <td>
 
-                                    @if(!empty($incident->created_at))
-
-                                        {{
-                                            \Carbon\Carbon::parse(
-                                                $incident->created_at
-                                            )->format('M d, Y')
-                                        }}
-
-                                    @else
-
-                                        —
-
-                                    @endif
+                                    {{
+                                        \Carbon\Carbon::parse(
+                                            $incident->created_at
+                                        )
+                                        ->timezone('Asia/Manila')
+                                        ->format('M d, Y')
+                                    }}
 
                                 </td>
 
@@ -250,7 +256,7 @@
                                     colspan="3"
                                     class="dashboard-empty"
                                 >
-                                    No incident reports.
+                                    No incident reports found.
                                 </td>
 
                             </tr>
@@ -263,17 +269,17 @@
 
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- Recent Activities -->
+        <!-- Recent Activity -->
 
-        <div class="dashboard-panel">
+        <section class="dashboard-panel">
 
             <div class="dashboard-panel-header">
 
                 <h2>
-                    Recent Activities
+                    Recent Activity
                 </h2>
 
             </div>
@@ -281,70 +287,56 @@
 
             <div class="activity-list">
 
-                <div class="activity-item">
+                @forelse($recentTourists as $tourist)
 
-                    <span class="activity-dot"></span>
+                    <div class="activity-item">
 
-                    <div>
+                        <span class="activity-dot"></span>
 
-                        <strong>
-                            Admin dashboard accessed
-                        </strong>
+                        <div>
 
-                        <span>
-                            Current session
-                        </span>
+                            <strong>
+                                New Tourist Account
+                            </strong>
 
-                    </div>
+                            <span>
 
-                </div>
+                                {{
+                                    trim(
+                                        ($tourist->first_name ?? '') .
+                                        ' ' .
+                                        ($tourist->last_name ?? '')
+                                    )
+                                }}
 
+                                joined CityPulse.
 
-                <div class="activity-item">
+                            </span>
 
-                    <span class="activity-dot"></span>
-
-                    <div>
-
-                        <strong>
-                            Supabase connected
-                        </strong>
-
-                        <span>
-                            Database active
-                        </span>
+                        </div>
 
                     </div>
 
-                </div>
+                @empty
 
+                    <div class="activity-item">
 
-                <div class="activity-item">
-
-                    <span class="activity-dot"></span>
-
-                    <div>
-
-                        <strong>
-                            Admin access verified
-                        </strong>
-
-                        <span>
-                            Authentication successful
-                        </span>
+                        <div class="dashboard-empty">
+                            No recent activity.
+                        </div>
 
                     </div>
 
-                </div>
+                @endforelse
 
             </div>
 
-        </div>
+        </section>
 
-    </section>
+    </div>
 
 
-    <!-- Recent Tourist Registrations -->
+    <!-- Recent Registrations -->
 
     <section class="dashboard-panel registrations-panel">
 
@@ -358,7 +350,7 @@
                 href="{{ route('admin.tourist-accounts.index') }}"
                 class="panel-link"
             >
-                View Directory
+                View All
             </a>
 
         </div>
@@ -366,7 +358,36 @@
 
         <div class="registration-grid">
 
-            @forelse(($recentTourists ?? []) as $tourist)
+            @forelse($recentTourists as $tourist)
+
+                @php
+
+                    $fullName = trim(
+                        ($tourist->first_name ?? '') .
+                        ' ' .
+                        ($tourist->last_name ?? '')
+                    );
+
+                    if ($fullName === '') {
+                        $fullName = 'Tourist';
+                    }
+
+                    $initials =
+                        strtoupper(
+                            substr(
+                                $tourist->first_name ?? 'T',
+                                0,
+                                1
+                            ) .
+                            substr(
+                                $tourist->last_name ?? '',
+                                0,
+                                1
+                            )
+                        );
+
+                @endphp
+
 
                 <div class="registration-card">
 
@@ -376,20 +397,12 @@
 
                             <img
                                 src="{{ $tourist->profile_image_url }}"
-                                alt=""
+                                alt="{{ $fullName }}"
                             >
 
                         @else
 
-                            {{
-                                strtoupper(
-                                    substr(
-                                        $tourist->first_name ?? 'T',
-                                        0,
-                                        1
-                                    )
-                                )
-                            }}
+                            {{ $initials }}
 
                         @endif
 
@@ -399,19 +412,19 @@
                     <div class="registration-info">
 
                         <strong>
-
-                            {{
-                                trim(
-                                    ($tourist->first_name ?? '') .
-                                    ' ' .
-                                    ($tourist->last_name ?? '')
-                                )
-                            }}
-
+                            {{ $fullName }}
                         </strong>
 
                         <span>
-                            Tourist
+
+                            {{
+                                \Carbon\Carbon::parse(
+                                    $tourist->created_at
+                                )
+                                ->timezone('Asia/Manila')
+                                ->format('M d, Y')
+                            }}
+
                         </span>
 
                     </div>
@@ -421,7 +434,7 @@
             @empty
 
                 <div class="dashboard-empty">
-                    No recent registrations.
+                    No recent tourist registrations.
                 </div>
 
             @endforelse

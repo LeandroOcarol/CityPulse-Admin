@@ -53,7 +53,19 @@
     line-height: 1.2;
 }
 
-.crime-show-edit {
+.crime-show-header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+.crime-show-delete-form {
+    margin: 0;
+}
+
+.crime-show-edit,
+.crime-show-delete {
     min-height: 40px;
 
     display: inline-flex;
@@ -64,18 +76,38 @@
 
     border-radius: 9px;
 
-    background: var(--primary-green);
-
-    color: var(--white);
-
     font-size: 13px;
     font-weight: 700;
 
     text-decoration: none;
 }
 
+.crime-show-edit {
+    border: 1px solid var(--primary-green);
+
+    background: var(--primary-green);
+
+    color: var(--white);
+}
+
 .crime-show-edit:hover {
+    border-color: var(--dark-green);
+
     background: var(--dark-green);
+}
+
+.crime-show-delete {
+    border: 1px solid var(--danger-red);
+
+    background: var(--white);
+
+    color: var(--danger-red);
+
+    cursor: pointer;
+}
+
+.crime-show-delete:hover {
+    background: #FDECEC;
 }
 
 
@@ -377,7 +409,17 @@
         font-size: 25px;
     }
 
-    .crime-show-edit {
+    .crime-show-header-actions {
+        width: 100%;
+    }
+
+    .crime-show-header-actions a,
+    .crime-show-header-actions form {
+        flex: 1;
+    }
+
+    .crime-show-edit,
+    .crime-show-delete {
         width: 100%;
     }
 

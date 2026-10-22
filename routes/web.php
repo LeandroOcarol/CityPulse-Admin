@@ -4,6 +4,10 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CrimeRecordController;
 use App\Http\Controllers\IncidentReportController;
+use App\Http\Controllers\LiveTouristMapController;
+use App\Http\Controllers\RatingFeedbackController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SafetyAlertController;
 use App\Http\Controllers\TouristAccountController;
 use App\Http\Controllers\TouristSpotController;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +60,18 @@ Route::get(
 
 /*
 |--------------------------------------------------------------------------
+| Reports
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/reports',
+    [ReportController::class, 'index']
+)->name('admin.reports.index');
+
+
+/*
+|--------------------------------------------------------------------------
 | Tourist Accounts
 |--------------------------------------------------------------------------
 */
@@ -64,6 +80,11 @@ Route::get(
     '/admin/tourist-accounts',
     [TouristAccountController::class, 'index']
 )->name('admin.tourist-accounts.index');
+
+Route::patch(
+    '/admin/tourist-accounts/{id}/status',
+    [TouristAccountController::class, 'updateStatus']
+)->name('admin.tourist-accounts.status');
 
 Route::get(
     '/admin/tourist-accounts/{id}',
@@ -102,6 +123,11 @@ Route::put(
     [TouristSpotController::class, 'update']
 )->name('admin.tourist-spots.update');
 
+Route::patch(
+    '/admin/tourist-spots/{id}/status',
+    [TouristSpotController::class, 'updateStatus']
+)->name('admin.tourist-spots.status');
+
 Route::get(
     '/admin/tourist-spots/{id}',
     [TouristSpotController::class, 'show']
@@ -123,6 +149,11 @@ Route::patch(
     '/admin/incident-reports/{id}/status',
     [IncidentReportController::class, 'updateStatus']
 )->name('admin.incident-reports.status');
+
+Route::delete(
+    '/admin/incident-reports/{id}',
+    [IncidentReportController::class, 'destroy']
+)->name('admin.incident-reports.destroy');
 
 Route::get(
     '/admin/incident-reports/{id}',
@@ -161,7 +192,88 @@ Route::put(
     [CrimeRecordController::class, 'update']
 )->name('admin.crime-records.update');
 
+Route::delete(
+    '/admin/crime-records/{id}',
+    [CrimeRecordController::class, 'destroy']
+)->name('admin.crime-records.destroy');
+
 Route::get(
     '/admin/crime-records/{id}',
     [CrimeRecordController::class, 'show']
 )->name('admin.crime-records.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| Safety Alerts
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/safety-alerts',
+    [SafetyAlertController::class, 'index']
+)->name('admin.safety-alerts.index');
+
+Route::get(
+    '/admin/safety-alerts/create',
+    [SafetyAlertController::class, 'create']
+)->name('admin.safety-alerts.create');
+
+Route::post(
+    '/admin/safety-alerts',
+    [SafetyAlertController::class, 'store']
+)->name('admin.safety-alerts.store');
+
+Route::get(
+    '/admin/safety-alerts/{id}/edit',
+    [SafetyAlertController::class, 'edit']
+)->name('admin.safety-alerts.edit');
+
+Route::put(
+    '/admin/safety-alerts/{id}',
+    [SafetyAlertController::class, 'update']
+)->name('admin.safety-alerts.update');
+
+Route::patch(
+    '/admin/safety-alerts/{id}/status',
+    [SafetyAlertController::class, 'updateStatus']
+)->name('admin.safety-alerts.status');
+
+Route::delete(
+    '/admin/safety-alerts/{id}',
+    [SafetyAlertController::class, 'destroy']
+)->name('admin.safety-alerts.destroy');
+
+Route::get(
+    '/admin/safety-alerts/{id}',
+    [SafetyAlertController::class, 'show']
+)->name('admin.safety-alerts.show');
+
+
+/*
+|--------------------------------------------------------------------------
+| Live Tourist Map
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/live-tourist-map',
+    [LiveTouristMapController::class, 'index']
+)->name('admin.live-tourist-map.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Ratings & Feedback
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/ratings-feedback',
+    [RatingFeedbackController::class, 'index']
+)->name('admin.ratings-feedback.index');
+
+Route::get(
+    '/admin/ratings-feedback/{id}',
+    [RatingFeedbackController::class, 'show']
+)->name('admin.ratings-feedback.show');

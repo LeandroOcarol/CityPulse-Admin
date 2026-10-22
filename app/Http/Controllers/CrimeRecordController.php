@@ -353,6 +353,37 @@ class CrimeRecordController extends Controller
 
     /*
     |--------------------------------------------------------------------------
+    | Delete Crime Record
+    |--------------------------------------------------------------------------
+    */
+
+    public function destroy($id)
+    {
+        if (!session()->has('admin_user')) {
+            return redirect()->route('admin.login');
+        }
+
+        $record = DB::table('crime_data')
+            ->where('crime_id', $id)
+            ->first();
+
+        abort_if(!$record, 404);
+
+        DB::table('crime_data')
+            ->where('crime_id', $id)
+            ->delete();
+
+        return redirect()
+            ->route('admin.crime-records.index')
+            ->with(
+                'success',
+                'Crime record deleted successfully.'
+            );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Shared Crime Record Query
     |--------------------------------------------------------------------------
     */

@@ -453,8 +453,13 @@
     gap: 7px;
 }
 
+.crime-delete-form {
+    margin: 0;
+}
+
 .crime-view-button,
-.crime-edit-button {
+.crime-edit-button,
+.crime-delete-button {
     min-height: 32px;
 
     display: inline-flex;
@@ -495,6 +500,20 @@
     border-color: var(--primary-green);
 
     color: var(--primary-green);
+}
+
+.crime-delete-button {
+    border: 1px solid var(--danger-red);
+
+    background: var(--white);
+
+    color: var(--danger-red);
+
+    cursor: pointer;
+}
+
+.crime-delete-button:hover {
+    background: #FDECEC;
 }
 
 
@@ -588,7 +607,7 @@
     }
 
     .crime-table {
-        min-width: 1040px;
+        min-width: 1100px;
     }
 }
 

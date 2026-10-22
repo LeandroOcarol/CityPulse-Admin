@@ -2,9 +2,6 @@
    INCIDENT REPORT DETAILS
 ========================================= */
 
-
-/* Page */
-
 .incident-report-show-page .content {
     padding: 24px 28px 32px;
 
@@ -16,6 +13,12 @@
 /* Header */
 
 .incident-show-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 16px;
+
     margin-bottom: 16px;
 }
 
@@ -43,8 +46,36 @@
 
     font-size: 28px;
     font-weight: 700;
+}
 
-    line-height: 1.2;
+.incident-show-delete-form {
+    margin: 0;
+}
+
+.incident-show-delete {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--danger-red);
+    border-radius: 9px;
+
+    background: var(--white);
+
+    color: var(--danger-red);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.incident-show-delete:hover {
+    background: #FDECEC;
 }
 
 
@@ -97,10 +128,6 @@
 
     font-size: 22px;
     font-weight: 700;
-
-    line-height: 1.3;
-
-    overflow-wrap: anywhere;
 }
 
 .incident-show-meta {
@@ -111,8 +138,8 @@
     gap: 8px;
 }
 
-.incident-show-type,
-.incident-show-status {
+.incident-show-status,
+.incident-show-category {
     min-height: 25px;
 
     display: inline-flex;
@@ -125,12 +152,6 @@
 
     font-size: 12px;
     font-weight: 700;
-}
-
-.incident-show-type {
-    background: var(--light-green);
-
-    color: var(--dark-green);
 }
 
 .incident-show-status-pending {
@@ -151,9 +172,13 @@
     color: var(--danger-red);
 }
 
-.incident-show-id {
-    flex-shrink: 0;
+.incident-show-category {
+    background: var(--light-gray);
 
+    color: var(--secondary-text);
+}
+
+.incident-show-id {
     text-align: right;
 }
 
@@ -165,26 +190,18 @@
     color: var(--secondary-text);
 
     font-size: 12px;
-    font-weight: 600;
 }
 
 .incident-show-id strong {
     color: var(--primary-green);
 
     font-size: 18px;
-    font-weight: 700;
 }
 
 
 /* Review */
 
 .incident-review-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
     margin-bottom: 16px;
 
     padding: 16px 18px;
@@ -192,53 +209,51 @@
     background: var(--white);
 
     border: 1px solid var(--border-gray);
-    border-left: 4px solid var(--primary-green);
     border-radius: 10px;
 
     box-shadow: var(--shadow-small);
 }
 
-.incident-review-info h2 {
+.incident-review-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+}
+
+.incident-review-content h2 {
     margin: 0;
 
     color: var(--primary-text);
 
     font-size: 16px;
-    font-weight: 700;
 }
 
-.incident-review-info p {
+.incident-review-content p {
     margin: 4px 0 0;
 
     color: var(--secondary-text);
 
     font-size: 13px;
-
-    line-height: 1.45;
 }
 
 .incident-review-actions {
-    flex-shrink: 0;
-
     display: flex;
     align-items: center;
 
-    gap: 9px;
+    gap: 8px;
 }
 
 .incident-review-actions form {
     margin: 0;
 }
 
-.incident-action-button {
-    min-width: 92px;
-    min-height: 38px;
+.incident-approve-button,
+.incident-reject-button {
+    min-height: 36px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 15px;
+    padding: 0 14px;
 
     border-radius: 8px;
 
@@ -256,28 +271,12 @@
     color: var(--white);
 }
 
-.incident-approve-button:hover:not(:disabled) {
-    background: var(--dark-green);
-
-    border-color: var(--dark-green);
-}
-
 .incident-reject-button {
     border: 1px solid var(--danger-red);
 
     background: var(--white);
 
     color: var(--danger-red);
-}
-
-.incident-reject-button:hover:not(:disabled) {
-    background: #FDECEC;
-}
-
-.incident-action-button:disabled {
-    opacity: 0.45;
-
-    cursor: default;
 }
 
 
@@ -307,8 +306,6 @@
 /* Cards */
 
 .incident-show-card {
-    min-width: 0;
-
     overflow: hidden;
 
     background: var(--white);
@@ -343,9 +340,6 @@
     padding: 4px 16px;
 }
 
-
-/* Rows */
-
 .incident-show-row {
     min-height: 52px;
 
@@ -374,14 +368,10 @@
 }
 
 .incident-show-value {
-    min-width: 0;
-
     color: var(--primary-text);
 
     font-size: 14px;
     font-weight: 600;
-
-    line-height: 1.45;
 
     overflow-wrap: anywhere;
 }
@@ -390,7 +380,7 @@
 /* Description */
 
 .incident-description-card {
-    min-height: 170px;
+    min-height: 180px;
 }
 
 .incident-show-text {
@@ -410,41 +400,24 @@
     white-space: pre-line;
 
     overflow-wrap: anywhere;
-    word-break: break-word;
 }
 
 
 /* Image */
 
-.incident-image-card {
-    min-height: 250px;
-}
-
-.incident-show-image-area {
-    min-height: 198px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.incident-image-container {
     padding: 16px;
-
-    color: var(--secondary-text);
-
-    font-size: 14px;
-
-    text-align: center;
 }
 
-.incident-show-image-area img {
+.incident-image {
     width: 100%;
-    max-height: 360px;
+    max-height: 380px;
 
     display: block;
 
-    object-fit: contain;
-
     border-radius: 8px;
+
+    object-fit: cover;
 }
 
 
@@ -455,12 +428,6 @@
     .incident-show-grid {
         grid-template-columns: 1fr;
     }
-
-    .incident-review-card {
-        align-items: flex-start;
-
-        flex-direction: column;
-    }
 }
 
 
@@ -470,11 +437,22 @@
         padding: 18px 14px 28px;
     }
 
+    .incident-show-header {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
     .incident-show-header h1 {
         font-size: 25px;
     }
 
-    .incident-show-overview-main {
+    .incident-show-delete {
+        width: 100%;
+    }
+
+    .incident-show-overview-main,
+    .incident-review-content {
         align-items: flex-start;
 
         flex-direction: column;
@@ -492,7 +470,8 @@
         flex: 1;
     }
 
-    .incident-action-button {
+    .incident-approve-button,
+    .incident-reject-button {
         width: 100%;
     }
 

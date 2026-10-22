@@ -2,9 +2,6 @@
    TOURIST SPOT DETAILS
 ========================================= */
 
-
-/* Page */
-
 .tourist-spot-show-page .content {
     padding: 24px 28px 32px;
 
@@ -16,6 +13,12 @@
 /* Header */
 
 .spot-show-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 16px;
+
     margin-bottom: 16px;
 }
 
@@ -47,15 +50,101 @@
     line-height: 1.2;
 }
 
-
-/* Overview */
-
-.spot-overview-card {
+.spot-show-actions {
     display: flex;
     align-items: center;
 
-    gap: 18px;
+    gap: 9px;
+}
 
+.spot-show-status-form {
+    margin: 0;
+}
+
+.spot-show-edit,
+.spot-show-deactivate,
+.spot-show-reactivate {
+    min-height: 40px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.spot-show-edit {
+    border: 1px solid var(--primary-green);
+
+    background: var(--primary-green);
+
+    color: var(--white);
+}
+
+.spot-show-edit:hover {
+    background: var(--dark-green);
+
+    border-color: var(--dark-green);
+}
+
+.spot-show-deactivate {
+    border: 1px solid var(--danger-red);
+
+    background: var(--white);
+
+    color: var(--danger-red);
+
+    cursor: pointer;
+}
+
+.spot-show-deactivate:hover {
+    background: #FDECEC;
+}
+
+.spot-show-reactivate {
+    border: 1px solid var(--primary-green);
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    cursor: pointer;
+}
+
+.spot-show-reactivate:hover {
+    background: #DDF1E3;
+}
+
+
+/* Success */
+
+.spot-show-success {
+    margin-bottom: 16px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #B8E0C2;
+    border-radius: 9px;
+
+    background: var(--light-green);
+
+    color: var(--dark-green);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Overview */
+
+.spot-overview {
     margin-bottom: 16px;
 
     padding: 18px;
@@ -68,52 +157,58 @@
     box-shadow: var(--shadow-small);
 }
 
-.spot-overview-image {
-    width: 92px;
-    height: 92px;
-
-    flex-shrink: 0;
-
-    overflow: hidden;
-
+.spot-overview-main {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
-    border-radius: 10px;
-
-    background: var(--light-green);
-
-    color: var(--primary-green);
-
-    font-size: 30px;
-    font-weight: 700;
+    gap: 20px;
 }
 
-.spot-overview-image img {
-    width: 100%;
-    height: 100%;
+.spot-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
-    display: block;
-
-    object-fit: cover;
+    gap: 10px;
 }
 
-.spot-overview-info {
-    min-width: 0;
-}
-
-.spot-overview-info h2 {
-    margin: 0 0 9px;
+.spot-title-row h2 {
+    margin: 0;
 
     color: var(--primary-text);
 
-    font-size: 23px;
+    font-size: 22px;
     font-weight: 700;
 
-    line-height: 1.25;
+    line-height: 1.3;
+}
 
-    overflow-wrap: anywhere;
+.spot-status {
+    min-height: 25px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.spot-status-active {
+    background: var(--light-green);
+
+    color: var(--dark-green);
+}
+
+.spot-status-inactive {
+    background: #F3F4F6;
+
+    color: var(--secondary-text);
 }
 
 .spot-overview-meta {
@@ -121,42 +216,43 @@
     align-items: center;
     flex-wrap: wrap;
 
-    gap: 9px;
-}
+    gap: 8px 14px;
 
-.spot-show-category {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 8px;
 
-    min-height: 25px;
-
-    padding: 0 10px;
-
-    border-radius: 20px;
-
-    background: var(--light-green);
-
-    color: var(--dark-green);
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.spot-show-address {
     color: var(--secondary-text);
 
     font-size: 13px;
+}
 
-    line-height: 1.4;
+.spot-id {
+    flex-shrink: 0;
 
-    overflow-wrap: anywhere;
+    text-align: right;
+}
+
+.spot-id span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: var(--secondary-text);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.spot-id strong {
+    color: var(--primary-green);
+
+    font-size: 18px;
+    font-weight: 700;
 }
 
 
-/* Details Grid */
+/* Grid */
 
-.spot-show-grid {
+.spot-details-grid {
     display: grid;
 
     grid-template-columns:
@@ -164,17 +260,12 @@
 
     gap: 16px;
 
-    align-items: stretch;
+    align-items: start;
 }
 
-.spot-show-column {
+.spot-details-column {
     min-width: 0;
-}
 
-
-/* Left Column */
-
-.spot-show-left {
     display: flex;
     flex-direction: column;
 
@@ -182,22 +273,9 @@
 }
 
 
-/* Right Column */
-
-.spot-show-right {
-    display: grid;
-
-    grid-template-rows:
-        minmax(150px, auto)
-        minmax(230px, 1fr);
-
-    gap: 16px;
-}
-
-
 /* Cards */
 
-.spot-show-card {
+.spot-card {
     min-width: 0;
 
     overflow: hidden;
@@ -210,7 +288,7 @@
     box-shadow: var(--shadow-small);
 }
 
-.spot-show-card-header {
+.spot-card-header {
     min-height: 50px;
 
     display: flex;
@@ -221,7 +299,7 @@
     border-bottom: 1px solid var(--border-gray);
 }
 
-.spot-show-card-header h2 {
+.spot-card-header h2 {
     margin: 0;
 
     color: var(--primary-text);
@@ -230,14 +308,14 @@
     font-weight: 700;
 }
 
-.spot-show-card-body {
+.spot-card-body {
     padding: 4px 16px;
 }
 
 
-/* Detail Rows */
+/* Information */
 
-.spot-detail-row {
+.spot-info-row {
     min-height: 52px;
 
     display: grid;
@@ -253,18 +331,18 @@
     border-bottom: 1px solid var(--border-gray);
 }
 
-.spot-detail-row:last-child {
+.spot-info-row:last-child {
     border-bottom: none;
 }
 
-.spot-detail-label {
+.spot-info-label {
     color: var(--secondary-text);
 
     font-size: 13px;
     font-weight: 600;
 }
 
-.spot-detail-value {
+.spot-info-value {
     min-width: 0;
 
     color: var(--primary-text);
@@ -275,45 +353,26 @@
     line-height: 1.45;
 
     overflow-wrap: anywhere;
-    word-break: break-word;
 }
 
 
-/* Description */
+/* Description and History */
 
 .spot-description-card {
     min-height: 150px;
-
-    display: flex;
-    flex-direction: column;
 }
-
-
-/* History */
 
 .spot-history-card {
     min-height: 230px;
-
-    display: flex;
-    flex-direction: column;
 }
 
-
-/* Text Content */
-
 .spot-text-content {
-    flex: 1;
-
-    min-width: 0;
-
     padding: 0 16px 18px;
 }
 
 .spot-text-content p {
     margin: 0;
     padding: 0;
-
-    max-width: 100%;
 
     color: var(--primary-text);
 
@@ -328,24 +387,30 @@
 }
 
 
+/* Image */
+
+.spot-image-container {
+    padding: 16px;
+}
+
+.spot-image {
+    width: 100%;
+    max-height: 320px;
+
+    display: block;
+
+    border-radius: 8px;
+
+    object-fit: cover;
+}
+
+
 /* Responsive */
 
 @media (max-width: 950px) {
 
-    .spot-show-grid {
+    .spot-details-grid {
         grid-template-columns: 1fr;
-    }
-
-    .spot-show-right {
-        grid-template-rows: auto;
-    }
-
-    .spot-description-card {
-        min-height: 140px;
-    }
-
-    .spot-history-card {
-        min-height: 190px;
     }
 }
 
@@ -356,33 +421,46 @@
         padding: 18px 14px 28px;
     }
 
+    .spot-show-header {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
     .spot-show-header h1 {
         font-size: 25px;
     }
 
-    .spot-overview-card {
+    .spot-show-actions {
+        width: 100%;
+    }
+
+    .spot-show-actions a,
+    .spot-show-actions form {
+        flex: 1;
+    }
+
+    .spot-show-edit,
+    .spot-show-deactivate,
+    .spot-show-reactivate {
+        width: 100%;
+    }
+
+    .spot-overview-main {
         align-items: flex-start;
+
+        flex-direction: column;
     }
 
-    .spot-overview-image {
-        width: 78px;
-        height: 78px;
+    .spot-id {
+        text-align: left;
     }
 
-    .spot-overview-info h2 {
-        font-size: 20px;
-    }
-
-    .spot-detail-row {
+    .spot-info-row {
         grid-template-columns: 1fr;
 
         gap: 5px;
 
         padding: 11px 0;
-    }
-
-    .spot-description-card,
-    .spot-history-card {
-        min-height: auto;
     }
 }

@@ -4,14 +4,15 @@
 @section('body-class', 'tourist-spots-page')
 
 @push('styles')
-    <link rel="stylesheet" href="/css/pages/tourist-spots.css">
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/pages/tourist-spots.css') }}"
+    >
 @endpush
 
 @section('content')
 
-    <!-- Page Header -->
-
-    <div class="spots-header-row">
+    <div class="spots-header">
 
         <h1>
             Tourist Spots
@@ -21,64 +22,76 @@
             href="{{ route('admin.tourist-spots.create') }}"
             class="spots-add-button"
         >
-            Add Spot
+            Add Tourist Spot
         </a>
 
     </div>
 
 
-    <!-- Success Message -->
-
     @if(session('success'))
 
-        <div class="success-message">
+        <div class="spots-success">
             {{ session('success') }}
         </div>
 
     @endif
 
 
-    <!-- Summary -->
-
     <section class="spots-summary-grid">
 
         <div class="spots-summary-card">
 
-            <div class="spots-summary-content">
+            <span class="spots-summary-label">
+                Tourist Spots
+            </span>
 
-                <span class="spots-summary-label">
-                    Tourist Spots
-                </span>
-
-                <strong class="spots-summary-value">
-                    {{ number_format($totalSpots ?? 0) }}
-                </strong>
-
-            </div>
+            <strong class="spots-summary-value">
+                {{ number_format($totalSpots) }}
+            </strong>
 
         </div>
 
 
         <div class="spots-summary-card">
 
-            <div class="spots-summary-content">
+            <span class="spots-summary-label">
+                Active Spots
+            </span>
 
-                <span class="spots-summary-label">
-                    Categories
-                </span>
+            <strong class="spots-summary-value">
+                {{ number_format($activeSpots) }}
+            </strong>
 
-                <strong class="spots-summary-value">
-                    {{ number_format($totalCategories ?? 0) }}
-                </strong>
+        </div>
 
-            </div>
+
+        <div class="spots-summary-card">
+
+            <span class="spots-summary-label">
+                Inactive Spots
+            </span>
+
+            <strong class="spots-summary-value">
+                {{ number_format($inactiveSpots) }}
+            </strong>
+
+        </div>
+
+
+        <div class="spots-summary-card">
+
+            <span class="spots-summary-label">
+                Categories
+            </span>
+
+            <strong class="spots-summary-value">
+                {{ number_format($totalCategories) }}
+            </strong>
 
         </div>
 
     </section>
 
-
-    <!-- Filters -->
 
     <section class="spots-filter-card">
 
@@ -88,30 +101,23 @@
             class="spots-filter-form"
         >
 
-            <div class="spots-filter-main">
+            <div class="spots-search">
 
                 <input
                     type="search"
                     name="search"
-                    value="{{ $search ?? '' }}"
-                    placeholder="Search spots"
-                    class="spots-search-input"
+                    value="{{ $search }}"
+                    placeholder="Search tourist spots"
                 >
 
             </div>
 
 
-            <div class="spots-filter-side">
+            <div class="spots-filter-controls">
 
-                <select
-                    name="category"
-                    class="spots-category-select"
-                >
+                <select name="category">
 
-                    <option
-                        value="all"
-                        {{ ($category ?? 'all') === 'all' ? 'selected' : '' }}
-                    >
+                    <option value="all">
                         All Categories
                     </option>
 
@@ -119,12 +125,38 @@
 
                         <option
                             value="{{ $categoryOption }}"
-                            {{ ($category ?? 'all') === $categoryOption ? 'selected' : '' }}
+                            {{ $category === $categoryOption ? 'selected' : '' }}
                         >
                             {{ $categoryOption }}
                         </option>
 
                     @endforeach
+
+                </select>
+
+
+                <select name="status">
+
+                    <option
+                        value="all"
+                        {{ $status === 'all' ? 'selected' : '' }}
+                    >
+                        All Statuses
+                    </option>
+
+                    <option
+                        value="active"
+                        {{ $status === 'active' ? 'selected' : '' }}
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="inactive"
+                        {{ $status === 'inactive' ? 'selected' : '' }}
+                    >
+                        Inactive
+                    </option>
 
                 </select>
 
@@ -138,8 +170,9 @@
 
 
                 @if(
-                    ($search ?? '') !== '' ||
-                    ($category ?? 'all') !== 'all'
+                    $search !== '' ||
+                    $category !== 'all' ||
+                    $status !== 'all'
                 )
 
                     <a
@@ -158,8 +191,6 @@
     </section>
 
 
-    <!-- Spot Directory -->
-
     <section class="spots-table-card">
 
         <div class="spots-table-header">
@@ -167,11 +198,11 @@
             <div>
 
                 <h2>
-                    Spot Directory
+                    Tourist Spot Directory
                 </h2>
 
                 <span>
-                    {{ $touristSpots->total() }} spots
+                    {{ number_format($touristSpots->total()) }} records
                 </span>
 
             </div>
@@ -179,7 +210,7 @@
         </div>
 
 
-        <div class="spots-table-wrap">
+        <div class="spots-table-wrapper">
 
             <table class="spots-table">
 
@@ -188,6 +219,7 @@
                     <tr>
                         <th>Spot</th>
                         <th>Category</th>
+                        <th>Status</th>
                         <th>Coordinates</th>
                         <th>Hours</th>
                         <th>Added</th>
@@ -201,71 +233,23 @@
 
                     @forelse($touristSpots as $spot)
 
-                        <tr>
+                        <tr class="{{ !$spot->is_active ? 'spots-row-inactive' : '' }}">
 
                             <td>
 
-                                <div class="spot-cell">
+                                <div class="spots-name-cell">
 
-                                    <div class="spot-thumbnail">
+                                    <strong>
+                                        {{ $spot->name }}
+                                    </strong>
 
-                                        @if(!empty($spot->image_url))
+                                    @if(!empty($spot->address))
 
-                                            <img
-                                                src="{{ $spot->image_url }}"
-                                                alt="{{ $spot->name }}"
-                                            >
+                                        <span>
+                                            {{ $spot->address }}
+                                        </span>
 
-                                        @else
-
-                                            <span>
-                                                {{
-                                                    strtoupper(
-                                                        substr(
-                                                            $spot->name ?? 'S',
-                                                            0,
-                                                            1
-                                                        )
-                                                    )
-                                                }}
-                                            </span>
-
-                                        @endif
-
-                                    </div>
-
-
-                                    <div class="spot-cell-info">
-
-                                        <strong>
-                                            {{ $spot->name }}
-                                        </strong>
-
-                                        @if(!empty($spot->address))
-
-                                            <span>
-                                                {{
-                                                    \Illuminate\Support\Str::limit(
-                                                        $spot->address,
-                                                        45
-                                                    )
-                                                }}
-                                            </span>
-
-                                        @elseif(!empty($spot->description))
-
-                                            <span>
-                                                {{
-                                                    \Illuminate\Support\Str::limit(
-                                                        $spot->description,
-                                                        45
-                                                    )
-                                                }}
-                                            </span>
-
-                                        @endif
-
-                                    </div>
+                                    @endif
 
                                 </div>
 
@@ -273,10 +257,25 @@
 
 
                             <td>
+                                {{ $spot->category }}
+                            </td>
 
-                                <span class="spot-category-badge">
-                                    {{ $spot->category ?? '—' }}
-                                </span>
+
+                            <td>
+
+                                @if($spot->is_active)
+
+                                    <span class="spots-status spots-status-active">
+                                        Active
+                                    </span>
+
+                                @else
+
+                                    <span class="spots-status spots-status-inactive">
+                                        Inactive
+                                    </span>
+
+                                @endif
 
                             </td>
 
@@ -288,14 +287,14 @@
                                     $spot->longitude !== null
                                 )
 
-                                    <div class="spot-coordinate-group">
+                                    <div class="spots-coordinates">
 
                                         <span>
-                                            {{ number_format($spot->latitude, 6) }}
+                                            {{ number_format($spot->latitude, 5) }}
                                         </span>
 
                                         <span>
-                                            {{ number_format($spot->longitude, 6) }}
+                                            {{ number_format($spot->longitude, 5) }}
                                         </span>
 
                                     </div>
@@ -335,21 +334,77 @@
 
                             <td>
 
-                                <div class="spot-action-group">
+                                <div class="spots-actions">
 
                                     <a
                                         href="{{ route('admin.tourist-spots.show', $spot->tourist_id) }}"
-                                        class="spot-action-button spot-view-button"
+                                        class="spots-view-button"
                                     >
                                         View
                                     </a>
 
+
                                     <a
                                         href="{{ route('admin.tourist-spots.edit', $spot->tourist_id) }}"
-                                        class="spot-action-button spot-edit-button"
+                                        class="spots-edit-button"
                                     >
                                         Edit
                                     </a>
+
+
+                                    @if($spot->is_active)
+
+                                        <form
+                                            method="POST"
+                                            action="{{ route('admin.tourist-spots.status', $spot->tourist_id) }}"
+                                            class="spots-status-form"
+                                            onsubmit="return confirm('Deactivate this tourist spot? It will remain in the database and can be reactivated later.');"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <input
+                                                type="hidden"
+                                                name="is_active"
+                                                value="0"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="spots-deactivate-button"
+                                            >
+                                                Deactivate
+                                            </button>
+
+                                        </form>
+
+                                    @else
+
+                                        <form
+                                            method="POST"
+                                            action="{{ route('admin.tourist-spots.status', $spot->tourist_id) }}"
+                                            class="spots-status-form"
+                                            onsubmit="return confirm('Reactivate this tourist spot?');"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <input
+                                                type="hidden"
+                                                name="is_active"
+                                                value="1"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="spots-reactivate-button"
+                                            >
+                                                Reactivate
+                                            </button>
+
+                                        </form>
+
+                                    @endif
 
                                 </div>
 
@@ -362,8 +417,8 @@
                         <tr>
 
                             <td
-                                colspan="6"
-                                class="spots-empty-state"
+                                colspan="7"
+                                class="spots-empty"
                             >
                                 No tourist spots found.
                             </td>
@@ -378,8 +433,6 @@
 
         </div>
 
-
-        <!-- Pagination -->
 
         <div class="spots-pagination">
 
@@ -400,7 +453,7 @@
                 of
 
                 <strong>
-                    {{ $touristSpots->total() }}
+                    {{ number_format($touristSpots->total()) }}
                 </strong>
 
             </div>

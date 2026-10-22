@@ -1,0 +1,169 @@
+.safety-alert-form-page .content {
+    padding: 24px 28px 32px;
+}
+
+.alert-form-header {
+    margin-bottom: 16px;
+}
+
+.alert-form-back {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: var(--primary-green);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.alert-form-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: var(--primary-text);
+}
+
+.alert-form {
+    max-width: 1050px;
+}
+
+.alert-form-card {
+    margin-bottom: 16px;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+    box-shadow: var(--shadow-small);
+}
+
+.alert-form-card-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.alert-form-card-header h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.alert-form-card-body {
+    padding: 16px;
+}
+
+.alert-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.alert-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.alert-field-full {
+    grid-column: 1 / -1;
+}
+
+.alert-field label {
+    color: var(--primary-text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.alert-field input,
+.alert-field select,
+.alert-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--primary-text);
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.alert-field input,
+.alert-field select {
+    min-height: 42px;
+}
+
+.alert-field textarea {
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.alert-field input:focus,
+.alert-field select:focus,
+.alert-field textarea:focus {
+    border-color: var(--primary-green);
+    outline: none;
+}
+
+.alert-error {
+    color: var(--danger-red);
+    font-size: 12px;
+}
+
+.alert-helper {
+    color: var(--secondary-text);
+    font-size: 12px;
+}
+
+.alert-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+.alert-cancel-button,
+.alert-save-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 17px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.alert-cancel-button {
+    border: 1px solid var(--border-gray);
+    color: var(--secondary-text);
+    text-decoration: none;
+}
+
+.alert-save-button {
+    border: none;
+    background: var(--primary-green);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.alert-save-button:hover {
+    background: var(--dark-green);
+}
+
+@media (max-width: 700px) {
+    .safety-alert-form-page .content {
+        padding: 18px 14px 28px;
+    }
+
+    .alert-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .alert-field-full {
+        grid-column: auto;
+    }
+
+    .alert-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .alert-cancel-button,
+    .alert-save-button {
+        width: 100%;
+    }
+}
