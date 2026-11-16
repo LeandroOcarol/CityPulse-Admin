@@ -1,14 +1,18 @@
+
 <?php
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CrimeRecordController;
+use App\Http\Controllers\GeofenceZoneController;
 use App\Http\Controllers\IncidentReportController;
-use App\Http\Controllers\LiveTouristMapController;
+use App\Http\Controllers\PredictiveAnalyticsController;
 use App\Http\Controllers\RatingFeedbackController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SafetyAlertController;
+use App\Http\Controllers\SafetyHeatMapController;
 use App\Http\Controllers\TouristAccountController;
+use App\Http\Controllers\TouristDensityMapController;
 use App\Http\Controllers\TouristSpotController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +72,16 @@ Route::get(
     '/admin/reports',
     [ReportController::class, 'index']
 )->name('admin.reports.index');
+
+Route::get(
+    '/admin/reports/export/pdf',
+    [ReportController::class, 'exportPdf']
+)->name('admin.reports.export.pdf');
+
+Route::get(
+    '/admin/reports/export/excel',
+    [ReportController::class, 'exportExcel']
+)->name('admin.reports.export.excel');
 
 
 /*
@@ -252,14 +266,50 @@ Route::get(
 
 /*
 |--------------------------------------------------------------------------
-| Live Tourist Map
+| Tourist Density Map
 |--------------------------------------------------------------------------
 */
 
 Route::get(
-    '/admin/live-tourist-map',
-    [LiveTouristMapController::class, 'index']
-)->name('admin.live-tourist-map.index');
+    '/admin/tourist-density-map',
+    [TouristDensityMapController::class, 'index']
+)->name('admin.tourist-density-map.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Safety Heat Map
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/safety-heat-map',
+    [SafetyHeatMapController::class, 'index']
+)->name('admin.safety-heat-map.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Geofence Zones
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/geofence-zones',
+    [GeofenceZoneController::class, 'index']
+)->name('admin.geofence-zones.index');
+
+
+/*
+|--------------------------------------------------------------------------
+| Predictive Analytics
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/predictive-analytics',
+    [PredictiveAnalyticsController::class, 'index']
+)->name('admin.predictive-analytics.index');
 
 
 /*

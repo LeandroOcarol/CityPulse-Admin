@@ -1,3 +1,4 @@
+
 <aside class="sidebar">
 
     <!-- Brand -->
@@ -9,7 +10,6 @@
         </div>
 
         <div>
-
             <div class="brand-name">
                 CityPulse
             </div>
@@ -17,7 +17,6 @@
             <div class="brand-subtitle">
                 Municipal Admin
             </div>
-
         </div>
 
     </div>
@@ -83,40 +82,32 @@
 
 
         <a
-            href="{{ route('admin.live-tourist-map.index') }}"
-            class="menu-item {{ request()->routeIs('admin.live-tourist-map.*') ? 'active' : '' }}"
+            href="{{ route('admin.tourist-density-map.index') }}"
+            class="menu-item {{ request()->routeIs('admin.tourist-density-map.*') ? 'active' : '' }}"
         >
-            Live Tourist Map
+            Tourist Density Map
         </a>
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.safety-heat-map.index') }}"
+            class="menu-item {{ request()->routeIs('admin.safety-heat-map.*') ? 'active' : '' }}"
         >
             Safety Heat Map
         </a>
 
 
         <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.geofence-zones.index') }}"
+            class="menu-item {{ request()->routeIs('admin.geofence-zones.*') ? 'active' : '' }}"
         >
             Geofence Zones
         </a>
 
 
         <a
-            href="#"
-            class="menu-item"
-        >
-            Map Routes
-        </a>
-
-
-        <a
-            href="#"
-            class="menu-item"
+            href="{{ route('admin.predictive-analytics.index') }}"
+            class="menu-item {{ request()->routeIs('admin.predictive-analytics.*') ? 'active' : '' }}"
         >
             Predictive Analytics
         </a>
@@ -167,7 +158,6 @@
             >
                 Logout
             </button>
-
         </form>
 
     </nav>
