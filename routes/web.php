@@ -1,8 +1,8 @@
-
 <?php
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\CrimeRecordController;
 use App\Http\Controllers\GeofenceZoneController;
 use App\Http\Controllers\IncidentReportController;
@@ -60,6 +60,34 @@ Route::get(
     '/admin/dashboard',
     [AdminDashboardController::class, 'index']
 )->name('admin.dashboard');
+
+
+/*
+|--------------------------------------------------------------------------
+| Admin Notifications
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/notifications',
+    [AdminNotificationController::class, 'index']
+)->name('admin.notifications.index');
+
+Route::post(
+    '/admin/notifications/sync',
+    [AdminNotificationController::class, 'sync']
+)->name('admin.notifications.sync');
+
+Route::post(
+    '/admin/notifications/read-all',
+    [AdminNotificationController::class, 'markAllRead']
+)->name('admin.notifications.read-all');
+
+Route::post(
+    '/admin/notifications/{id}/read',
+    [AdminNotificationController::class, 'markRead']
+)->whereNumber('id')
+  ->name('admin.notifications.read');
 
 
 /*
@@ -168,6 +196,11 @@ Route::delete(
     '/admin/incident-reports/{id}',
     [IncidentReportController::class, 'destroy']
 )->name('admin.incident-reports.destroy');
+
+Route::get(
+    '/admin/incident-reports/{id}/image',
+    [IncidentReportController::class, 'image']
+)->name('admin.incident-reports.image');
 
 Route::get(
     '/admin/incident-reports/{id}',
@@ -290,7 +323,7 @@ Route::get(
 
 /*
 |--------------------------------------------------------------------------
-| Geofence Zones
+| Geofence Zone Management
 |--------------------------------------------------------------------------
 */
 
@@ -298,6 +331,28 @@ Route::get(
     '/admin/geofence-zones',
     [GeofenceZoneController::class, 'index']
 )->name('admin.geofence-zones.index');
+
+Route::get(
+    '/admin/geofence-zones/create',
+    [GeofenceZoneController::class, 'create']
+)->name('admin.geofence-zones.create');
+
+Route::post(
+    '/admin/geofence-zones',
+    [GeofenceZoneController::class, 'store']
+)->name('admin.geofence-zones.store');
+
+Route::get(
+    '/admin/geofence-zones/{id}/edit',
+    [GeofenceZoneController::class, 'edit']
+)->whereNumber('id')
+  ->name('admin.geofence-zones.edit');
+
+Route::put(
+    '/admin/geofence-zones/{id}',
+    [GeofenceZoneController::class, 'update']
+)->whereNumber('id')
+  ->name('admin.geofence-zones.update');
 
 
 /*

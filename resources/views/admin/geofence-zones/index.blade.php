@@ -31,22 +31,47 @@
         line-height: 1.6;
     }
 
-    .geofence-refresh {
+    .geofence-header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .geofence-refresh,
+    .geofence-add {
         padding: 11px 16px;
-        border: 1px solid #198b46;
         border-radius: 9px;
-        background: #fff;
-        color: #168442;
         font-size: 13px;
         font-weight: 600;
         text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .geofence-refresh {
+        border: 1px solid #198b46;
+        background: #fff;
+        color: #168442;
     }
 
     .geofence-refresh:hover {
         background: #edf8f0;
     }
 
-    .geofence-notice {
+    .geofence-add {
+        border: 1px solid #198b46;
+        background: #198b46;
+        color: #fff;
+    }
+
+    .geofence-add:hover {
+        background: #13733a;
+    }
+
+    .geofence-notice,
+    .geofence-success {
         padding: 15px 18px;
         margin-bottom: 20px;
         border: 1px solid #d1e6d6;
@@ -60,6 +85,12 @@
     .geofence-notice strong {
         display: block;
         margin-bottom: 4px;
+    }
+
+    .geofence-success {
+        border-color: #a5d6b5;
+        background: #eaf8ee;
+        font-weight: 600;
     }
 
     .geofence-summary {
@@ -239,21 +270,28 @@
         overflow-y: auto;
     }
 
+    .geofence-zone-row {
+        border-bottom: 1px solid #ecf0ed;
+        background: #fff;
+    }
+
+    .geofence-zone-row:hover {
+        background: #f7fbf8;
+    }
+
     .geofence-zone-item {
         width: 100%;
-        padding: 15px 17px;
+        padding: 15px 17px 8px;
         text-align: left;
         display: block;
         border: 0;
-        border-bottom: 1px solid #ecf0ed;
-        background: #fff;
+        background: transparent;
         cursor: pointer;
         font-family: inherit;
     }
 
-    .geofence-zone-item:hover,
-    .geofence-zone-item:focus {
-        background: #f0f8f2;
+    .geofence-zone-item:focus-visible {
+        outline: 2px solid #198b46;
         outline-offset: -2px;
     }
 
@@ -284,6 +322,28 @@
         color: #718075;
         font-size: 12px;
         line-height: 1.6;
+    }
+
+    .geofence-zone-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 17px 12px;
+    }
+
+    .geofence-edit-link {
+        font-size: 12px;
+        font-weight: 700;
+        color: #168442;
+        text-decoration: none;
+        border: 1px solid #d1e6d6;
+        border-radius: 7px;
+        padding: 6px 12px;
+        background: #fff;
+    }
+
+    .geofence-edit-link:hover {
+        background: #edf8f0;
     }
 
     .geofence-info-card {
@@ -322,6 +382,7 @@
         color: #65776a;
         text-align: center;
         padding: 20px;
+        box-sizing: border-box;
     }
 
     .geofence-popup {
@@ -346,10 +407,7 @@
 
         .geofence-side-column {
             display: grid;
-            grid-template-columns: repeat(
-                2,
-                minmax(0, 1fr)
-            );
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
@@ -378,10 +436,9 @@
 </style>
 @endpush
 
-
 @section('content')
 
-<!-- PAGE HEADER -->
+<!-- HEADER -->
 
 <div class="geofence-header">
 
@@ -394,84 +451,72 @@
         </div>
     </div>
 
-    <a
-        class="geofence-refresh"
-        href="{{ route('admin.geofence-zones.index') }}"
-    >
-        Refresh Zones
-    </a>
+    <div class="geofence-header-actions">
+
+        <a
+            class="geofence-refresh"
+            href="{{ route('admin.geofence-zones.index') }}"
+        >
+            Refresh Zones
+        </a>
+
+        <a
+            class="geofence-add"
+            href="{{ route('admin.geofence-zones.create') }}"
+        >
+            + Add Zone
+        </a>
+
+    </div>
 
 </div>
 
+@if (session('success'))
+    <div class="geofence-success" role="status">
+        {{ session('success') }}
+    </div>
+@endif
 
 <!-- INFORMATION NOTICE -->
 
 <div class="geofence-notice">
 
-    <strong>
-        Geofence Zone Monitoring
-    </strong>
+    <strong>Geofence Zone Management</strong>
 
-    This dashboard displays existing destination
-    and safety-related geographic zones.
+    Administrators can create and edit supported geographic zones.
+    Changes are saved to the shared CityPulse database.
 
-    Zone information is retrieved from the shared
-    CityPulse database without changing its records.
-
-    Tourist destination geofences are intended to
-    follow the Tourist Spots management workflow.
+    Emergency zones are excluded from this management page.
+    Existing Emergency records are not deleted or modified.
 
 </div>
-
 
 <!-- SUMMARY CARDS -->
 
 <section class="geofence-summary">
 
     <div class="geofence-summary-card">
-
-        <span>
-            Total Supported Zones
-        </span>
-
-        <strong>
-            {{ number_format($totalZones) }}
-        </strong>
-
+        <span>Total Supported Zones</span>
+        <strong>{{ number_format($totalZones) }}</strong>
     </div>
 
-
     <div class="geofence-summary-card">
-
-        <span>
-            Medium & High Risk Zones
-        </span>
-
+        <span>Medium & High Risk Zones</span>
         <strong>
             {{ number_format(
                 $counts['Medium Risk'] + $counts['High Risk']
             ) }}
         </strong>
-
     </div>
 
-
     <div class="geofence-summary-card">
-
-        <span>
-            Mapped Filter Results
-        </span>
-
-        <strong>
-            {{ number_format($mappedZoneCount) }}
-        </strong>
-
+        <span>Mapped Filter Results</span>
+        <strong>{{ number_format($mappedZoneCount) }}</strong>
     </div>
 
 </section>
 
-
-<!-- ZONE FILTERS -->
+<!-- FILTERS -->
 
 <form
     method="GET"
@@ -488,10 +533,7 @@
         aria-label="Search geofence zones"
     >
 
-    <select
-        name="type"
-        aria-label="Filter by zone type"
-    >
+    <select name="type" aria-label="Filter by zone type">
 
         <option
             value="all"
@@ -501,24 +543,17 @@
         </option>
 
         @foreach ($zoneTypes as $zoneType)
-
             <option
                 value="{{ $zoneType }}"
-                {{ $selectedType === $zoneType
-                    ? 'selected'
-                    : '' }}
+                {{ $selectedType === $zoneType ? 'selected' : '' }}
             >
                 {{ $zoneType }}
             </option>
-
         @endforeach
 
     </select>
 
-    <button
-        type="submit"
-        class="geofence-filter-button"
-    >
+    <button type="submit" class="geofence-filter-button">
         Apply Filter
     </button>
 
@@ -531,8 +566,7 @@
 
 </form>
 
-
-<!-- GOOGLE MAP AND ZONE DIRECTORY -->
+<!-- MAP AND ZONE DIRECTORY -->
 
 <div class="geofence-layout">
 
@@ -540,9 +574,7 @@
 
         <div class="geofence-card-header">
 
-            <h2>
-                Geographic Zone Boundaries
-            </h2>
+            <h2>Geographic Zone Boundaries</h2>
 
             <span>
                 Click a circle to view zone information.
@@ -551,46 +583,33 @@
 
         </div>
 
-
         <div id="geofenceMap"></div>
-
-
-        <!-- ZONE LEGEND -->
 
         <div class="geofence-map-legend">
 
             <span class="geofence-legend-item">
-                <i
-                    class="geofence-legend-dot geofence-legend-safe"
-                ></i>
+                <i class="geofence-legend-dot geofence-legend-safe"></i>
                 Safe
             </span>
 
             <span class="geofence-legend-item">
-                <i
-                    class="geofence-legend-dot geofence-legend-medium"
-                ></i>
+                <i class="geofence-legend-dot geofence-legend-medium"></i>
                 Medium Risk
             </span>
 
             <span class="geofence-legend-item">
-                <i
-                    class="geofence-legend-dot geofence-legend-high"
-                ></i>
+                <i class="geofence-legend-dot geofence-legend-high"></i>
                 High Risk
             </span>
 
             <span class="geofence-legend-item">
-                <i
-                    class="geofence-legend-dot geofence-legend-tourist"
-                ></i>
+                <i class="geofence-legend-dot geofence-legend-tourist"></i>
                 Tourist
             </span>
 
         </div>
 
     </section>
-
 
     <!-- ZONE DIRECTORY -->
 
@@ -600,9 +619,7 @@
 
             <div class="geofence-card-header">
 
-                <h2>
-                    Zone Directory
-                </h2>
+                <h2>Zone Directory</h2>
 
                 <span>
                     {{ number_format($filteredZoneCount) }}
@@ -611,68 +628,76 @@
 
             </div>
 
-
             <div class="geofence-list">
 
                 @forelse ($zones as $index => $zone)
 
-                    <button
-                        type="button"
-                        class="geofence-zone-item"
-                        data-zone-index="{{ $index }}"
-                    >
+                    <div class="geofence-zone-row">
 
-                        <div class="geofence-zone-item-heading">
+                        <button
+                            type="button"
+                            class="geofence-zone-item"
+                            data-zone-index="{{ $index }}"
+                        >
 
-                            <strong>
-                                {{ $zone['zone_name']
-                                    ?: 'Unnamed Zone' }}
-                            </strong>
+                            <div class="geofence-zone-item-heading">
 
-                            <span class="geofence-zone-badge">
-                                {{ $zone['zone_type'] }}
-                            </span>
+                                <strong>
+                                    {{ $zone['zone_name'] ?: 'Unnamed Zone' }}
+                                </strong>
+
+                                <span class="geofence-zone-badge">
+                                    {{ $zone['zone_type'] }}
+                                </span>
+
+                            </div>
+
+                            <div class="geofence-zone-meta">
+
+                                Radius:
+                                {{ number_format(
+                                    $zone['radius_meters']
+                                ) }}
+                                meters
+
+                                @if ($zone['tourist_spot_name'])
+                                    <div>
+                                        Tourist Spot:
+                                        {{ $zone['tourist_spot_name'] }}
+                                    </div>
+                                @endif
+
+                                @if ($zone['alert_message'])
+                                    <div>
+                                        Alert:
+                                        {{ $zone['alert_message'] }}
+                                    </div>
+                                @endif
+
+                            </div>
+
+                        </button>
+
+                        <div class="geofence-zone-actions">
+
+                            <a
+                                class="geofence-edit-link"
+                                href="{{ route(
+                                    'admin.geofence-zones.edit',
+                                    $zone['zone_id']
+                                ) }}"
+                            >
+                                Edit Zone
+                            </a>
 
                         </div>
 
-
-                        <div class="geofence-zone-meta">
-
-                            Radius:
-                            {{ number_format(
-                                $zone['radius_meters']
-                            ) }}
-                            meters
-
-                            @if ($zone['tourist_spot_name'])
-
-                                <div>
-                                    Tourist Spot:
-                                    {{ $zone['tourist_spot_name'] }}
-                                </div>
-
-                            @endif
-
-                            @if ($zone['alert_message'])
-
-                                <div>
-                                    Alert:
-                                    {{ $zone['alert_message'] }}
-                                </div>
-
-                            @endif
-
-                        </div>
-
-                    </button>
+                    </div>
 
                 @empty
 
                     <div class="geofence-empty">
-
-                        No geofence zones match the
-                        selected filters.
-
+                        No geofence zones match the selected filters.
                     </div>
 
                 @endforelse
@@ -681,14 +706,11 @@
 
         </section>
 
-
-        <!-- ADDITIONAL INFORMATION -->
+        <!-- INFORMATION -->
 
         <section class="geofence-info-card">
 
-            <strong>
-                Geofence Information
-            </strong>
+            <strong>Geofence Information</strong>
 
             <p>
                 Green, amber, and red indicate configured
@@ -703,10 +725,17 @@
             </p>
 
             <p>
-                This page is read-only. Tourist spot creation
-                and updates should manage their associated
-                destination geofences once that integration
-                has been verified.
+                Authorized administrators can now add and
+                edit supported zones. These classifications
+                are not automatically generated by the
+                Random Forest predictive model.
+            </p>
+
+            <p>
+                Changes in the geofence table become visible
+                through the Android-facing database view,
+                but device-side reloading and notification
+                behavior must be verified separately.
             </p>
 
         </section>
@@ -717,11 +746,8 @@
 
 @endsection
 
-
 @push('scripts')
-
 <script>
-
     /*
     |--------------------------------------------------------------------------
     | EXISTING GEOFENCE DATA
@@ -730,13 +756,6 @@
 
     const geofenceZones = @json($zones);
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUPPORTED ZONE COLORS
-    |--------------------------------------------------------------------------
-    */
-
     const zoneColors = {
         'Safe': '#1B8E3E',
         'Medium Risk': '#F59E0B',
@@ -744,19 +763,15 @@
         'Tourist': '#2563EB'
     };
 
-
     const defaultCenter = {
         lat: 10.3157,
         lng: 123.8854
     };
 
-
     let geofenceMapInstance = null;
-
     let geofenceInfoWindow = null;
 
     const zoneCircleLookup = new Map();
-
 
     /*
     |--------------------------------------------------------------------------
@@ -767,7 +782,6 @@
     function makeZonePopup(zone) {
 
         const container = document.createElement('div');
-
         container.className = 'geofence-popup';
 
         const title = document.createElement('strong');
@@ -782,48 +796,38 @@
                 (zone.zone_type || 'Unknown'),
 
             'Radius: ' +
-                Number(
-                    zone.radius_meters
-                ).toLocaleString() +
+                Number(zone.radius_meters).toLocaleString() +
                 ' meters',
 
             zone.tourist_spot_name
-                ? 'Tourist Spot: ' +
-                    zone.tourist_spot_name
+                ? 'Tourist Spot: ' + zone.tourist_spot_name
                 : null,
 
             zone.alert_message
-                ? 'Alert: ' +
-                    zone.alert_message
+                ? 'Alert: ' + zone.alert_message
                 : null
         ];
 
         lines.forEach(function (line) {
-
             if (!line) {
                 return;
             }
 
             const row = document.createElement('span');
-
             row.textContent = line;
-
             container.appendChild(row);
-
         });
 
         return container;
     }
 
-
     /*
     |--------------------------------------------------------------------------
-    | VALIDATE DISPLAY COORDINATES
+    | VALID ZONES
     |--------------------------------------------------------------------------
     */
 
     function isValidZone(zone) {
-
         if (
             zone.latitude === null ||
             zone.longitude === null
@@ -832,9 +836,7 @@
         }
 
         const latitude = Number(zone.latitude);
-
         const longitude = Number(zone.longitude);
-
         const radius = Number(zone.radius_meters);
 
         return (
@@ -849,10 +851,9 @@
         );
     }
 
-
     /*
     |--------------------------------------------------------------------------
-    | FOCUS ZONE FROM DIRECTORY
+    | FOCUS DIRECTORY ZONE
     |--------------------------------------------------------------------------
     */
 
@@ -869,23 +870,17 @@
         }
 
         const zone = geofenceZones[index];
-
         const center = entry.center;
 
         const bounds = entry.circle.getBounds();
 
         if (bounds) {
-
-            geofenceMapInstance.fitBounds(
-                bounds,
-                65
-            );
+            geofenceMapInstance.fitBounds(bounds, 65);
 
             google.maps.event.addListenerOnce(
                 geofenceMapInstance,
                 'idle',
                 function () {
-
                     const zoom =
                         geofenceMapInstance.getZoom();
 
@@ -895,14 +890,11 @@
                     ) {
                         geofenceMapInstance.setZoom(16);
                     }
-
                 }
             );
 
         } else {
-
             geofenceMapInstance.setCenter(center);
-
             geofenceMapInstance.setZoom(15);
         }
 
@@ -918,10 +910,9 @@
         });
     }
 
-
     /*
     |--------------------------------------------------------------------------
-    | INITIALIZE GOOGLE MAP
+    | GOOGLE MAP INITIALIZATION
     |--------------------------------------------------------------------------
     */
 
@@ -935,39 +926,30 @@
         }
 
         try {
-
             const {
                 Map,
                 Circle,
                 InfoWindow
             } = await google.maps.importLibrary('maps');
 
-
-            const map = new Map(
-                element,
-                {
-                    center: defaultCenter,
-                    zoom: 12,
-                    mapId: 'DEMO_MAP_ID',
-                    mapTypeControl: false,
-                    streetViewControl: false,
-                    fullscreenControl: true,
-                    zoomControl: true,
-                    cameraControl: false,
-                    gestureHandling: 'greedy'
-                }
-            );
-
+            const map = new Map(element, {
+                center: defaultCenter,
+                zoom: 12,
+                mapId: 'DEMO_MAP_ID',
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true,
+                zoomControl: true,
+                cameraControl: false,
+                gestureHandling: 'greedy'
+            });
 
             geofenceMapInstance = map;
-
-            geofenceInfoWindow =
-                new InfoWindow();
-
+            geofenceInfoWindow = new InfoWindow();
 
             /*
             |--------------------------------------------------------------------------
-            | DISPLAY GEOFENCE CIRCLES
+            | DRAW ZONE CIRCLES
             |--------------------------------------------------------------------------
             */
 
@@ -989,27 +971,18 @@
 
                     const circle = new Circle({
                         map: map,
-
                         center: center,
-
-                        radius: Number(
-                            zone.radius_meters
-                        ),
-
+                        radius: Number(zone.radius_meters),
                         strokeColor: color,
                         strokeOpacity: 0.85,
                         strokeWeight: 2,
-
                         fillColor: color,
                         fillOpacity: 0.17,
-
                         clickable: true,
                         editable: false,
                         draggable: false,
-
                         zIndex: 2
                     });
-
 
                     circle.addListener(
                         'click',
@@ -1030,18 +1003,12 @@
                         }
                     );
 
-
-                    zoneCircleLookup.set(
-                        index,
-                        {
-                            center: center,
-                            circle: circle
-                        }
-                    );
-
+                    zoneCircleLookup.set(index, {
+                        center: center,
+                        circle: circle
+                    });
                 }
             );
-
 
             /*
             |--------------------------------------------------------------------------
@@ -1062,7 +1029,6 @@
                         );
 
                         focusGeofenceZone(index);
-
                     }
                 );
 
@@ -1076,10 +1042,8 @@
             );
 
             window.showGeofenceMapError();
-
         }
     };
-
 
     /*
     |--------------------------------------------------------------------------
@@ -1099,52 +1063,34 @@
         element.innerHTML = '';
 
         const box = document.createElement('div');
-
         box.className = 'geofence-map-error';
 
         const title = document.createElement('strong');
-
-        title.textContent =
-            'Google Maps could not be loaded.';
+        title.textContent = 'Google Maps could not be loaded.';
 
         const message = document.createElement('span');
-
         message.textContent =
             'Check the Google Maps API key and internet connection.';
 
         box.appendChild(title);
-
         box.appendChild(message);
 
         element.appendChild(box);
     };
-
 </script>
 
-
 @if (filled(env('GOOGLE_MAPS_API_KEY')))
-
     <script
         async
         src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&loading=async&callback=initGeofenceMap&v=weekly"
         onerror="showGeofenceMapError()"
     ></script>
-
 @else
-
     <script>
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            function () {
-
-                window.showGeofenceMapError();
-
-            }
-        );
-
+        document.addEventListener('DOMContentLoaded', function () {
+            window.showGeofenceMapError();
+        });
     </script>
-
 @endif
 
 @endpush

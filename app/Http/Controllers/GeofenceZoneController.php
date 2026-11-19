@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class GeofenceZoneController extends Controller
 {
@@ -11,12 +14,6 @@ class GeofenceZoneController extends Controller
     |--------------------------------------------------------------------------
     | SUPPORTED ADMIN ZONE TYPES
     |--------------------------------------------------------------------------
-    |
-    | Emergency zones are excluded from this dashboard.
-    |
-    | Existing Emergency records are NOT deleted or modified.
-    | Other applications that use those records are unaffected.
-    |
     */
 
     private const ZONE_TYPES = [
@@ -26,23 +23,107 @@ class GeofenceZoneController extends Controller
         'Tourist',
     ];
 
-    public function index(Request $request)
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | ADMIN AUTHENTICATION
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | AUTHORIZATION
+    |--------------------------------------------------------------------------
+    */
 
-        if (!session()->has('admin_user')) {
-            return redirect()->route('admin.login');
+    private function adminId(): ?string
+    {
+        $admin = session('admin_user', []);
+
+        $id = data_get($admin, 'id');
+
+        $role = strtolower(
+            (string) data_get($admin, 'role', '')
+        );
+
+        if (
+            $role !== 'admin' ||
+            !is_string($id) ||
+            !Str::isUuid($id)
+        ) {
+            return null;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | FILTERS
-        |--------------------------------------------------------------------------
-        */
+        return $id;
+    }
+
+    private function requireAdmin(): string
+    {
+        $adminId = $this->adminId();
+
+        if (!$adminId) {
+            abort(403, 'Administrator access required.');
+        }
+
+        return $adminId;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    private function validatedZone(Request $request): array
+    {
+        return $request->validate([
+            'zone_name' => [
+                'required',
+                'string',
+                'max:150',
+            ],
+
+            'zone_type' => [
+                'required',
+                Rule::in(self::ZONE_TYPES),
+            ],
+
+            'latitude' => [
+                'required',
+                'numeric',
+                'between:-90,90',
+            ],
+
+            'longitude' => [
+                'required',
+                'numeric',
+                'between:-180,180',
+            ],
+
+            'radius_meters' => [
+                'required',
+                'integer',
+                'between:1,50000',
+            ],
+
+            'alert_message' => [
+                'required',
+                'string',
+                'max:1000',
+            ],
+
+            'tourist_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('tourist_spots', 'tourist_id'),
+            ],
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | GEOFENCE DIRECTORY
+    |--------------------------------------------------------------------------
+    */
+
+    public function index(Request $request)
+    {
+        if (!$this->adminId()) {
+            return redirect()->route('admin.login');
+        }
 
         $selectedType = $request->query('type', 'all');
 
@@ -72,18 +153,12 @@ class GeofenceZoneController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | SUPPORTED ZONE SUMMARY
+        | ZONE SUMMARY
         |--------------------------------------------------------------------------
-        |
-        | Count only the four supported zone classifications.
-        |
         */
 
         $summaryRows = DB::table('geofence_zones')
-            ->whereIn(
-                'zone_type',
-                self::ZONE_TYPES
-            )
+            ->whereIn('zone_type', self::ZONE_TYPES)
             ->select('zone_type')
             ->selectRaw('COUNT(*) AS total')
             ->groupBy('zone_type')
@@ -99,31 +174,18 @@ class GeofenceZoneController extends Controller
         $totalZones = 0;
 
         foreach ($summaryRows as $row) {
-
             $count = (int) $row->total;
 
-            if (
-                array_key_exists(
-                    $row->zone_type,
-                    $counts
-                )
-            ) {
-
+            if (array_key_exists($row->zone_type, $counts)) {
                 $counts[$row->zone_type] = $count;
-
                 $totalZones += $count;
             }
         }
 
         /*
         |--------------------------------------------------------------------------
-        | GEOFENCE DIRECTORY QUERY
+        | ZONE DIRECTORY QUERY
         |--------------------------------------------------------------------------
-        |
-        | Read-only access to the shared Supabase database.
-        |
-        | No inserts, updates, or deletes are performed.
-        |
         */
 
         $query = DB::table('geofence_zones as gz')
@@ -138,29 +200,14 @@ class GeofenceZoneController extends Controller
                 self::ZONE_TYPES
             );
 
-        /*
-        |--------------------------------------------------------------------------
-        | ZONE TYPE FILTER
-        |--------------------------------------------------------------------------
-        */
-
         if ($selectedType !== 'all') {
-
             $query->where(
                 'gz.zone_type',
-                '=',
                 $selectedType
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | SEARCH FILTER
-        |--------------------------------------------------------------------------
-        */
-
         if ($search !== '') {
-
             $escapedSearch = addcslashes(
                 $search,
                 '\\%_'
@@ -170,7 +217,6 @@ class GeofenceZoneController extends Controller
 
             $query->where(
                 function ($subQuery) use ($searchTerm) {
-
                     $subQuery
                         ->whereRaw(
                             "gz.zone_name ILIKE ? ESCAPE '\\'",
@@ -180,22 +226,14 @@ class GeofenceZoneController extends Controller
                             "ts.name ILIKE ? ESCAPE '\\'",
                             [$searchTerm]
                         );
-
                 }
             );
         }
 
         /*
         |--------------------------------------------------------------------------
-        | LOAD ZONE DATA
+        | MAP COORDINATES
         |--------------------------------------------------------------------------
-        |
-        | Coordinates are extracted from existing PostGIS
-        | geometry values.
-        |
-        | No changes are made to stored geofence centers
-        | or radius measurements.
-        |
         */
 
         $zones = $query
@@ -208,73 +246,52 @@ class GeofenceZoneController extends Controller
                 'ts.name as tourist_spot_name'
             )
             ->selectRaw(
-                '
-                extensions.ST_Y(
-                    gz.center::extensions.geometry
-                ) AS latitude
-                '
+                'extensions.ST_Y(gz.center::extensions.geometry) AS latitude'
             )
             ->selectRaw(
-                '
-                extensions.ST_X(
-                    gz.center::extensions.geometry
-                ) AS longitude
-                '
+                'extensions.ST_X(gz.center::extensions.geometry) AS longitude'
             )
             ->orderBy('gz.zone_name')
             ->get()
             ->map(function ($zone) {
-
-                $latitude = $zone->latitude === null
-                    ? null
-                    : (float) $zone->latitude;
-
-                $longitude = $zone->longitude === null
-                    ? null
-                    : (float) $zone->longitude;
-
                 return [
                     'zone_id' => $zone->zone_id,
 
-                    'zone_name' =>
-                        $zone->zone_name,
+                    'zone_name' => $zone->zone_name,
 
-                    'zone_type' =>
-                        $zone->zone_type,
+                    'zone_type' => $zone->zone_type,
 
-                    'radius_meters' => (float) (
-                        $zone->radius_meters ?? 0
-                    ),
+                    'radius_meters' =>
+                        (float) ($zone->radius_meters ?? 0),
 
-                    'alert_message' =>
-                        $zone->alert_message,
+                    'alert_message' => $zone->alert_message,
 
                     'tourist_spot_name' =>
                         $zone->tourist_spot_name,
 
-                    'latitude' => $latitude,
+                    'latitude' => $zone->latitude === null
+                        ? null
+                        : (float) $zone->latitude,
 
-                    'longitude' => $longitude,
+                    'longitude' => $zone->longitude === null
+                        ? null
+                        : (float) $zone->longitude,
                 ];
-
             })
             ->values()
             ->all();
 
         /*
         |--------------------------------------------------------------------------
-        | COUNT VALID MAPPED ZONES
+        | VALID MAPPED ZONES
         |--------------------------------------------------------------------------
         */
 
         $mappedZoneCount = 0;
 
         foreach ($zones as $zone) {
-
             $latitude = $zone['latitude'];
-
             $longitude = $zone['longitude'];
-
             $radius = $zone['radius_meters'];
 
             if (
@@ -289,40 +306,271 @@ class GeofenceZoneController extends Controller
                 is_finite($radius) &&
                 $radius > 0
             ) {
-
                 $mappedZoneCount++;
             }
         }
 
+        return view('admin.geofence-zones.index', [
+            'zones' => $zones,
+            'counts' => $counts,
+            'totalZones' => $totalZones,
+            'filteredZoneCount' => count($zones),
+            'mappedZoneCount' => $mappedZoneCount,
+            'selectedType' => $selectedType,
+            'search' => $search,
+            'zoneTypes' => self::ZONE_TYPES,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE FORM
+    |--------------------------------------------------------------------------
+    */
+
+    public function create()
+    {
+        if (!$this->adminId()) {
+            return redirect()->route('admin.login');
+        }
+
+        $touristSpots = DB::table('tourist_spots')
+            ->select('tourist_id', 'name')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.geofence-zones.form', [
+            'mode' => 'create',
+            'zone' => null,
+            'touristSpots' => $touristSpots,
+            'zoneTypes' => self::ZONE_TYPES,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STORE NEW ZONE
+    |--------------------------------------------------------------------------
+    */
+
+    public function store(Request $request)
+    {
+        $adminId = $this->requireAdmin();
+
+        $data = $this->validatedZone($request);
+
         /*
         |--------------------------------------------------------------------------
-        | RETURN VIEW
+        | POSTGIS GEOGRAPHY POINT
         |--------------------------------------------------------------------------
+        |
+        | ST_MakePoint uses LONGITUDE first, LATITUDE second.
+        | SRID 4326 is the existing CityPulse coordinate system.
+        |
+        | Parameter binding prevents SQL injection.
+        |
         */
 
-        return view(
-            'admin.geofence-zones.index',
-            [
-                'zones' => $zones,
+        try {
+            DB::insert(
+                "
+                INSERT INTO public.geofence_zones (
+                    tourist_id,
+                    zone_name,
+                    zone_type,
+                    center,
+                    radius_meters,
+                    alert_message,
+                    created_by
+                )
+                VALUES (
+                    ?,
+                    ?,
+                    ?,
+                    extensions.ST_SetSRID(
+                        extensions.ST_MakePoint(?, ?),
+                        4326
+                    )::extensions.geography,
+                    ?,
+                    ?,
+                    ?
+                )
+                ",
+                [
+                    $data['tourist_id'] ?? null,
+                    trim($data['zone_name']),
+                    $data['zone_type'],
+                    (float) $data['longitude'],
+                    (float) $data['latitude'],
+                    (int) $data['radius_meters'],
+                    trim($data['alert_message']),
+                    $adminId,
+                ]
+            );
 
-                'counts' => $counts,
+            return redirect()
+                ->route('admin.geofence-zones.index')
+                ->with(
+                    'success',
+                    'Geofence zone created successfully.'
+                );
 
-                'totalZones' => $totalZones,
+        } catch (\Throwable $e) {
+            Log::error(
+                'CityPulse geofence creation failed',
+                ['exception' => $e]
+            );
 
-                'filteredZoneCount' =>
-                    count($zones),
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'zone_name' =>
+                        'Unable to create this zone. Please check the entered data and try again.',
+                ]);
+        }
+    }
 
-                'mappedZoneCount' =>
-                    $mappedZoneCount,
+    /*
+    |--------------------------------------------------------------------------
+    | FIND SUPPORTED ZONE
+    |--------------------------------------------------------------------------
+    |
+    | Emergency zones cannot be edited here.
+    |
+    */
 
-                'selectedType' =>
-                    $selectedType,
+    private function findZone(int $id): object
+    {
+        $zone = DB::table('geofence_zones')
+            ->where('zone_id', $id)
+            ->whereIn('zone_type', self::ZONE_TYPES)
+            ->select(
+                'zone_id',
+                'tourist_id',
+                'zone_name',
+                'zone_type',
+                'radius_meters',
+                'alert_message'
+            )
+            ->selectRaw(
+                'extensions.ST_Y(center::extensions.geometry) AS latitude'
+            )
+            ->selectRaw(
+                'extensions.ST_X(center::extensions.geometry) AS longitude'
+            )
+            ->first();
 
-                'search' => $search,
+        if (!$zone) {
+            abort(404, 'Geofence zone not found.');
+        }
 
-                'zoneTypes' =>
-                    self::ZONE_TYPES,
-            ]
-        );
+        return $zone;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EDIT FORM
+    |--------------------------------------------------------------------------
+    */
+
+    public function edit(int $id)
+    {
+        if (!$this->adminId()) {
+            return redirect()->route('admin.login');
+        }
+
+        $zone = $this->findZone($id);
+
+        $touristSpots = DB::table('tourist_spots')
+            ->select('tourist_id', 'name')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.geofence-zones.form', [
+            'mode' => 'edit',
+            'zone' => $zone,
+            'touristSpots' => $touristSpots,
+            'zoneTypes' => self::ZONE_TYPES,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE EXISTING ZONE
+    |--------------------------------------------------------------------------
+    */
+
+    public function update(Request $request, int $id)
+    {
+        $this->requireAdmin();
+
+        $data = $this->validatedZone($request);
+
+        // Verify zone exists and is not an Emergency zone.
+        $this->findZone($id);
+
+        try {
+            $affected = DB::update(
+                "
+                UPDATE public.geofence_zones
+                SET
+                    tourist_id = ?,
+                    zone_name = ?,
+                    zone_type = ?,
+                    center = extensions.ST_SetSRID(
+                        extensions.ST_MakePoint(?, ?),
+                        4326
+                    )::extensions.geography,
+                    radius_meters = ?,
+                    alert_message = ?
+                WHERE zone_id = ?
+                  AND zone_type IN (
+                      'Safe',
+                      'Medium Risk',
+                      'High Risk',
+                      'Tourist'
+                  )
+                ",
+                [
+                    $data['tourist_id'] ?? null,
+                    trim($data['zone_name']),
+                    $data['zone_type'],
+                    (float) $data['longitude'],
+                    (float) $data['latitude'],
+                    (int) $data['radius_meters'],
+                    trim($data['alert_message']),
+                    $id,
+                ]
+            );
+
+            if ($affected === 0) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'zone_name' =>
+                            'The zone was not updated. It may no longer be available.',
+                    ]);
+            }
+
+            return redirect()
+                ->route('admin.geofence-zones.index')
+                ->with(
+                    'success',
+                    'Geofence zone updated successfully.'
+                );
+
+        } catch (\Throwable $e) {
+            Log::error(
+                'CityPulse geofence update failed',
+                ['exception' => $e]
+            );
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'zone_name' =>
+                        'Unable to update this zone. Please try again.',
+                ]);
+        }
     }
 }
